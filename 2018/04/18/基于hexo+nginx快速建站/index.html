@@ -157,7 +157,7 @@
 <meta property="og:site_name" content="陈瑞文的个人博客">
 <meta property="og:description" content="前言跟公司大神学习技术知识，发现大神们都有自己的技术博客，拥有个人网站，感觉很酷。所以趁着一波阿里云打折，开启自己个人网站之路。准备着手从个人博客网站开始，无奈自己是一个小小后端程序猿，前端技术了解不多，难道要开始先积累前端技术栈再建站吗？orz。当然不，网上有大量博客框架和教程可以快速建站，比如Hexo,Wordpress等。本人博客 1.0版本就准备用hexo开始。本文并非部署到github上">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-29T13:17:52.000Z">
+<meta property="og:updated_time" content="2018-06-01T15:55:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于hexo+nginx快速建站">
 <meta name="twitter:description" content="前言跟公司大神学习技术知识，发现大神们都有自己的技术博客，拥有个人网站，感觉很酷。所以趁着一波阿里云打折，开启自己个人网站之路。准备着手从个人博客网站开始，无奈自己是一个小小后端程序猿，前端技术了解不多，难道要开始先积累前端技术栈再建站吗？orz。当然不，网上有大量博客框架和教程可以快速建站，比如Hexo,Wordpress等。本人博客 1.0版本就准备用hexo开始。本文并非部署到github上">
@@ -424,7 +424,7 @@
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>跟公司大神学习技术知识，发现大神们都有自己的技术博客，拥有个人网站，感觉很酷。所以趁着一波阿里云打折，开启自己个人网站之路。准备着手从个人博客网站开始，无奈自己是一个小小后端程序猿，前端技术了解不多，难道要开始先积累前端技术栈再建站吗？orz。当然不，网上有大量博客框架和教程可以快速建站，比如Hexo,Wordpress等。本人博客 1.0版本就准备用hexo开始。<br>本文并非部署到github上，想要部署到github另行参考。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>跟公司大神学习技术知识，发现大神们都有自己的技术博客，拥有个人网站，感觉很酷。所以趁着一波阿里云打折，开启自己个人网站之路。准备着手从个人博客网站开始，无奈自己是一个小小后端程序猿，前端技术了解不多，难道要开始先积累前端技术栈再建站吗？orz。当然不，网上有大量博客框架和教程可以快速建站，比如Hexo,Wordpress等。本人博客 1.0版本就准备用hexo开始。<br>本文并非部署到github上，想要部署到github另行参考。<br><a id="more"></a></p>
 <h2 id="Hexo特点"><a href="#Hexo特点" class="headerlink" title="Hexo特点"></a>Hexo特点</h2><p>不妨登录<a href="https://hexo.io/" target="_blank" rel="noopener">Hexo官网</a>瞧一瞧。</p>
 <ul>
 <li>Blazing Fast</li>
@@ -459,9 +459,26 @@
 <h4 id="部署静态站点"><a href="#部署静态站点" class="headerlink" title="部署静态站点"></a>部署静态站点</h4><p>生成静态文件:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜  hexo-blog hexo g</span><br><span class="line">➜  hexo-blog ls</span><br><span class="line">_config.yml       node_modules      public            themes</span><br><span class="line">db.json           package-lock.json scaffolds</span><br><span class="line">debug.log         package.json      source</span><br></pre></td></tr></table></figure></p>
 <p>生成好的静态文件在public 文件夹内。</p>
 <h4 id="修改nginx配置文件"><a href="#修改nginx配置文件" class="headerlink" title="修改nginx配置文件"></a>修改nginx配置文件</h4><p>修改nginx配置文件:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/nginx/conf/nginx.conf</span><br></pre></td></tr></table></figure></p>
-<p>仅需修改http模块的server配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  www.chenruiwen.cn;</span><br><span class="line">        charset utf-8;</span><br><span class="line">        </span><br><span class="line">        location / &#123;</span><br><span class="line">            root   /data/hexo-blog/public;</span><br><span class="line">            index  index.html;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>仅需修改http模块的server配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  www.chenruiwen.cn;</span><br><span class="line">        charset utf-8;</span><br><span class="line">        </span><br><span class="line">        root   /data/hexo-blog/public;# 这里是静态文件地址</span><br><span class="line">        location / &#123;</span><br><span class="line">            index  index.html;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>重新加载nginx：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure></p>
 <p>至此，网站已初步建成。</p>
+<h3 id="部署到github上"><a href="#部署到github上" class="headerlink" title="部署到github上"></a>部署到github上</h3><h5 id="通过git部署"><a href="#通过git部署" class="headerlink" title="通过git部署"></a>通过git部署</h5><ul>
+<li>创建GitHub Repository(略)</li>
+<li><p>修改配置文件_config.yml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/crrrrrw/hexo_static_page.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装hexo git插件  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>部署</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo generate</span><br><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这样，所有文件就都提交到github库上了。</p>
+<p>服务器上，克隆静态文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /data</span><br><span class="line">git clone https://github.com/crrrrrw/hexo_static_page.git</span><br><span class="line">git pull origin master</span><br></pre></td></tr></table></figure></p>
+<p>即可实现静态文件的更新。然后nginx重新指向这个静态文件目录即可。</p>
+<h2 id="自动化部署"><a href="#自动化部署" class="headerlink" title="自动化部署"></a>自动化部署</h2><p>思路a:<br>脚本定时更新github地址。</p>
+<p>思路b:<br>基于git hooks实现push后的自动化部署。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总之，搭建博客环境很简单，不过还有很多的工作要做，比如优化自己博客的样式，增加一些有意思的功能等，以后会慢慢优化的。当然，最重要的是写出好的有用的博文分享出去。</p>
 
       
@@ -700,7 +717,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo特点"><span class="nav-number">2.</span> <span class="nav-text">Hexo特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快速搭建博客"><span class="nav-number">3.</span> <span class="nav-text">快速搭建博客</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前提条件"><span class="nav-number">3.1.</span> <span class="nav-text">前提条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建站"><span class="nav-number">3.2.</span> <span class="nav-text">建站</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置网站信息"><span class="nav-number">3.3.</span> <span class="nav-text">配置网站信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过Nginx发布"><span class="nav-number">3.4.</span> <span class="nav-text">通过Nginx发布</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nginx下载安装"><span class="nav-number">3.4.1.</span> <span class="nav-text">Nginx下载安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署静态站点"><span class="nav-number">3.4.2.</span> <span class="nav-text">部署静态站点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改nginx配置文件"><span class="nav-number">3.4.3.</span> <span class="nav-text">修改nginx配置文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo特点"><span class="nav-number">2.</span> <span class="nav-text">Hexo特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快速搭建博客"><span class="nav-number">3.</span> <span class="nav-text">快速搭建博客</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前提条件"><span class="nav-number">3.1.</span> <span class="nav-text">前提条件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建站"><span class="nav-number">3.2.</span> <span class="nav-text">建站</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置网站信息"><span class="nav-number">3.3.</span> <span class="nav-text">配置网站信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过Nginx发布"><span class="nav-number">3.4.</span> <span class="nav-text">通过Nginx发布</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Nginx下载安装"><span class="nav-number">3.4.1.</span> <span class="nav-text">Nginx下载安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部署静态站点"><span class="nav-number">3.4.2.</span> <span class="nav-text">部署静态站点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改nginx配置文件"><span class="nav-number">3.4.3.</span> <span class="nav-text">修改nginx配置文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#部署到github上"><span class="nav-number">3.5.</span> <span class="nav-text">部署到github上</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#通过git部署"><span class="nav-number">3.5.0.1.</span> <span class="nav-text">通过git部署</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动化部署"><span class="nav-number">4.</span> <span class="nav-text">自动化部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -751,7 +768,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共10.0k字</span>
+  <span class="post-count">本站累计共10.2k字</span>
 </div>
 
         
