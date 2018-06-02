@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="mysql," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="陈瑞文的个人博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="目的 了解查询优化器的优化策略 了解和查看查询优化器优化后的执行计划 了解优化器是怎么优化的 了解优化器在关联语句中的处理 了解一些查询优化器的提示">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL查询优化器">
+<meta property="og:url" content="http://www.chenruiwen.cn/2018/05/22/MySQL查询优化器/index.html">
+<meta property="og:site_name" content="陈瑞文的个人博客">
+<meta property="og:description" content="目的 了解查询优化器的优化策略 了解和查看查询优化器优化后的执行计划 了解优化器是怎么优化的 了解优化器在关联语句中的处理 了解一些查询优化器的提示">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqnue0bqrbj20r102ut8o.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqongff9j4j20sx01rjra.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqr12aclarj20tb02q3yf.jpg">
+<meta property="og:updated_time" content="2018-06-02T15:44:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL查询优化器">
+<meta name="twitter:description" content="目的 了解查询优化器的优化策略 了解和查看查询优化器优化后的执行计划 了解优化器是怎么优化的 了解优化器在关联语句中的处理 了解一些查询优化器的提示">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqnue0bqrbj20r102ut8o.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.chenruiwen.cn/2018/05/22/MySQL查询优化器/"/>
+
+
+
+
+
+  <title>MySQL查询优化器 | 陈瑞文的个人博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/crrrrrw"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">陈瑞文的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/05/22/MySQL查询优化器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈瑞文">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/touxiang.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="陈瑞文的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL查询优化器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-22T23:42:47+08:00">
+                2018-05-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><ul>
+<li>了解查询优化器的优化策略</li>
+<li>了解和查看查询优化器优化后的执行计划</li>
+<li>了解优化器是怎么优化的</li>
+<li>了解优化器在关联语句中的处理</li>
+<li>了解一些查询优化器的提示<a id="more"></a>
+</li>
+</ul>
+<h2 id="MySQL查询优化器的优化策略"><a href="#MySQL查询优化器的优化策略" class="headerlink" title="MySQL查询优化器的优化策略"></a>MySQL查询优化器的优化策略</h2><p>简单分为 <strong>静态优化</strong> 和 <strong>动态优化</strong>。</p>
+<p>一、静态优化(“编译时优化”):</p>
+<ul>
+<li>可以直接对解析树进行分析并完成优化。  </li>
+<li>优化器通过一些简单的代叔变换将WHERE条件转化为另一种等价形式。</li>
+<li>静态优化不依赖特别的数值，比如WHERE条件里带一些常数等。</li>
+<li>静态优化在第一次完成后一直有效，即使使用不同的参数值执行查询也不会发生变化。</li>
+</ul>
+<p>二、动态优化(“运行时优化”):</p>
+<ul>
+<li>动态优化和查询上下文有关或者其他因素有关，比如WHERE条件中的取值，索引中条目对应的数据行数等。</li>
+<li>每次查询都需要重新评估。</li>
+</ul>
+<h2 id="MySQL能够处理的优化类型"><a href="#MySQL能够处理的优化类型" class="headerlink" title="MySQL能够处理的优化类型"></a>MySQL能够处理的优化类型</h2><p>先说一点，MySQL优化器使用了很多复杂的优化技巧把查询转化为执行计划。“不要试着比优化器更聪明”，通常都应让MySQL按照自己优化的方式执行语句，绝大多数情况优化器都是更优的。<br>你也可以通过EXPLAIN EXTENDED SELECT … … ; SHOW WARNINGS; 查看最终优化后的执行sql。<br>如何使用“EXPLAIN EXTENDED”可参考<a href="https://dev.mysql.com/doc/refman/5.7/en/explain-extended.html" target="_blank" rel="noopener">官方文档上的Extended EXPLAIN Output Format</a></p>
+<ol>
+<li><font face="华文新魏" size="3">重新定义关联表顺序。</font><br>数据表的关联并不总是按照查询中指定顺序进行的。</li>
+<li><font face="华文新魏" size="3">将外链接转化为内连接。</font><br>优化器可以根据某些因素(比如WHERE条件，库表结构等)，使得一个外连接等价于一个内连接。</li>
+<li><p><font face="华文新魏" size="3">等价变换规则。</font><br>MySQL通过等价变换来简化并规范表达式。MySQL可以合并和减少比较。比如 (5=5 AND a&gt;5)会被改写为a&gt;5。(a &lt; b AND b=c) AND a=5会被改写为(b&gt;5 AND b=c AND a=5)</p>
+</li>
+<li><p><font face="华文新魏" size="3">优化</font> COUNT()、MIN()、MAX()。<br>查找某列最大/最小值，该列又有索引，查找最大值，则会直接找最后一行；最小值，则直接找第一行。因为索引已经排好序了。可以从EXPLAIN中看到：“Select tables optimized away”。这说明已经从执行计划中移除该表并用常数取代。</p>
+</li>
+<li><font face="华文新魏" size="3">预估并转化为常数表达式</font><br>如果一个表达式可以被简化为一个常量，那么这个表达式就会被转换。 在WHERE 、USING、ON这些连接条件强制值相等的条件中，常量具有传递性<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN SELECT</span><br><span class="line">	table_a.id,</span><br><span class="line">	table_b.id</span><br><span class="line">FROM</span><br><span class="line">	table_b</span><br><span class="line">INNER JOIN table_a ON table_a.tb_id = table_b.id</span><br><span class="line">WHERE</span><br><span class="line">	table_b.id = 1</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="http://ww1.sinaimg.cn/large/87faef88ly1fqnue0bqrbj20r102ut8o.jpg" alt=""></p>
+<ol start="6">
+<li><p><font face="华文新魏" size="3">覆盖索引</font><br>当索引包含查询需要的列时，MySql就可以使用索引来避免读取行数据。</p>
+</li>
+<li><p><font face="华文新魏" size="3">子查询优化</font><br>MySQL可以将某些类型的子查询转换成相等的效率更高的形式。</p>
+</li>
+<li><font face="华文新魏" size="3">提前终止查询</font>  </li>
+</ol>
+<ul>
+<li>MySQL在发现已经满足查询需求时，会立刻终止查询。</li>
+<li>MySQL检测一个不成立的条件也会立刻返回空结果。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN SELECT * FROM table_a WHERE id = - 1;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><img src="http://ww1.sinaimg.cn/large/87faef88ly1fqongff9j4j20sx01rjra.jpg" alt=""></p>
+<ol start="9">
+<li><font face="华文新魏" size="3">等值传播</font><br>如果两个列的值通过等式关联，那么MySQL能把其中一个列的WHERE条件传递到另一个列。<br>比如：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT table_a.id, table_b.id FROM table_b INNER JOIN table_a ON table_a.tb_id = table_b.id WHERE table_b.id &lt; 100;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>MySQL会判断把WHERE后面的关联作用于table_a表，等价于<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT table_a.id, table_b.id FROM table_b INNER JOIN table_a ON table_a.tb_id = table_b.id WHERE table_b.id &lt; 100 AND table_a.tb_id &lt; 100;</span><br></pre></td></tr></table></figure></p>
+<ol start="10">
+<li><font face="华文新魏" size="3">列表IN()的比较</font><br>MySql会对IN()里面的数据进行排序，然后用二分法查找某个值是否在列表中，这个算法的效率是O(Log n)。这其他数据库等价转换为多个OR条件连接的复杂度O(n)来说，IN()里大量取值时会更快。</li>
+</ol>
+<h2 id="MySQL如何关联查询"><a href="#MySQL如何关联查询" class="headerlink" title="MySQL如何关联查询"></a>MySQL如何关联查询</h2><p>MySQL关联查询策略:<br>其实就是嵌套循环查询。MySQL先从第一个表循环读，然后再嵌套循环到下一个表寻找匹配，如此反复，直到找到所有表的匹配的行为止。 </p>
+<p>举个栗子：  </p>
+<ul>
+<li>内连接sql<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT tbl_user.name, tbl_bankcard.bankcard </span><br><span class="line">FROM tbl_user INNER JOIN tbl_bankcard ON tbl_user.id = tbl_bankcard.user_id</span><br><span class="line">WHERE tbl_user.moblie in (&apos;18611112222&apos;,&apos;18611113333&apos;)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>MySQL在查询这条SQL时，用伪代码表示查询过程如下:<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">outer_iter = iterator over tbl_user where moblie <span class="keyword">in</span> (<span class="string">'18611112222'</span>,<span class="string">'18611113333'</span>);</span><br><span class="line">outer_row = outer_iter.<span class="keyword">next</span>;</span><br><span class="line"><span class="keyword">while</span> <span class="symbol">outer_row:</span></span><br><span class="line">    inner_iter = iterator over tbl_bankcard where user_id = outer_row.id;</span><br><span class="line">    inner_row = inner_iter.<span class="keyword">next</span>;</span><br><span class="line">    <span class="keyword">while</span> <span class="symbol">inner_row:</span></span><br><span class="line">        output [outer_row.name, inner_row.bankcard]</span><br><span class="line">        inner_row = inner_iter.<span class="keyword">next</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    outer_row = outer_iter.<span class="keyword">next</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>再看这个SQL左外连接版本：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT tbl_user.name, tbl_bankcard.bankcard </span><br><span class="line">FROM tbl_user LEFT JOIN tbl_bankcard ON tbl_user.id = tbl_bankcard.user_id</span><br><span class="line">WHERE tbl_user.moblie in (&apos;18611112222&apos;,&apos;18611113333&apos;)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>MySQL在查询这条SQL时，用伪代码表示查询过程如下:<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">outer_iter = iterator over tbl_user where moblie <span class="keyword">in</span> (<span class="string">'18611112222'</span>,<span class="string">'18611113333'</span>);</span><br><span class="line">outer_row = outer_iter.<span class="keyword">next</span>;</span><br><span class="line"><span class="keyword">while</span> <span class="symbol">outer_row:</span></span><br><span class="line">    inner_iter = iterator over tbl_bankcard where user_id = outer_row.id;</span><br><span class="line">    inner_row = inner_iter.<span class="keyword">next</span>;</span><br><span class="line">    <span class="keyword">if</span> <span class="symbol">inner_row:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="symbol">inner_row:</span></span><br><span class="line">            output [outer_row.name, inner_row.bankcard]</span><br><span class="line">            inner_row = inner_iter.<span class="keyword">next</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">        output [outer_row.name, NULL]</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    outer_row = outer_iter.<span class="keyword">next</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
+<p>基本上MySQL所有类型的查询都是这种方式运行。包括子查询，也是生成一张临时表，被当做普通表进行循环嵌套。以及右外链接也是会改写成等价的左外连接。</p>
+<hr>
+<p>多表关联的一种方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    B(Join) --&gt; A[Join]</span><br><span class="line">    C(Join) --&gt; A</span><br><span class="line">    D(tbl1) --&gt; B</span><br><span class="line">    E(tbl2) --&gt; B</span><br><span class="line">    F(tbl3) --&gt; C</span><br><span class="line">    G(tbl4) --&gt; C</span><br></pre></td></tr></table></figure></p>
+<p>但是MySQL是通过从一个表开始一直嵌套循环的方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    B(Join) --&gt; A[Join]</span><br><span class="line">    C(tbl4) --&gt; A</span><br><span class="line">    D[Join] --&gt; B</span><br><span class="line">    E[tbl3] --&gt; B</span><br><span class="line">    F[tbl1] --&gt; D</span><br><span class="line">    G[tbl2] --&gt; D</span><br></pre></td></tr></table></figure></p>
+<h2 id="关联查询优化器"><a href="#关联查询优化器" class="headerlink" title="关联查询优化器"></a>关联查询优化器</h2><ul>
+<li>MySQL查询优化器中最重要的一部分。它决定了多表查询的顺序。它评估不同顺序的成本选择成本最小的一个。</li>
+<li>有时优化器给出的并不是最优的关联顺序，可使用STRAIGHT_JOIN关键字替换JOIN关键字重写查询。还是那句，“不要试着比优化器更聪明”。</li>
+<li>不过，如果有超过n个表的关联，那么需要检查n的阶乘种关联顺序。我们称之为所有可能的执行计划的“搜索空间”。实际上，当需要关联的表超过 optimizer_search_depth 的限制的时候，就会选择“贪婪”搜索模式。</li>
+</ul>
+<h2 id="查询优化器的提示-hint"><a href="#查询优化器的提示-hint" class="headerlink" title="查询优化器的提示(hint)"></a>查询优化器的提示(hint)</h2><p>用于控制查询执行计划。列举一些课使用的提示：</p>
+<ol>
+<li><p>HIGH_PRIORITY 和 LOW_PRIORITY <br><br>当多条语句同时访问数据库时，设置语句优先级。HIGH_PRIORITY会使语句放在表的队列的最前面，LOW_PRIORITY则相反。这两个提示只对使用表锁的存储引擎有效。</p>
+</li>
+<li><p>DELAYED <br><br>这个提示用于INSERT和REPLACE。使用该提示会将插入的行数据放入缓冲区，然后在表空闲时批量写入数据。适合于日志插入等场景。但并不是所有存储引擎都支持，还会导致函数 LAST_INSERT_ID()无法正常工作。</p>
+</li>
+<li><p>STRAIGHT_JOIN <br><br>这个提示可用于SELECT语句中SELECT关键字之后，也可放置于两个关联表之间。该提示作用一是让查询中的表按语句出现的顺序关联。作用二是固定前后两个表的关联顺序。</p>
+</li>
+<li><p>SQL_SMALL_RESULT 和 SQL_BIG_RESULT <br><br>这个提示只对SELECT有效。它告诉优化器对GROUP BY或者DISTINCT查询如果使用临时表和排序。SQL_SMALL_RESULT会让优化器认为结果集很小，将结果放在内存中的索引临时表中，避免排序。SQL_BIG_RESULT 则告诉优化器结果集很大，在磁盘临时表进行排序。</p>
+</li>
+<li><p>SQL_BUFFER_RESULT <br><br>这个提示告诉优化器将结果放在临时表中，并且尽快释放掉表锁。</p>
+</li>
+<li><p>SQL_CACHE 和 SQL_NO_CACHE <br><br>这个提示告诉MySQL是否将结果集放在查询缓存中。</p>
+</li>
+<li><p>USING INDEX、IGNORE INDEX 和 FORCE INDEX <br><br>这几个提示分别告诉优化器 使用或者不使用或者强制使用索引。</p>
+</li>
+</ol>
+<h2 id="控制优化器的一些参数"><a href="#控制优化器的一些参数" class="headerlink" title="控制优化器的一些参数"></a>控制优化器的一些参数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW VARIABLES LIKE &quot;optimizer_%&quot;;</span><br></pre></td></tr></table></figure>
+<p><img src="http://ww1.sinaimg.cn/large/87faef88ly1fqr12aclarj20tb02q3yf.jpg" alt=""></p>
+<ul>
+<li>optimizer_search_depth<br>控制穷举执行计划的限度。</li>
+<li>optimizer_prune_level<br>默认打开的，让优化器根据需要扫描的行数来决定是否跳过某些执行计划</li>
+<li>optimizer_switch<br>此变量包含了一些开关优化器特性的标志位。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>MySQL优化器做了很多工作把SQL语句变成更优的查询方式</li>
+<li>使用 EXPLAIN EXTENDED … SHOW WARNINGS关键字查看优化后的指令</li>
+<li>MySQL的关联查询是“嵌套循环”的</li>
+<li>可使用查询优化提示控制查询执行计划，但是，“不要试着比优化器更聪明”。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束,</i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+      
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您如果觉得本文不错，不妨打赏一下，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="陈瑞文 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="陈瑞文 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"><i class="fa fa-tag"></i>
+               mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/20/Dubbo暴露服务过程/" rel="next" title="Dubbo暴露服务过程">
+                <i class="fa fa-chevron-left"></i> Dubbo暴露服务过程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/touxiang.jpeg"
+                alt="陈瑞文" />
+            
+              <p class="site-author-name" itemprop="name">陈瑞文</p>
+              <p class="site-description motion-element" itemprop="description">你好，旅行者</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/crrrrrw" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目的"><span class="nav-number">1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL查询优化器的优化策略"><span class="nav-number">2.</span> <span class="nav-text">MySQL查询优化器的优化策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL能够处理的优化类型"><span class="nav-number">3.</span> <span class="nav-text">MySQL能够处理的优化类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL如何关联查询"><span class="nav-number">4.</span> <span class="nav-text">MySQL如何关联查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关联查询优化器"><span class="nav-number">5.</span> <span class="nav-text">关联查询优化器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询优化器的提示-hint"><span class="nav-number">6.</span> <span class="nav-text">查询优化器的提示(hint)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制优化器的一些参数"><span class="nav-number">7.</span> <span class="nav-text">控制优化器的一些参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈瑞文</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">本站累计共16.4k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
