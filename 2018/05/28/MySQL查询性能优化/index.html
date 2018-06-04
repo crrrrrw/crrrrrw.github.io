@@ -136,7 +136,7 @@
 
 
 
-  <meta name="keywords" content="tool," />
+  <meta name="keywords" content="mysql," />
 
 
 
@@ -149,21 +149,20 @@
 
 
 
-<meta name="description" content="前言寻找一个免费的图床软件，微博图床真的是太好不过了~~（手动感谢微博图床！）。之前安装微博图床的chrome插件，本人手贱删了，现在暂时也没翻到墙外，一时间需要重新安装微博图床的chrome插件，甚是着急。网上提供的一些插件也都没用，只能另求他路。">
-<meta name="keywords" content="tool">
+<meta name="description" content="目的 查询优化的基本原则 了解MySQL执行过程 浅析MySQL优化器 MySQL语句优化小tips 理解MySQL如何查询，明白高效和低效的原因">
+<meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="微博图床插件打包">
-<meta property="og:url" content="http://www.chenruiwen.cn/2018/04/20/微博图床插件打包/index.html">
+<meta property="og:title" content="MySQL查询性能优化">
+<meta property="og:url" content="http://www.chenruiwen.cn/2018/05/28/MySQL查询性能优化/index.html">
 <meta property="og:site_name" content="陈瑞文的个人博客">
-<meta property="og:description" content="前言寻找一个免费的图床软件，微博图床真的是太好不过了~~（手动感谢微博图床！）。之前安装微博图床的chrome插件，本人手贱删了，现在暂时也没翻到墙外，一时间需要重新安装微博图床的chrome插件，甚是着急。网上提供的一些插件也都没用，只能另求他路。">
+<meta property="og:description" content="目的 查询优化的基本原则 了解MySQL执行过程 浅析MySQL优化器 MySQL语句优化小tips 理解MySQL如何查询，明白高效和低效的原因">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fq68oqn95lj20mn09ygmb.jpg">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fq68qz213aj20fj04wmxd.jpg">
-<meta property="og:updated_time" content="2018-04-30T10:14:07.000Z">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqmpuoqb43j20px0hyacw.jpg">
+<meta property="og:updated_time" content="2018-06-04T15:17:08.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="微博图床插件打包">
-<meta name="twitter:description" content="前言寻找一个免费的图床软件，微博图床真的是太好不过了~~（手动感谢微博图床！）。之前安装微博图床的chrome插件，本人手贱删了，现在暂时也没翻到墙外，一时间需要重新安装微博图床的chrome插件，甚是着急。网上提供的一些插件也都没用，只能另求他路。">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fq68oqn95lj20mn09ygmb.jpg">
+<meta name="twitter:title" content="MySQL查询性能优化">
+<meta name="twitter:description" content="目的 查询优化的基本原则 了解MySQL执行过程 浅析MySQL优化器 MySQL语句优化小tips 理解MySQL如何查询，明白高效和低效的原因">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqmpuoqb43j20px0hyacw.jpg">
 
 
 
@@ -193,13 +192,13 @@
 
 
 
-  <link rel="canonical" href="http://www.chenruiwen.cn/2018/04/20/微博图床插件打包/"/>
+  <link rel="canonical" href="http://www.chenruiwen.cn/2018/05/28/MySQL查询性能优化/"/>
 
 
 
 
 
-  <title>微博图床插件打包 | 陈瑞文的个人博客</title>
+  <title>MySQL查询性能优化 | 陈瑞文的个人博客</title>
   
 
 
@@ -338,7 +337,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/04/20/微博图床插件打包/">
+    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/05/28/MySQL查询性能优化/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈瑞文">
@@ -355,7 +354,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">微博图床插件打包</h1>
+          <h1 class="post-title" itemprop="name headline">MySQL查询性能优化</h1>
         
 
         <div class="post-meta">
@@ -367,8 +366,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-20T14:31:43+08:00">
-                2018-04-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-28T23:16:27+08:00">
+                2018-05-28
               </time>
             
 
@@ -390,8 +389,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tips/" itemprop="url" rel="index">
-                    <span itemprop="name">tips</span>
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
                   </a>
                 </span>
 
@@ -427,20 +426,62 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>寻找一个免费的图床软件，微博图床真的是太好不过了~~（手动感谢微博图床！）。之前安装微博图床的chrome插件，本人手贱删了，现在暂时也没翻到墙外，一时间需要重新安装微博图床的chrome插件，甚是着急。网上提供的一些插件也都没用，只能另求他路。<br><a id="more"></a></p>
-<h1 id="通过自己打包安装微博图床插件"><a href="#通过自己打包安装微博图床插件" class="headerlink" title="通过自己打包安装微博图床插件"></a>通过自己打包安装微博图床插件</h1><ol>
-<li><p>链接到微博图床github地址并下载。url如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/suxiaogang/WeiboPicBed</span><br></pre></td></tr></table></figure>
+        <h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><ul>
+<li>查询优化的基本原则</li>
+<li>了解MySQL执行过程</li>
+<li>浅析MySQL优化器</li>
+<li>MySQL语句优化小tips</li>
+<li>理解MySQL如何查询，明白高效和低效的原因<a id="more"></a>
 </li>
-<li><p>打开chrome扩展程序<br>打开chrome浏览器，输入如下地址：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chrome://extensions/</span><br></pre></td></tr></table></figure>
+</ul>
+<h2 id="优化数据访问"><a href="#优化数据访问" class="headerlink" title="优化数据访问"></a>优化数据访问</h2><p>分两步分析是否是低效的查询：  </p>
+<ol>
+<li><p><strong>是否向数据库请求了不需要的数据？</strong><br>比如查询了过多的行，查询过多的列(select * …)，以及重复的查询。</p>
 </li>
-<li><p>打开开发者模式，点击 打包扩展程序<br><img src="http://ww1.sinaimg.cn/large/87faef88ly1fq68oqn95lj20mn09ygmb.jpg" alt=""></p>
-</li>
-<li><p>打包扩展程序， 扩展程序目录选择 github上 clone下来的目录，点击打包即可。<br>会在同级目录下生成 .crx 和 .pem结尾文件，其中 .crx结尾文件即是扩展程序<br><img src="http://ww1.sinaimg.cn/large/87faef88ly1fq68qz213aj20fj04wmxd.jpg" alt=""></p>
+<li><p><strong>Mysql是否在扫描额外的记录？</strong><br>三个指标衡量查询开销：</p>
+<ul>
+<li>响应时间</li>
+<li>扫描行数</li>
+<li>返回的行数</li>
+</ul>
 </li>
 </ol>
-<h1 id="安装微博图床插件"><a href="#安装微博图床插件" class="headerlink" title="安装微博图床插件"></a>安装微博图床插件</h1><p>直接拖动微博图床插件(WeiboPicBed.crx)至chrome扩展程序即可。然后你就可以肆意上传图片了~</p>
+<h2 id="重构查询的方式"><a href="#重构查询的方式" class="headerlink" title="重构查询的方式"></a>重构查询的方式</h2><ul>
+<li>一个复杂查询or多个简单查询?</li>
+<li>切分查询(比如在删改操作时，将全量语句改成批量执行)</li>
+<li>分解关联查询(把一条复杂的关联查询分解为多条简单查询，可以让缓存效率更高，减少锁竞争) </li>
+</ul>
+<h2 id="一张图看Mysql执行过程"><a href="#一张图看Mysql执行过程" class="headerlink" title="一张图看Mysql执行过程"></a>一张图看Mysql执行过程</h2><p><img src="http://ww1.sinaimg.cn/large/87faef88ly1fqmpuoqb43j20px0hyacw.jpg" alt=""></p>
+<ol>
+<li>客户端将查询发送到服务器；</li>
+<li>服务器检查查询缓存，如果找到了，就从缓存中返回结果，否则进行下一步。</li>
+<li>服务器解析，预处理和优化查询，生成执行计划。</li>
+<li>执行引擎调用存储引擎API执行查询。</li>
+<li>服务器将结果发送回客户端。</li>
+</ol>
+<h4 id="1-客户端服务端通信协议"><a href="#1-客户端服务端通信协议" class="headerlink" title="1.客户端服务端通信协议"></a>1.客户端服务端通信协议</h4><p>通信协议工作机制：“抛球”游戏。任意时刻，要么是客户端发送数据，要么是服务端发送数据。一旦一端发送数据(抛球),另一端只能完整的接受消息才能响应。</p>
+<p>所以，我们需要限制发送信息的大小。<br>客户端：查询语句尽量少，否则可能会抛错误异常(“MySQL server has gone away”)。<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看你的服务器所允许传送的最大数据</span></span><br><span class="line">SHOW VARIABLES LIKE <span class="string">'max_allowed_packet'</span></span><br></pre></td></tr></table></figure></p>
+<p>服务端：当服务端开始响应客户端请求时，客户端必须完整接受整个返回结果。所以要限制查询条数，必要时查询语句用“LIMIT”限制。</p>
+<p>通过  “SHOW [FULL] PROCESSLIST” 命令查询mysql连接时线程状态:<a href="https://dev.mysql.com/doc/refman/5.7/en/general-thread-states.html" target="_blank" rel="noopener">MySQL5.7通用线程状态</a></p>
+<h4 id="2-查询缓存"><a href="#2-查询缓存" class="headerlink" title="2.查询缓存"></a>2.查询缓存</h4><p>如果开启了缓存，MySql会检查查询缓存，进行大小写敏感的哈希查找。如果命中，判断权限没问题后会跳过所有其他阶段直接返回。<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看是否开启查询</span></span><br><span class="line">SHOW VARIABLES LIKE <span class="string">'query_cache_type'</span>;</span><br></pre></td></tr></table></figure></p>
+<h4 id="3-解析器"><a href="#3-解析器" class="headerlink" title="3.解析器"></a>3.解析器</h4><p>解析器通过关键字解析SQL，然后生成一颗对应的“解析树”，然后它使用MySQL语法规则验证和解析语句，比如关键字是否错误，顺序等。</p>
+<h4 id="4-预处理"><a href="#4-预处理" class="headerlink" title="4.预处理"></a>4.预处理</h4><p>进一步检查解析树的合法性。比如检查数据表列是否存在，名字和别名等。最后，预处理器检查权限。</p>
+<h4 id="5-查询优化器-重点"><a href="#5-查询优化器-重点" class="headerlink" title="5.查询优化器(重点)"></a>5.查询优化器(重点)</h4><p>优化器负责将预处理合格的语法树转化为执行计划。</p>
+<p>MySQL使用基于成本的优化器，它将尝试预测一个查询使用某种执行计划的成本，并选择成本最小的一个。<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查询当前会话的当前查询成本</span></span><br><span class="line">SHOW VARIABLES LIKE <span class="string">'Last_query_cost'</span>;</span><br></pre></td></tr></table></figure></p>
+<p><strong>Q:</strong> 那么，MySQL是如何预测成本的呢？<br><strong>A:</strong> MySQL根据一系列统计信息计算得来:每个表或页面个数，索引基数，索引和数据行的长度，索引分布情况等。评估成本不考虑缓存，假设读取任何数据需要一次磁盘I/O。</p>
+<p><strong>可惜MySQL优化器并不是万能的</strong>，有诸多因素会导致MySQL选择错误的执行计划，比如统计信息可能不准确，成本估算和实际成有差距等。</p>
+<p>更多的了解查询优化器是怎么处理查询语句的，查看<a href="http://www.chenruiwen.cn/2018/05/22/MySQL%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E5%99%A8/">MySQL查询优化器</a></p>
+<h4 id="6-查询执行引擎"><a href="#6-查询执行引擎" class="headerlink" title="6.查询执行引擎"></a>6.查询执行引擎</h4><p>MySQL根据解析优化阶段生成的执行计划给出的指令逐步执行。</p>
+<h4 id="7-返回结果给客户端"><a href="#7-返回结果给客户端" class="headerlink" title="7.返回结果给客户端"></a>7.返回结果给客户端</h4><ul>
+<li>查询结果返回给客户端，即时查询不需要返回结果集给客户端，也亏返回一些这个查询信息，比如影响的行数。  </li>
+<li>如果查询可以被缓存，这一阶段也会存放结果入缓存。</li>
+<li>MySQL结果集返回是一个增量、逐步返回的过程。一旦处理开始产生第一条结果时，MySQL就开始逐步返回结果集了。这样的好处是，服务器无须存储太多结果而消耗太多内存，二是客户端可以第一时间获得返回结果。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>当发现MySQL查询效率不高时，考虑两个因素：1.是否请求了不需要的数据？2.是否查询了额外的记录？</li>
+<li>对待效率不高的语句，考虑语句适当拆分成多个简单的语句。</li>
+<li>MySQL执行过程，看图</li>
+</ul>
 
       
     </div>
@@ -499,8 +540,8 @@
       
         <div class="post-tags">
           
-            <a href="/tags/tool/" rel="tag"><i class="fa fa-tag"></i>
-               tool</a>
+            <a href="/tags/mysql/" rel="tag"><i class="fa fa-tag"></i>
+               mysql</a>
           
         </div>
       
@@ -513,8 +554,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/18/基于hexo+nginx快速建站/" rel="next" title="基于hexo+nginx快速建站">
-                <i class="fa fa-chevron-left"></i> 基于hexo+nginx快速建站
+              <a href="/2018/05/22/MySQL查询优化器/" rel="next" title="MySQL查询优化器">
+                <i class="fa fa-chevron-left"></i> MySQL查询优化器
               </a>
             
           </div>
@@ -522,10 +563,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/21/java8实战学习总结/" rel="prev" title="java8实战学习总结">
-                java8实战学习总结 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -678,7 +715,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通过自己打包安装微博图床插件"><span class="nav-number">2.</span> <span class="nav-text">通过自己打包安装微博图床插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装微博图床插件"><span class="nav-number">3.</span> <span class="nav-text">安装微博图床插件</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目的"><span class="nav-number">1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化数据访问"><span class="nav-number">2.</span> <span class="nav-text">优化数据访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重构查询的方式"><span class="nav-number">3.</span> <span class="nav-text">重构查询的方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一张图看Mysql执行过程"><span class="nav-number">4.</span> <span class="nav-text">一张图看Mysql执行过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-客户端服务端通信协议"><span class="nav-number">4.0.1.</span> <span class="nav-text">1.客户端服务端通信协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-查询缓存"><span class="nav-number">4.0.2.</span> <span class="nav-text">2.查询缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-解析器"><span class="nav-number">4.0.3.</span> <span class="nav-text">3.解析器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-预处理"><span class="nav-number">4.0.4.</span> <span class="nav-text">4.预处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-查询优化器-重点"><span class="nav-number">4.0.5.</span> <span class="nav-text">5.查询优化器(重点)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-查询执行引擎"><span class="nav-number">4.0.6.</span> <span class="nav-text">6.查询执行引擎</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-返回结果给客户端"><span class="nav-number">4.0.7.</span> <span class="nav-text">7.返回结果给客户端</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
