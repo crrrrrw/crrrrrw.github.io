@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,dubbo," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="陈瑞文的个人博客" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="前言在之前的文章Dubbo暴露服务过程中提出了问题：@SPI这些东西究竟是什么?在Dubbo开发手册之扩展点加载中有这么解释过：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  所以在分析Dubbo扩展机制前，先看看jdk的SPI。">
+<meta name="keywords" content="java,dubbo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dubbo扩展机制实现(一)之java SPI">
+<meta property="og:url" content="http://www.chenruiwen.cn/2018/06/04/Dubbo扩展机制实现(一)之java SPI/index.html">
+<meta property="og:site_name" content="陈瑞文的个人博客">
+<meta property="og:description" content="前言在之前的文章Dubbo暴露服务过程中提出了问题：@SPI这些东西究竟是什么?在Dubbo开发手册之扩展点加载中有这么解释过：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  所以在分析Dubbo扩展机制前，先看看jdk的SPI。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fr6nptfm2aj20ig0cqgml.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fr6n9im7d1j20kq060aam.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fr9re67q83j20vk0jugp9.jpg">
+<meta property="og:updated_time" content="2018-06-05T13:34:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dubbo扩展机制实现(一)之java SPI">
+<meta name="twitter:description" content="前言在之前的文章Dubbo暴露服务过程中提出了问题：@SPI这些东西究竟是什么?在Dubbo开发手册之扩展点加载中有这么解释过：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  所以在分析Dubbo扩展机制前，先看看jdk的SPI。">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fr6nptfm2aj20ig0cqgml.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.chenruiwen.cn/2018/06/04/Dubbo扩展机制实现(一)之java SPI/"/>
+
+
+
+
+
+  <title>Dubbo扩展机制实现(一)之java SPI | 陈瑞文的个人博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/crrrrrw"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">陈瑞文的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/06/04/Dubbo扩展机制实现(一)之java SPI/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈瑞文">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/touxiang.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="陈瑞文的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Dubbo扩展机制实现(一)之java SPI</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-04T21:31:24+08:00">
+                2018-06-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/dubbo/" itemprop="url" rel="index">
+                    <span itemprop="name">dubbo</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在之前的文章<a href="http://www.chenruiwen.cn/2018/05/20/Dubbo%E6%9A%B4%E9%9C%B2%E6%9C%8D%E5%8A%A1%E8%BF%87%E7%A8%8B/">Dubbo暴露服务过程</a>中提出了问题：<em>@SPI</em>这些东西究竟是什么?<br>在<a href="http://dubbo.apache.org/books/dubbo-dev-book/SPI.html" target="_blank" rel="noopener">Dubbo开发手册之扩展点加载</a>中有这么解释过：</p>
+<blockquote>
+<p>Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。</p>
+</blockquote>
+<p>所以在分析Dubbo扩展机制前，先看看jdk的SPI。<br><a id="more"></a></p>
+<h2 id="什么是SPI"><a href="#什么是SPI" class="headerlink" title="什么是SPI"></a>什么是SPI</h2><p>SPI 全称为 (Service Provider Interface) ,是JDK内置的一种服务提供发现机制。<br>在面向对象设计里，我们不会针对实现编程，模块间面向接口编程来防止强耦合。java spi机制实现了一种放在程序以外的方式去动态装配模块，这就是java的服务发现。类似于ioc的思想，将模块装配放在程序外，比如xml等方式。</p>
+<p>Dubbo框架就是借鉴了这种机制，在jdk的基础上进行了改进。</p>
+<h2 id="java-SPI机制约定"><a href="#java-SPI机制约定" class="headerlink" title="java SPI机制约定"></a>java SPI机制约定</h2><p>java的spi是通过<a href="https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html" target="_blank" rel="noopener">ServiceLoader</a>来加载，根据官方文档来看一下SPI机制的约定：</p>
+<ul>
+<li>Service实现类必须有一个无参构造器</li>
+<li>在META-INF/services/目录中提供一个文件名称为Service接口全限定名的文件，文件内容为Service接口实现类全限定名，编码格式为UTF-8</li>
+<li>使用java.util.ServiceLoader来动态加载Service接口的实现类。</li>
+</ul>
+<h2 id="SPI示例"><a href="#SPI示例" class="headerlink" title="SPI示例"></a>SPI示例</h2><p><a href="https://github.com/crrrrrw/java-spi-demo" target="_blank" rel="noopener">代码地址传送门</a><br>目录结构如下:<br><img src="http://ww1.sinaimg.cn/large/87faef88ly1fr6nptfm2aj20ig0cqgml.jpg" alt=""><br>接口定义：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface HelloWorld &#123;</span><br><span class="line">    void sayHello();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>两个实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class HelloWorldENimpl implements HelloWorld &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void sayHello() &#123;</span><br><span class="line">        System.out.println(&quot;hello,world!&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">public class HelloWorldCNimpl implements HelloWorld &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void sayHello() &#123;</span><br><span class="line">        System.out.println(&quot;你好，世界！&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>配置服务发现，在META-INF/service目录下创建文件：<em>com.crw.demo.spi.HelloWorld</em>，内容为接口实现类全名：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">com.crw.demo.spi.impl.HelloWorldENimpl</span><br><span class="line">com.crw.demo.spi.impl.HelloWorldCNimpl</span><br></pre></td></tr></table></figure></p>
+<p>编写调用端：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public class Run &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        ServiceLoader&lt;HelloWorld&gt; loads = ServiceLoader.load(HelloWorld.class);</span><br><span class="line">        for (HelloWorld load : loads) &#123;</span><br><span class="line">            load.sayHello();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果如下：<br><img src="http://ww1.sinaimg.cn/large/87faef88ly1fr6n9im7d1j20kq060aam.jpg" alt="">  </p>
+<h2 id="ServiceLoader源码分析"><a href="#ServiceLoader源码分析" class="headerlink" title="ServiceLoader源码分析"></a>ServiceLoader源码分析</h2><p>从 <em>ServiceLoader.load(Class\&lt;S> service)</em> 方法点进去看一下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public static &lt;S&gt; ServiceLoader&lt;S&gt; load(Class&lt;S&gt; service) &#123;</span><br><span class="line">    ClassLoader cl = Thread.currentThread().getContextClassLoader(); // 获取类加载器</span><br><span class="line">    return ServiceLoader.load(service, cl);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private ServiceLoader(Class&lt;S&gt; svc, ClassLoader cl) &#123;</span><br><span class="line">    service = Objects.requireNonNull(svc, &quot;Service interface cannot be null&quot;);</span><br><span class="line">    loader = (cl == null) ? ClassLoader.getSystemClassLoader() : cl;</span><br><span class="line">    acc = (System.getSecurityManager() != null) ? AccessController.getContext() : null;</span><br><span class="line">    reload(); // 开始加载</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void reload() &#123;</span><br><span class="line">    providers.clear(); // 清空提供者缓存</span><br><span class="line">    lookupIterator = new LazyIterator(service, loader); // 创建一个懒加载的提供者发现器</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到，实际上是交给了一个私有静态内部类处理new LazyIterator(service, loader); 通过名字就像是懒加载，所以我们看看什么时候类加载器会加载SPI实现服务。  </p>
+<p>答案是遍历的时候。</p>
+<p>ServiceLoader实现了iterator接口:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public Iterator&lt;S&gt; iterator() &#123;</span><br><span class="line">    return new Iterator&lt;S&gt;() &#123;</span><br><span class="line"></span><br><span class="line">        Iterator&lt;Map.Entry&lt;String,S&gt;&gt; knownProviders</span><br><span class="line">            = providers.entrySet().iterator();</span><br><span class="line"></span><br><span class="line">        public boolean hasNext() &#123;</span><br><span class="line">            if (knownProviders.hasNext())</span><br><span class="line">                return true;</span><br><span class="line">            return lookupIterator.hasNext(); // 实际上是调用LazyIterator.hasNext()方法。</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public S next() &#123;</span><br><span class="line">            if (knownProviders.hasNext())</span><br><span class="line">                return knownProviders.next().getValue();</span><br><span class="line">            return lookupIterator.next(); // 实际上是调用LazyIterator.next()方法。</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public void remove() &#123;</span><br><span class="line">            throw new UnsupportedOperationException();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在客户端遍历的时候，首先调用了hasNext()方法，hasNext调用了LazyIterator.hasNext(),其实际上又调用了内部方法 <em>hasNextService()</em> :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">private boolean hasNextService() &#123;</span><br><span class="line">    if (nextName != null) &#123; // 如果有服务提供者名称，直接返回</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line">    if (configs == null) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            String fullName = PREFIX + service.getName(); // META-INF/services/xxx.xxx.xxx.XxxImpl</span><br><span class="line">            // 获取配置文件加载路径</span><br><span class="line">            if (loader == null)</span><br><span class="line">                configs = ClassLoader.getSystemResources(fullName);</span><br><span class="line">            else</span><br><span class="line">                configs = loader.getResources(fullName);</span><br><span class="line">        &#125; catch (IOException x) &#123;</span><br><span class="line">            fail(service, &quot;Error locating configuration files&quot;, x);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    while ((pending == null) || !pending.hasNext()) &#123;</span><br><span class="line">        if (!configs.hasMoreElements()) &#123;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">        pending = parse(service, configs.nextElement()); //解析配置路径，用utf-8格式读取配置</span><br><span class="line">    &#125;</span><br><span class="line">    nextName = pending.next(); // 服务提供者名称赋值</span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>看一眼解析完的结构，在遍历的时候会读取配置，把服务提供者名称一次性获取：<br><img src="http://ww1.sinaimg.cn/large/87faef88ly1fr9re67q83j20vk0jugp9.jpg" alt="">  </p>
+<p>接着，在客户端遍历的时候调用了next()方法，<br>LazyIterator.next()方法里做了如下事情<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">private S nextService() &#123;</span><br><span class="line">    if (!hasNextService()) // 如果配置里没有服务，则会抛异常</span><br><span class="line">        throw new NoSuchElementException();</span><br><span class="line">    String cn = nextName;</span><br><span class="line">    nextName = null;</span><br><span class="line">    Class&lt;?&gt; c = null;</span><br><span class="line">    try &#123;</span><br><span class="line">        c = Class.forName(cn, false, loader); // 反射创建了配置文件里的实现类</span><br><span class="line">    &#125; catch (ClassNotFoundException x) &#123;</span><br><span class="line">        fail(service,</span><br><span class="line">             &quot;Provider &quot; + cn + &quot; not found&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    if (!service.isAssignableFrom(c)) &#123;</span><br><span class="line">        fail(service,</span><br><span class="line">             &quot;Provider &quot; + cn  + &quot; not a subtype&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    try &#123;</span><br><span class="line">        S p = service.cast(c.newInstance()); // 创建了一个实现类的实例</span><br><span class="line">        providers.put(cn, p); // 放入提供者缓存中</span><br><span class="line">        return p;</span><br><span class="line">    &#125; catch (Throwable x) &#123;</span><br><span class="line">        fail(service,</span><br><span class="line">             &quot;Provider &quot; + cn + &quot; could not be instantiated&quot;,</span><br><span class="line">             x);</span><br><span class="line">    &#125;</span><br><span class="line">    throw new Error();          // This cannot happen</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>返回了一个服务提供者实例，就这样完成了一次SPI调用。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇文章主要介绍了jdk SPI机制：</p>
+<ul>
+<li>java如何编写一个SPI服务的。</li>
+<li>ServiceLoader源码如何实现SPI服务。  </li>
+</ul>
+<p>本篇主要是为了Dubbo实现spi而做了铺垫。在看ServiceLoader的源码时，主要还是利用了java的类加载器 ClassLoader ，这些之后会单独写一写。鉴于鄙人才疏学浅，以上文章如有不对的地方希望大家予以指出，共同进步。</p>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束,</i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+      
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您如果觉得本文不错，不妨打赏一下，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="陈瑞文 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="陈瑞文 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i>
+               java</a>
+          
+            <a href="/tags/dubbo/" rel="tag"><i class="fa fa-tag"></i>
+               dubbo</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/28/MySQL查询性能优化/" rel="next" title="MySQL查询性能优化">
+                <i class="fa fa-chevron-left"></i> MySQL查询性能优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/touxiang.jpeg"
+                alt="陈瑞文" />
+            
+              <p class="site-author-name" itemprop="name">陈瑞文</p>
+              <p class="site-description motion-element" itemprop="description">你好，旅行者</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/crrrrrw" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是SPI"><span class="nav-number">2.</span> <span class="nav-text">什么是SPI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java-SPI机制约定"><span class="nav-number">3.</span> <span class="nav-text">java SPI机制约定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SPI示例"><span class="nav-number">4.</span> <span class="nav-text">SPI示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ServiceLoader源码分析"><span class="nav-number">5.</span> <span class="nav-text">ServiceLoader源码分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈瑞文</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">本站累计共19.0k字</span>
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
