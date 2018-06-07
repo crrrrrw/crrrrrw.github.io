@@ -4,8 +4,39 @@
 
   
 
-
 <html class="theme-next pisces use-motion" lang="zh-Hans">
+<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
+<style>
+blockquote {
+  color: #888;
+  background-color: #eae6f3;
+  border-left: 1rem solid #5236a0;
+  padding: 0 1.5rem;
+  position: relative;
+  font-family: 'Roboto', sans-serif;
+}
+
+blockquote:before,
+blockquote:after {
+  color: #392570;
+  font-size: 2.5rem;
+  position: absolute;
+  line-height: 2.5rem;
+}
+
+blockquote:before {
+  content: "\201C";
+  left: -1rem;
+  top: 0;
+}
+
+blockquote:after {
+  content: "\201D";
+  right: 0;
+  bottom: -1rem;
+}
+</style>
+
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -127,7 +158,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -142,7 +173,7 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="陈瑞文的个人博客" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="陈瑞文的小院" type="application/atom+xml" />
 
 
 
@@ -154,7 +185,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="java8实战学习总结">
 <meta property="og:url" content="http://www.chenruiwen.cn/2018/04/21/java8实战学习总结/index.html">
-<meta property="og:site_name" content="陈瑞文的个人博客">
+<meta property="og:site_name" content="陈瑞文的小院">
 <meta property="og:description" content="前言java8作为一次大的升级，语法层面上有很大的改变，于是，来尝尝Java8的鲜。(ps: 哈哈，java10都出了，java8还不熟咋办呢~ 学学吧~)">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-06-05T13:37:58.000Z">
@@ -196,7 +227,7 @@
 
 
 
-  <title>java8实战学习总结 | 陈瑞文的个人博客</title>
+  <title>java8实战学习总结 | 陈瑞文的小院</title>
   
 
 
@@ -228,7 +259,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">陈瑞文的个人博客</span>
+        <span class="site-title">陈瑞文的小院</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -344,7 +375,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的个人博客">
+      <meta itemprop="name" content="陈瑞文的小院">
     </span>
 
     
@@ -441,21 +472,24 @@
 <li>JVM新特性</li>
 </ul>
 <h3 id="1-Lambda表达式"><a href="#1-Lambda表达式" class="headerlink" title="1.Lambda表达式"></a>1.Lambda表达式</h3><p>Lambda允许把函数作为一个方法的参数（函数作为参数传递进方法中），或者把代码看成数据。</p>
-<h4 id="1-1-lambda的基本语法是："><a href="#1-1-lambda的基本语法是：" class="headerlink" title="1.1 lambda的基本语法是："></a>1.1 lambda的基本语法是：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(parameters) -&gt; expression</span><br></pre></td></tr></table></figure>
-<p>或者<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(parameters) -&gt; &#123; statements; &#125;</span><br></pre></td></tr></table></figure></p>
-<p>eg:java8中有效的lambda表达式：</p>
+<h4 id="1-1-lambda的基本语法是："><a href="#1-1-lambda的基本语法是：" class="headerlink" title="1.1 lambda的基本语法是："></a>1.1 lambda的基本语法是：</h4><pre><code>(parameters) -&gt; expression
+</code></pre><p>或者</p>
+<pre><code>(parameters) -&gt; { statements; }
+</code></pre><p>eg:java8中有效的lambda表达式：</p>
 <ol>
 <li><p>一个String类型的参数并返回一个int。Lambda中没有return语句，因为已经隐含了return。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(String s) -&gt; s.length()</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>(String s) -&gt; s.length()
+</code></pre></li>
 <li><p>两个int类型的参数而没有返回值。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(int x, int y) -&gt; &#123;</span><br><span class="line">    System.out.println(&quot;Result:&quot;);</span><br><span class="line">    System.out.println(x+y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>没有参数，返回一个int</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">() -&gt; 1</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>(int x, int y) -&gt; {
+ System.out.println(&quot;Result:&quot;);
+ System.out.println(x+y);
+}
+</code></pre></li>
+<li>没有参数，返回一个int<pre><code>() -&gt; 1
+</code></pre><h4 id="1-2-函数式接口"><a href="#1-2-函数式接口" class="headerlink" title="1.2 函数式接口"></a>1.2 函数式接口</h4></li>
 </ol>
-<h4 id="1-2-函数式接口"><a href="#1-2-函数式接口" class="headerlink" title="1.2 函数式接口"></a>1.2 函数式接口</h4><ul>
+<ul>
 <li>函数式接口(函数式接口就是只定义一个抽象方法的接口)</li>
 <li>函数描述符(函数式接口的抽象方法的签名 就是 lambda表达式的签名)</li>
 </ul>
@@ -473,21 +507,38 @@
 <ol>
 <li>指向静态方法的方法引用。<br>lambda表达式:   (args) -&gt; ClassName.staticMethod(args)<br>方法引用:       ClassName::staticMethod</li>
 </ol>
-<p>比如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s -&gt; Integer.valueOf(s) 等价于 Integer::valueOf</span><br></pre></td></tr></table></figure></p>
-<ol start="2">
+<p>比如</p>
+<pre><code>s -&gt; Integer.valueOf(s) 等价于 Integer::valueOf
+</code></pre><ol start="2">
 <li>指向任意类型实例方法的方法引用。<br>lambda表达式:   (arg0, rest) -&gt; arg0.instanceMethod(rest)<br>方法引用:       ClassName::instanceMethod<br>(上面args0是ClassName类型的)</li>
 </ol>
-<p>比如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(str, integer) -&gt; str.substring(integer) 等价于 String::substring</span><br></pre></td></tr></table></figure></p>
-<ol start="3">
+<p>比如</p>
+<pre><code>(str, integer) -&gt; str.substring(integer) 等价于 String::substring
+</code></pre><ol start="3">
 <li>指向现有对象的实例方法的方法引用。<br>lambda表达式:   (args) -&gt; expr.instanceMethod(args)<br>方法引用:       expr::instanceMethod</li>
 </ol>
-<p>比如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(Apple arg) -&gt; appleExpr.compareAppleWight(arg) 等价于 appleExpr::compareAppleWight</span><br></pre></td></tr></table></figure></p>
-<ul>
+<p>比如</p>
+<pre><code>(Apple arg) -&gt; appleExpr.compareAppleWight(arg) 等价于 appleExpr::compareAppleWight
+</code></pre><ul>
 <li>构造函数的方法引用。<br>对于一个现有构造函数，你可以利用它的名称和关键字new来创建它的一个引用：<br>ClassName::new。它的功能与指向静态方法的引用类似。</li>
 </ul>
-<p>比如创建一个Apple对象。<br>空参构造器Apple()：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Supplier&lt;Apple&gt; c1 = Apple::new;</span><br><span class="line">Apple a1 = c1.get();</span><br><span class="line"></span><br><span class="line">等价于</span><br><span class="line"></span><br><span class="line">Supplier&lt;Apple&gt; c1 = () -&gt; new Apple();</span><br><span class="line">Apple a1 = c1.get();</span><br></pre></td></tr></table></figure></p>
-<p>两个参数的构造函数Apple(String color, Integer weight)：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">BiFunction&lt;Integer, String, Apple&gt; biFunction = Apple::new;</span><br><span class="line">Apple apple2 = biFunction.apply(155, &quot;green&quot;);</span><br><span class="line"></span><br><span class="line">等价于</span><br><span class="line"></span><br><span class="line">BiFunction&lt;Integer, String, Apple&gt; biFunction = (weight, color) -&gt; new Apple(weight, color);</span><br><span class="line">Apple apple2 = biFunction.apply(155, &quot;green&quot;);</span><br></pre></td></tr></table></figure></p>
-<h4 id="1-4-复合lambda表达式"><a href="#1-4-复合lambda表达式" class="headerlink" title="1.4 复合lambda表达式"></a>1.4 复合lambda表达式</h4><ol>
+<p>比如创建一个Apple对象。<br>空参构造器Apple()：</p>
+<pre><code>Supplier&lt;Apple&gt; c1 = Apple::new;
+Apple a1 = c1.get();
+
+等价于
+
+Supplier&lt;Apple&gt; c1 = () -&gt; new Apple();
+Apple a1 = c1.get();
+</code></pre><p>两个参数的构造函数Apple(String color, Integer weight)：</p>
+<pre><code>BiFunction&lt;Integer, String, Apple&gt; biFunction = Apple::new;
+Apple apple2 = biFunction.apply(155, &quot;green&quot;);
+
+等价于
+
+BiFunction&lt;Integer, String, Apple&gt; biFunction = (weight, color) -&gt; new Apple(weight, color);
+Apple apple2 = biFunction.apply(155, &quot;green&quot;);
+</code></pre><h4 id="1-4-复合lambda表达式"><a href="#1-4-复合lambda表达式" class="headerlink" title="1.4 复合lambda表达式"></a>1.4 复合lambda表达式</h4><ol>
 <li>比较器(Comparator<t>)复合(reversed(),thenComparing())</t></li>
 <li>谓词(Predicate<t>)复合(negate(),and(),or())</t></li>
 <li>函数(Function&lt;T, V&gt;)复合(compose(),andThen(),identity())</li>
@@ -556,21 +607,31 @@
 </ul>
 <h6 id="2-3-1-归约和汇总"><a href="#2-3-1-归约和汇总" class="headerlink" title="2.3.1 归约和汇总"></a>2.3.1 归约和汇总</h6><p>Stream.reduce 与 Stream.collect的区别：<br>Stream.reduce，常用的方法有average, sum, min, max, and count，返回单个的结果值，并且reduce操作每处理一个元素总是创建一个新值。<br>Stream.collect修改现存的值，而不是每处理一个元素，创建一个新值。</p>
 <h6 id="2-3-2-数据分组"><a href="#2-3-2-数据分组" class="headerlink" title="2.3.2 数据分组"></a>2.3.2 数据分组</h6><ul>
-<li><p>一级分组</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Dish.Type, List&lt;Dish&gt;&gt; groupByType = menuList.stream().collect(groupingBy(Dish::getType));</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>多级分组</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Dish.Type, Map&lt;CaloricLevel, List&lt;Dish&gt;&gt;&gt; groupByTypeAndCalories = menuList.stream().collect(</span><br><span class="line">            groupingBy(Dish::getType,</span><br><span class="line">                    groupingBy(dish -&gt; &#123;</span><br><span class="line">                        if (dish.getCalories() &lt;= 400) return CaloricLevel.DIET;</span><br><span class="line">                        else if (dish.getCalories() &lt;= 700) return CaloricLevel.NORMAL;</span><br><span class="line">                        else return CaloricLevel.FAT;</span><br><span class="line">                    &#125;))</span><br><span class="line">    );</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>按子组收集数据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Dish.Type, Long&gt; groupByTypeToCount = menuList.stream().collect(groupingBy(Dish::getType, counting()));</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>分区(分区是一种特殊的分组，结果map至少包含两个不同的分组——一个true，一个false。)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Boolean, List&lt;Dish&gt;&gt; partitionByVegeterian =</span><br><span class="line">                menuList.stream().collect(partitioningBy(Dish::isVegetarian));</span><br></pre></td></tr></table></figure>
-</li>
+<li>一级分组<pre><code>Map&lt;Dish.Type, List&lt;Dish&gt;&gt; groupByType = menuList.stream().collect(groupingBy(Dish::getType));
+</code></pre></li>
+<li>多级分组<pre><code>Map&lt;Dish.Type, Map&lt;CaloricLevel, List&lt;Dish&gt;&gt;&gt; groupByTypeAndCalories = menuList.stream().collect(
+          groupingBy(Dish::getType,
+                  groupingBy(dish -&gt; {
+                      if (dish.getCalories() &lt;= 400) return CaloricLevel.DIET;
+                      else if (dish.getCalories() &lt;= 700) return CaloricLevel.NORMAL;
+                      else return CaloricLevel.FAT;
+                  }))
+  );
+</code></pre></li>
+<li>按子组收集数据<pre><code>Map&lt;Dish.Type, Long&gt; groupByTypeToCount = menuList.stream().collect(groupingBy(Dish::getType, counting()));
+</code></pre></li>
+<li>分区(分区是一种特殊的分组，结果map至少包含两个不同的分组——一个true，一个false。)<pre><code>Map&lt;Boolean, List&lt;Dish&gt;&gt; partitionByVegeterian =
+              menuList.stream().collect(partitioningBy(Dish::isVegetarian));
+</code></pre><h6 id="2-3-3-Collector接口"><a href="#2-3-3-Collector接口" class="headerlink" title="2.3.3 Collector接口"></a>2.3.3 Collector接口</h6></li>
 </ul>
-<h6 id="2-3-3-Collector接口"><a href="#2-3-3-Collector接口" class="headerlink" title="2.3.3 Collector接口"></a>2.3.3 Collector接口</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public interface Collector&lt;T, A, R&gt; &#123;</span><br><span class="line">    Supplier&lt;A&gt; supplier()</span><br><span class="line">    BiConsumer&lt;A, T&gt; accumulator()</span><br><span class="line">    Function&lt;A, R&gt; finisher()</span><br><span class="line">    BinaryOperator&lt;A&gt; combiner()</span><br><span class="line">    Set&lt;Characteristics&gt; characteristics()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Collector接口的三个泛型：</p>
+<pre><code>public interface Collector&lt;T, A, R&gt; {
+    Supplier&lt;A&gt; supplier()
+    BiConsumer&lt;A, T&gt; accumulator()
+    Function&lt;A, R&gt; finisher()
+    BinaryOperator&lt;A&gt; combiner()
+    Set&lt;Characteristics&gt; characteristics()
+}
+</code></pre><p>Collector接口的三个泛型：</p>
 <ul>
 <li>T：stream在调用collect方法收集前的数据类型</li>
 <li>A：A是T的累加器，遍历T的时候，会把T按照一定的方式添加到A中，换句话说就是把一些T通过一种方式变成A</li>
@@ -694,11 +755,12 @@
 <li>DateTimeFormatter(DateTimeFormatter实例都是线程安全<br>的)</li>
 </ul>
 <h3 id="5-其他"><a href="#5-其他" class="headerlink" title="5. 其他"></a>5. 其他</h3><ol>
-<li><p>java类库标准base64编码使用方式:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">final String text = &quot;测试Abc123!!￥￥&quot;;</span><br><span class="line">final String encoded = Base64.getEncoder().encodeToString(text.getBytes(StandardCharsets.UTF_8)); </span><br><span class="line">System.out.println(encoded); // 5rWL6K+VQWJjMTIzISHvv6Xvv6U=</span><br><span class="line">final String decoded = new String(Base64.getDecoder().decode(encoded), StandardCharsets.UTF_8);</span><br><span class="line">System.out.println(decoded); // 测试Abc123!!￥￥</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// url encode</span><br><span class="line">final String url = &quot;http://www.jinhui365.com/abc?foo=中文&amp;￥%&amp;bar=hello123&amp;baz=http://abc/def123&quot;;</span><br><span class="line">final String encoded2 = Base64.getUrlEncoder().encodeToString(url.getBytes(StandardCharsets.UTF_8));</span><br><span class="line">System.out.println(encoded2); // aHR0cDovL3d3dy5qaW5odWkzNjUuY29tL2FiYz9mb2895Lit5paHJu-_pSUmYmFyPWhlbGxvMTIzJmJhej1odHRwOi8vYWJjL2RlZjEyMw==</span><br><span class="line">final String decoded2 = new String(Base64.getUrlDecoder().decode(encoded2), StandardCharsets.UTF_8);</span><br><span class="line">System.out.println(decoded2); // http://www.jinhui365.com/abc?foo=中文&amp;￥%&amp;bar=hello123&amp;baz=http://abc/def123</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>jvm的变化:<br>PermGen空间被移除了，取而代之的是Metaspace（JEP 122）。  JVM选项    -XX:PermSize与-XX:MaxPermSize分别被<br>-XX:MetaSpaceSize与-XX:MaxMetaspaceSize所代替。</p>
-</li>
+<li>java类库标准base64编码使用方式:<br><code>`</code><br>final String text = “测试Abc123!!￥￥”;<br>final String encoded = Base64.getEncoder().encodeToString(text.getBytes(StandardCharsets.UTF_8));<br>System.out.println(encoded); // 5rWL6K+VQWJjMTIzISHvv6Xvv6U=<br>final String decoded = new String(Base64.getDecoder().decode(encoded), StandardCharsets.UTF_8);<br>System.out.println(decoded); // 测试Abc123!!￥￥</li>
+</ol>
+<p>// url encode<br>final String url = “<a href="http://www.jinhui365.com/abc?foo=中文&amp;￥%&amp;bar=hello123&amp;baz=http://abc/def123&quot;" target="_blank" rel="noopener">http://www.jinhui365.com/abc?foo=中文&amp;￥%&amp;bar=hello123&amp;baz=http://abc/def123&quot;</a>;<br>final String encoded2 = Base64.getUrlEncoder().encodeToString(url.getBytes(StandardCharsets.UTF_8));<br>System.out.println(encoded2); // aHR0cDovL3d3dy5qaW5odWkzNjUuY29tL2FiYz9mb2895Lit5paHJu-_pSUmYmFyPWhlbGxvMTIzJmJhej1odHRwOi8vYWJjL2RlZjEyMw==<br>final String decoded2 = new String(Base64.getUrlDecoder().decode(encoded2), StandardCharsets.UTF_8);<br>System.out.println(decoded2); // <a href="http://www.jinhui365.com/abc?foo=中文&amp;￥%&amp;bar=hello123&amp;baz=http://abc/def123" target="_blank" rel="noopener">http://www.jinhui365.com/abc?foo=中文&amp;￥%&amp;bar=hello123&amp;baz=http://abc/def123</a></p>
+<p><code>`</code></p>
+<ol start="2">
+<li>jvm的变化:<br>PermGen空间被移除了，取而代之的是Metaspace（JEP 122）。  JVM选项    -XX:PermSize与-XX:MaxPermSize分别被<br>-XX:MetaSpaceSize与-XX:MaxMetaspaceSize所代替。</li>
 </ol>
 <h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>Java8 作为 Java 语言的一次重大发布，包含语法上的更改、新的方法与数据类型，以及一些能默默提升应用性能的隐性改善。而且java8有利于提高开发生产力，对于开发者来说是好事，也是趋势。但是生产中使用java8可能存在风险，在正式使用Java8之前，不妨先体验一下java8的神奇。</p>
 <p>附《java8 in action》源码:<a href="https://github.com/java8/Java8InAction.git" target="_blank" rel="noopener">https://github.com/java8/Java8InAction.git</a>   </p>
@@ -734,14 +796,14 @@
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="陈瑞文 微信支付"/>
+        <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"/>
         <p>微信支付</p>
       </div>
     
 
     
       <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="陈瑞文 支付宝"/>
+        <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"/>
         <p>支付宝</p>
       </div>
     
@@ -857,7 +919,7 @@
                 alt="陈瑞文" />
             
               <p class="site-author-name" itemprop="name">陈瑞文</p>
-              <p class="site-description motion-element" itemprop="description">你好，旅行者</p>
+              <p class="site-description motion-element" itemprop="description">每天都在小小的改变</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -983,15 +1045,43 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4
+<span>   |   </span>
+<span id="showDays"></span></div>
 
 
 
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共20.4k字</span>
+  <span class="post-count">本站累计共19.2k字</span>
 </div>
+
+<script>
+  var seconds = 1000;
+  var minutes = seconds * 60;
+  var hours = minutes * 60;
+  var days = hours * 24;
+  var years = days * 365;
+  var birthDay = Date.UTC(2018,04,14,00,00,00); // 这里设置建站时间
+  setInterval(function() {
+    var today = new Date();
+    var todayYear = today.getFullYear();
+    var todayMonth = today.getMonth()+1;
+    var todayDate = today.getDate();
+    var todayHour = today.getHours();
+    var todayMinute = today.getMinutes();
+    var todaySecond = today.getSeconds();
+    var now = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+    var diff = now - birthDay;
+    var diffYears = Math.floor(diff/years);
+    var diffDays = Math.floor((diff/days)-diffYears*365);
+    var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+    var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+    var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+      document.getElementById('showDays').innerHTML="本站已运行 "+diffYears+" 年 "+diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
+  }, 1000);
+</script>
 
         
 
@@ -1141,6 +1231,20 @@
 
 
 
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script type="text/javascript">
+  new Valine({
+      av: AV,
+      el: '#comments' ,
+      app_id: '',
+      app_key: '',
+      placeholder: 'Just go go', // 默认 null
+      notify: false, // 默认 false
+      verify: false, // 默认 false
+      path: , // 默认 window.location.pathname
+      avatar: 'mm' // 默认 ''
+  });
+</script>
 
 
   
@@ -1168,3 +1272,20 @@
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/love.js"></script>
+<!-- highlight 高亮 start-->
+<script src="http://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script type="text/javascript">
+  $(function() {
+    hljs.initHighlighting();
+    $('pre code').each(function() {
+      var lines = $(this).text().split('\n').length - 1;
+      var $numbering = $('<ul/>').addClass('pre-numbering');
+      $(this)
+        .addClass('has-numbering')
+        .parent()
+        .append($numbering);
+    });
+  });
+
+</script>
+<!-- highlight 高亮 end-->

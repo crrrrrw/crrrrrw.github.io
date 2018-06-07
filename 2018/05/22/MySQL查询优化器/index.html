@@ -4,8 +4,39 @@
 
   
 
-
 <html class="theme-next pisces use-motion" lang="zh-Hans">
+<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
+<style>
+blockquote {
+  color: #888;
+  background-color: #eae6f3;
+  border-left: 1rem solid #5236a0;
+  padding: 0 1.5rem;
+  position: relative;
+  font-family: 'Roboto', sans-serif;
+}
+
+blockquote:before,
+blockquote:after {
+  color: #392570;
+  font-size: 2.5rem;
+  position: absolute;
+  line-height: 2.5rem;
+}
+
+blockquote:before {
+  content: "\201C";
+  left: -1rem;
+  top: 0;
+}
+
+blockquote:after {
+  content: "\201D";
+  right: 0;
+  bottom: -1rem;
+}
+</style>
+
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -127,7 +158,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -142,7 +173,7 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="陈瑞文的个人博客" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="陈瑞文的小院" type="application/atom+xml" />
 
 
 
@@ -154,17 +185,15 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL查询优化器">
 <meta property="og:url" content="http://www.chenruiwen.cn/2018/05/22/MySQL查询优化器/index.html">
-<meta property="og:site_name" content="陈瑞文的个人博客">
+<meta property="og:site_name" content="陈瑞文的小院">
 <meta property="og:description" content="目的 了解查询优化器的优化策略 了解和查看查询优化器优化后的执行计划 了解优化器是怎么优化的 了解优化器在关联语句中的处理 了解一些查询优化器的提示">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqnue0bqrbj20r102ut8o.jpg">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqongff9j4j20sx01rjra.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqr12aclarj20tb02q3yf.jpg">
 <meta property="og:updated_time" content="2018-06-02T15:44:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL查询优化器">
 <meta name="twitter:description" content="目的 了解查询优化器的优化策略 了解和查看查询优化器优化后的执行计划 了解优化器是怎么优化的 了解优化器在关联语句中的处理 了解一些查询优化器的提示">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqnue0bqrbj20r102ut8o.jpg">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqr12aclarj20tb02q3yf.jpg">
 
 
 
@@ -200,7 +229,7 @@
 
 
 
-  <title>MySQL查询优化器 | 陈瑞文的个人博客</title>
+  <title>MySQL查询优化器 | 陈瑞文的小院</title>
   
 
 
@@ -232,7 +261,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">陈瑞文的个人博客</span>
+        <span class="site-title">陈瑞文的小院</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -348,7 +377,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的个人博客">
+      <meta itemprop="name" content="陈瑞文的小院">
     </span>
 
     
@@ -457,48 +486,92 @@
 </li>
 <li><p><font face="华文新魏" size="3">优化</font> COUNT()、MIN()、MAX()。<br>查找某列最大/最小值，该列又有索引，查找最大值，则会直接找最后一行；最小值，则直接找第一行。因为索引已经排好序了。可以从EXPLAIN中看到：“Select tables optimized away”。这说明已经从执行计划中移除该表并用常数取代。</p>
 </li>
-<li><font face="华文新魏" size="3">预估并转化为常数表达式</font><br>如果一个表达式可以被简化为一个常量，那么这个表达式就会被转换。 在WHERE 、USING、ON这些连接条件强制值相等的条件中，常量具有传递性<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN SELECT</span><br><span class="line">	table_a.id,</span><br><span class="line">	table_b.id</span><br><span class="line">FROM</span><br><span class="line">	table_b</span><br><span class="line">INNER JOIN table_a ON table_a.tb_id = table_b.id</span><br><span class="line">WHERE</span><br><span class="line">	table_b.id = 1</span><br></pre></td></tr></table></figure>
-</li>
+<li><font face="华文新魏" size="3">预估并转化为常数表达式</font><br>如果一个表达式可以被简化为一个常量，那么这个表达式就会被转换。 在WHERE 、USING、ON这些连接条件强制值相等的条件中，常量具有传递性<br><code>`</code><br>EXPLAIN SELECT<br> table_a.id,<br> table_b.id<br>FROM<br> table_b<br>INNER JOIN table_a ON table_a.tb_id = table_b.id<br>WHERE<br> table_b.id = 1</li>
 </ol>
-<p><img src="http://ww1.sinaimg.cn/large/87faef88ly1fqnue0bqrbj20r102ut8o.jpg" alt=""></p>
-<ol start="6">
-<li><p><font face="华文新魏" size="3">覆盖索引</font><br>当索引包含查询需要的列时，MySql就可以使用索引来避免读取行数据。</p>
-</li>
-<li><p><font face="华文新魏" size="3">子查询优化</font><br>MySQL可以将某些类型的子查询转换成相等的效率更高的形式。</p>
-</li>
-<li><font face="华文新魏" size="3">提前终止查询</font>  </li>
-</ol>
-<ul>
-<li>MySQL在发现已经满足查询需求时，会立刻终止查询。</li>
-<li>MySQL检测一个不成立的条件也会立刻返回空结果。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN SELECT * FROM table_a WHERE id = - 1;</span><br></pre></td></tr></table></figure>
+<pre><code>![](http://ww1.sinaimg.cn/large/87faef88ly1fqnue0bqrbj20r102ut8o.jpg)
+
+6. &lt;font face=&quot;华文新魏&quot; size=&quot;3&quot;&gt;覆盖索引&lt;/font&gt;  
+当索引包含查询需要的列时，MySql就可以使用索引来避免读取行数据。
+
+7. &lt;font face=&quot;华文新魏&quot; size=&quot;3&quot;&gt;子查询优化&lt;/font&gt;  
+MySQL可以将某些类型的子查询转换成相等的效率更高的形式。
+
+8. &lt;font face=&quot;华文新魏&quot; size=&quot;3&quot;&gt;提前终止查询&lt;/font&gt;  
+- MySQL在发现已经满足查询需求时，会立刻终止查询。
+- MySQL检测一个不成立的条件也会立刻返回空结果。
+</code></pre><p>EXPLAIN SELECT * FROM table_a WHERE id = - 1;</p>
+<pre><code>![](http://ww1.sinaimg.cn/large/87faef88ly1fqongff9j4j20sx01rjra.jpg)
+
+9. &lt;font face=&quot;华文新魏&quot; size=&quot;3&quot;&gt;等值传播&lt;/font&gt;  
+如果两个列的值通过等式关联，那么MySQL能把其中一个列的WHERE条件传递到另一个列。
+比如：
+</code></pre><p>SELECT table_a.id, table_b.id FROM table_b INNER JOIN table_a ON table_a.tb_id = table_b.id WHERE table_b.id &lt; 100;</p>
+<pre><code>MySQL会判断把WHERE后面的关联作用于table_a表，等价于
+</code></pre><p>SELECT table_a.id, table_b.id FROM table_b INNER JOIN table_a ON table_a.tb_id = table_b.id WHERE table_b.id &lt; 100 AND table_a.tb_id &lt; 100;</p>
+<pre><code>10. &lt;font face=&quot;华文新魏&quot; size=&quot;3&quot;&gt;列表IN()的比较&lt;/font&gt;  
+MySql会对IN()里面的数据进行排序，然后用二分法查找某个值是否在列表中，这个算法的效率是O(Log n)。这其他数据库等价转换为多个OR条件连接的复杂度O(n)来说，IN()里大量取值时会更快。
+
+## MySQL如何关联查询
+MySQL关联查询策略:  
+其实就是嵌套循环查询。MySQL先从第一个表循环读，然后再嵌套循环到下一个表寻找匹配，如此反复，直到找到所有表的匹配的行为止。 
+
+举个栗子：  
+- 内连接sql
+</code></pre><p>SELECT tbl_user.name, tbl_bankcard.bankcard<br>FROM tbl_user INNER JOIN tbl_bankcard ON tbl_user.id = tbl_bankcard.user_id<br>WHERE tbl_user.moblie in (‘18611112222’,’18611113333’)</p>
+<pre><code>MySQL在查询这条SQL时，用伪代码表示查询过程如下:
+```ruby
+outer_iter = iterator over tbl_user where moblie in (&#39;18611112222&#39;,&#39;18611113333&#39;);
+outer_row = outer_iter.next;
+while outer_row:
+    inner_iter = iterator over tbl_bankcard where user_id = outer_row.id;
+    inner_row = inner_iter.next;
+    while inner_row:
+        output [outer_row.name, inner_row.bankcard]
+        inner_row = inner_iter.next;
+    end
+    outer_row = outer_iter.next;
+end    
+</code></pre><ul>
+<li>再看这个SQL左外连接版本：<pre><code>SELECT tbl_user.name, tbl_bankcard.bankcard 
+FROM tbl_user LEFT JOIN tbl_bankcard ON tbl_user.id = tbl_bankcard.user_id
+WHERE tbl_user.moblie in (&#39;18611112222&#39;,&#39;18611113333&#39;)
+</code></pre>MySQL在查询这条SQL时，用伪代码表示查询过程如下:<pre><code class="ruby">outer_iter = iterator over tbl_user where moblie in (&#39;18611112222&#39;,&#39;18611113333&#39;);
+outer_row = outer_iter.next;
+while outer_row:
+  inner_iter = iterator over tbl_bankcard where user_id = outer_row.id;
+  inner_row = inner_iter.next;
+  if inner_row:
+      while inner_row:
+          output [outer_row.name, inner_row.bankcard]
+          inner_row = inner_iter.next;
+      end
+  else 
+      output [outer_row.name, NULL]
+  end
+  outer_row = outer_iter.next;
+end    
+</code></pre>
 </li>
 </ul>
-<p><img src="http://ww1.sinaimg.cn/large/87faef88ly1fqongff9j4j20sx01rjra.jpg" alt=""></p>
-<ol start="9">
-<li><font face="华文新魏" size="3">等值传播</font><br>如果两个列的值通过等式关联，那么MySQL能把其中一个列的WHERE条件传递到另一个列。<br>比如：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT table_a.id, table_b.id FROM table_b INNER JOIN table_a ON table_a.tb_id = table_b.id WHERE table_b.id &lt; 100;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>MySQL会判断把WHERE后面的关联作用于table_a表，等价于<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT table_a.id, table_b.id FROM table_b INNER JOIN table_a ON table_a.tb_id = table_b.id WHERE table_b.id &lt; 100 AND table_a.tb_id &lt; 100;</span><br></pre></td></tr></table></figure></p>
-<ol start="10">
-<li><font face="华文新魏" size="3">列表IN()的比较</font><br>MySql会对IN()里面的数据进行排序，然后用二分法查找某个值是否在列表中，这个算法的效率是O(Log n)。这其他数据库等价转换为多个OR条件连接的复杂度O(n)来说，IN()里大量取值时会更快。</li>
-</ol>
-<h2 id="MySQL如何关联查询"><a href="#MySQL如何关联查询" class="headerlink" title="MySQL如何关联查询"></a>MySQL如何关联查询</h2><p>MySQL关联查询策略:<br>其实就是嵌套循环查询。MySQL先从第一个表循环读，然后再嵌套循环到下一个表寻找匹配，如此反复，直到找到所有表的匹配的行为止。 </p>
-<p>举个栗子：  </p>
-<ul>
-<li>内连接sql<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT tbl_user.name, tbl_bankcard.bankcard </span><br><span class="line">FROM tbl_user INNER JOIN tbl_bankcard ON tbl_user.id = tbl_bankcard.user_id</span><br><span class="line">WHERE tbl_user.moblie in (&apos;18611112222&apos;,&apos;18611113333&apos;)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>MySQL在查询这条SQL时，用伪代码表示查询过程如下:<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">outer_iter = iterator over tbl_user where moblie <span class="keyword">in</span> (<span class="string">'18611112222'</span>,<span class="string">'18611113333'</span>);</span><br><span class="line">outer_row = outer_iter.<span class="keyword">next</span>;</span><br><span class="line"><span class="keyword">while</span> <span class="symbol">outer_row:</span></span><br><span class="line">    inner_iter = iterator over tbl_bankcard where user_id = outer_row.id;</span><br><span class="line">    inner_row = inner_iter.<span class="keyword">next</span>;</span><br><span class="line">    <span class="keyword">while</span> <span class="symbol">inner_row:</span></span><br><span class="line">        output [outer_row.name, inner_row.bankcard]</span><br><span class="line">        inner_row = inner_iter.<span class="keyword">next</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    outer_row = outer_iter.<span class="keyword">next</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>再看这个SQL左外连接版本：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT tbl_user.name, tbl_bankcard.bankcard </span><br><span class="line">FROM tbl_user LEFT JOIN tbl_bankcard ON tbl_user.id = tbl_bankcard.user_id</span><br><span class="line">WHERE tbl_user.moblie in (&apos;18611112222&apos;,&apos;18611113333&apos;)</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>MySQL在查询这条SQL时，用伪代码表示查询过程如下:<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">outer_iter = iterator over tbl_user where moblie <span class="keyword">in</span> (<span class="string">'18611112222'</span>,<span class="string">'18611113333'</span>);</span><br><span class="line">outer_row = outer_iter.<span class="keyword">next</span>;</span><br><span class="line"><span class="keyword">while</span> <span class="symbol">outer_row:</span></span><br><span class="line">    inner_iter = iterator over tbl_bankcard where user_id = outer_row.id;</span><br><span class="line">    inner_row = inner_iter.<span class="keyword">next</span>;</span><br><span class="line">    <span class="keyword">if</span> <span class="symbol">inner_row:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="symbol">inner_row:</span></span><br><span class="line">            output [outer_row.name, inner_row.bankcard]</span><br><span class="line">            inner_row = inner_iter.<span class="keyword">next</span>;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">        output [outer_row.name, NULL]</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    outer_row = outer_iter.<span class="keyword">next</span>;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
 <p>基本上MySQL所有类型的查询都是这种方式运行。包括子查询，也是生成一张临时表，被当做普通表进行循环嵌套。以及右外链接也是会改写成等价的左外连接。</p>
 <hr>
-<p>多表关联的一种方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    B(Join) --&gt; A[Join]</span><br><span class="line">    C(Join) --&gt; A</span><br><span class="line">    D(tbl1) --&gt; B</span><br><span class="line">    E(tbl2) --&gt; B</span><br><span class="line">    F(tbl3) --&gt; C</span><br><span class="line">    G(tbl4) --&gt; C</span><br></pre></td></tr></table></figure></p>
-<p>但是MySQL是通过从一个表开始一直嵌套循环的方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    B(Join) --&gt; A[Join]</span><br><span class="line">    C(tbl4) --&gt; A</span><br><span class="line">    D[Join] --&gt; B</span><br><span class="line">    E[tbl3] --&gt; B</span><br><span class="line">    F[tbl1] --&gt; D</span><br><span class="line">    G[tbl2] --&gt; D</span><br></pre></td></tr></table></figure></p>
-<h2 id="关联查询优化器"><a href="#关联查询优化器" class="headerlink" title="关联查询优化器"></a>关联查询优化器</h2><ul>
+<p>多表关联的一种方式：</p>
+<pre><code>graph TD
+    B(Join) --&gt; A[Join]
+    C(Join) --&gt; A
+    D(tbl1) --&gt; B
+    E(tbl2) --&gt; B
+    F(tbl3) --&gt; C
+    G(tbl4) --&gt; C
+</code></pre><p>但是MySQL是通过从一个表开始一直嵌套循环的方式：</p>
+<pre><code>graph TD
+    B(Join) --&gt; A[Join]
+    C(tbl4) --&gt; A
+    D[Join] --&gt; B
+    E[tbl3] --&gt; B
+    F[tbl1] --&gt; D
+    G[tbl2] --&gt; D 
+</code></pre><h2 id="关联查询优化器"><a href="#关联查询优化器" class="headerlink" title="关联查询优化器"></a>关联查询优化器</h2><ul>
 <li>MySQL查询优化器中最重要的一部分。它决定了多表查询的顺序。它评估不同顺序的成本选择成本最小的一个。</li>
 <li>有时优化器给出的并不是最优的关联顺序，可使用STRAIGHT_JOIN关键字替换JOIN关键字重写查询。还是那句，“不要试着比优化器更聪明”。</li>
 <li>不过，如果有超过n个表的关联，那么需要检查n的阶乘种关联顺序。我们称之为所有可能的执行计划的“搜索空间”。实际上，当需要关联的表超过 optimizer_search_depth 的限制的时候，就会选择“贪婪”搜索模式。</li>
@@ -520,8 +593,8 @@
 <li><p>USING INDEX、IGNORE INDEX 和 FORCE INDEX <br><br>这几个提示分别告诉优化器 使用或者不使用或者强制使用索引。</p>
 </li>
 </ol>
-<h2 id="控制优化器的一些参数"><a href="#控制优化器的一些参数" class="headerlink" title="控制优化器的一些参数"></a>控制优化器的一些参数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SHOW VARIABLES LIKE &quot;optimizer_%&quot;;</span><br></pre></td></tr></table></figure>
-<p><img src="http://ww1.sinaimg.cn/large/87faef88ly1fqr12aclarj20tb02q3yf.jpg" alt=""></p>
+<h2 id="控制优化器的一些参数"><a href="#控制优化器的一些参数" class="headerlink" title="控制优化器的一些参数"></a>控制优化器的一些参数</h2><pre><code>SHOW VARIABLES LIKE &quot;optimizer_%&quot;;
+</code></pre><p><img src="http://ww1.sinaimg.cn/large/87faef88ly1fqr12aclarj20tb02q3yf.jpg" alt=""></p>
 <ul>
 <li>optimizer_search_depth<br>控制穷举执行计划的限度。</li>
 <li>optimizer_prune_level<br>默认打开的，让优化器根据需要扫描的行数来决定是否跳过某些执行计划</li>
@@ -565,14 +638,14 @@
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="陈瑞文 微信支付"/>
+        <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"/>
         <p>微信支付</p>
       </div>
     
 
     
       <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="陈瑞文 支付宝"/>
+        <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"/>
         <p>支付宝</p>
       </div>
     
@@ -688,7 +761,7 @@
                 alt="陈瑞文" />
             
               <p class="site-author-name" itemprop="name">陈瑞文</p>
-              <p class="site-description motion-element" itemprop="description">你好，旅行者</p>
+              <p class="site-description motion-element" itemprop="description">每天都在小小的改变</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -770,7 +843,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目的"><span class="nav-number">1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL查询优化器的优化策略"><span class="nav-number">2.</span> <span class="nav-text">MySQL查询优化器的优化策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL能够处理的优化类型"><span class="nav-number">3.</span> <span class="nav-text">MySQL能够处理的优化类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL如何关联查询"><span class="nav-number">4.</span> <span class="nav-text">MySQL如何关联查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关联查询优化器"><span class="nav-number">5.</span> <span class="nav-text">关联查询优化器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询优化器的提示-hint"><span class="nav-number">6.</span> <span class="nav-text">查询优化器的提示(hint)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制优化器的一些参数"><span class="nav-number">7.</span> <span class="nav-text">控制优化器的一些参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目的"><span class="nav-number">1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL查询优化器的优化策略"><span class="nav-number">2.</span> <span class="nav-text">MySQL查询优化器的优化策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL能够处理的优化类型"><span class="nav-number">3.</span> <span class="nav-text">MySQL能够处理的优化类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关联查询优化器"><span class="nav-number">4.</span> <span class="nav-text">关联查询优化器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询优化器的提示-hint"><span class="nav-number">5.</span> <span class="nav-text">查询优化器的提示(hint)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制优化器的一些参数"><span class="nav-number">6.</span> <span class="nav-text">控制优化器的一些参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -814,15 +887,43 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4
+<span>   |   </span>
+<span id="showDays"></span></div>
 
 
 
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共20.4k字</span>
+  <span class="post-count">本站累计共19.2k字</span>
 </div>
+
+<script>
+  var seconds = 1000;
+  var minutes = seconds * 60;
+  var hours = minutes * 60;
+  var days = hours * 24;
+  var years = days * 365;
+  var birthDay = Date.UTC(2018,04,14,00,00,00); // 这里设置建站时间
+  setInterval(function() {
+    var today = new Date();
+    var todayYear = today.getFullYear();
+    var todayMonth = today.getMonth()+1;
+    var todayDate = today.getDate();
+    var todayHour = today.getHours();
+    var todayMinute = today.getMinutes();
+    var todaySecond = today.getSeconds();
+    var now = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+    var diff = now - birthDay;
+    var diffYears = Math.floor(diff/years);
+    var diffDays = Math.floor((diff/days)-diffYears*365);
+    var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+    var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+    var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+      document.getElementById('showDays').innerHTML="本站已运行 "+diffYears+" 年 "+diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
+  }, 1000);
+</script>
 
         
 
@@ -972,6 +1073,20 @@
 
 
 
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script type="text/javascript">
+  new Valine({
+      av: AV,
+      el: '#comments' ,
+      app_id: '',
+      app_key: '',
+      placeholder: 'Just go go', // 默认 null
+      notify: false, // 默认 false
+      verify: false, // 默认 false
+      path: , // 默认 window.location.pathname
+      avatar: 'mm' // 默认 ''
+  });
+</script>
 
 
   
@@ -999,3 +1114,20 @@
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/love.js"></script>
+<!-- highlight 高亮 start-->
+<script src="http://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script type="text/javascript">
+  $(function() {
+    hljs.initHighlighting();
+    $('pre code').each(function() {
+      var lines = $(this).text().split('\n').length - 1;
+      var $numbering = $('<ul/>').addClass('pre-numbering');
+      $(this)
+        .addClass('has-numbering')
+        .parent()
+        .append($numbering);
+    });
+  });
+
+</script>
+<!-- highlight 高亮 end-->

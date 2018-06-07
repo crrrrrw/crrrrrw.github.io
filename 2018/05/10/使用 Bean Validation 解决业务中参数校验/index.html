@@ -4,8 +4,39 @@
 
   
 
-
 <html class="theme-next pisces use-motion" lang="zh-Hans">
+<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
+<style>
+blockquote {
+  color: #888;
+  background-color: #eae6f3;
+  border-left: 1rem solid #5236a0;
+  padding: 0 1.5rem;
+  position: relative;
+  font-family: 'Roboto', sans-serif;
+}
+
+blockquote:before,
+blockquote:after {
+  color: #392570;
+  font-size: 2.5rem;
+  position: absolute;
+  line-height: 2.5rem;
+}
+
+blockquote:before {
+  content: "\201C";
+  left: -1rem;
+  top: 0;
+}
+
+blockquote:after {
+  content: "\201D";
+  right: 0;
+  bottom: -1rem;
+}
+</style>
+
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -127,7 +158,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -142,7 +173,7 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="陈瑞文的个人博客" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="陈瑞文的小院" type="application/atom+xml" />
 
 
 
@@ -154,7 +185,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用 Bean Validation 解决业务中参数校验">
 <meta property="og:url" content="http://www.chenruiwen.cn/2018/05/10/使用 Bean Validation 解决业务中参数校验/index.html">
-<meta property="og:site_name" content="陈瑞文的个人博客">
+<meta property="og:site_name" content="陈瑞文的小院">
 <meta property="og:description" content="目的精简业务中的代码校验。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-06-05T13:48:00.000Z">
@@ -196,7 +227,7 @@
 
 
 
-  <title>使用 Bean Validation 解决业务中参数校验 | 陈瑞文的个人博客</title>
+  <title>使用 Bean Validation 解决业务中参数校验 | 陈瑞文的小院</title>
   
 
 
@@ -228,7 +259,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">陈瑞文的个人博客</span>
+        <span class="site-title">陈瑞文的小院</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -344,7 +375,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的个人博客">
+      <meta itemprop="name" content="陈瑞文的小院">
     </span>
 
     
@@ -425,8 +456,11 @@
 
       
         <h1 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h1><p>精简业务中的代码校验。<br><a id="more"></a></p>
-<h1 id="痛点及现状"><a href="#痛点及现状" class="headerlink" title="痛点及现状"></a>痛点及现状</h1><p>代码中常常见到如下代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (Objects.equal(0L ,repertory))&#123;</span><br><span class="line">    return ApiResultMap.errorResult(-1 ,&quot;操作数量不可为0&quot;) ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这种参数校验写在模块里有如下缺点：</p>
+<h1 id="痛点及现状"><a href="#痛点及现状" class="headerlink" title="痛点及现状"></a>痛点及现状</h1><p>代码中常常见到如下代码：</p>
+<pre><code>if (Objects.equal(0L ,repertory)){
+    return ApiResultMap.errorResult(-1 ,&quot;操作数量不可为0&quot;) ;
+}
+</code></pre><p>这种参数校验写在模块里有如下缺点：</p>
 <ul>
 <li>代码冗余</li>
 <li>影响代码可读性</li>
@@ -441,36 +475,43 @@
 </ul>
 <h1 id="QUICK-START"><a href="#QUICK-START" class="headerlink" title="QUICK START"></a>QUICK START</h1><ol>
 <li><p>引入pom</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.hibernate&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;hibernate-validator&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;5.3.1.Final&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>dto入参对象属性加入注解</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@Data</span><br><span class="line">public class ValidDemo &#123;</span><br><span class="line">    @Size(min = 3, max = 12, message = &quot;用户名必须的长度必须是3到12个字母之间&quot;)</span><br><span class="line">    @Pattern(regexp = &quot;^[a-z]+$&quot;, message = &quot;用户名必须是a-z小字母&quot;)</span><br><span class="line">    private String name;</span><br><span class="line"></span><br><span class="line">    @Size(min = 6, max = 6, message = &quot;密码必须是6位数字&quot;)</span><br><span class="line">    @Pattern(regexp = &quot;^[0-9]+$&quot;, message = &quot;密码必须是6位数字&quot;)</span><br><span class="line">    private String password;</span><br><span class="line"></span><br><span class="line">    @Range(min = 1, max = 9, message = &quot;范围只能1到9&quot;)</span><br><span class="line">    private Integer range;</span><br><span class="line"></span><br><span class="line">    @NotNull(message = &quot;邮箱不能为Null&quot;)</span><br><span class="line">    @Email(regexp = &quot;(?:[a-z0-9!#$%&amp;&apos;*+/=?^_`&#123;|&#125;~-]+(?:\\.[a-z0-9!#$%&amp;&apos;*+/=?^_`&#123;|&#125;~-]+)*|\&quot;(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\&quot;)@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.)&#123;3&#125;(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])&quot;,</span><br><span class="line">            message = &quot;邮箱格式有误&quot;)</span><br><span class="line">    private String email;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>controller方法入参加入校验(@Valid)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/validdemo&quot;)</span><br><span class="line">public Map&lt;String,Object&gt; demo(@Valid ValidDemo validDemo)&#123;</span><br><span class="line">	return ApiResultMap.successResult(validDemo);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>精简出参，加入全局异常处理</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@ExceptionHandler(value = &#123; BindException.class &#125;)</span><br><span class="line">public Map&lt;String, Object&gt; validationException(BindException ex) &#123;</span><br><span class="line">    log.error(ex.getBindingResult().getFieldError().getDefaultMessage());</span><br><span class="line">    return ApiResultMap.errorResult(ex.getBindingResult().getFieldError().getDefaultMessage());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>测试结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$curl http://localhost:8080/validdemo?email=xxxxx</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    &quot;message&quot;: &#123;</span><br><span class="line">        &quot;code&quot;: -1,</span><br><span class="line">        &quot;message&quot;: &quot;邮箱格式有误&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p><strong>另一种方式，使用 spring 的 @Validated 注解:</strong></p>
-<ol>
-<li><p>配置 MethodValidationPostProcessor</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@Bean</span><br><span class="line">public MethodValidationPostProcessor methodValidationPostProcessor() &#123;</span><br><span class="line">    return new MethodValidationPostProcessor();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用@Validated注解：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@Validated</span><br><span class="line">@RestController</span><br><span class="line">public class DemoController &#123;&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>方法上加上校验</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(&quot;/validdemo3&quot;)</span><br><span class="line">public Map&lt;String,Object&gt; demo3(@NotNull String str, @NotNull @Range(min = 0, max = 10) Integer a)&#123;</span><br><span class="line">	return ApiResultMap.successResult(str + a);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>测试 </p>
+<pre><code>&lt;dependency&gt;
+ &lt;groupId&gt;org.hibernate&lt;/groupId&gt;
+ &lt;artifactId&gt;hibernate-validator&lt;/artifactId&gt;
+ &lt;version&gt;5.3.1.Final&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre></li>
+<li><p>dto入参对象属性加入注解<br><code>`</code><br>@Data<br>public class ValidDemo {<br> @Size(min = 3, max = 12, message = “用户名必须的长度必须是3到12个字母之间”)<br> @Pattern(regexp = “^[a-z]+$”, message = “用户名必须是a-z小字母”)<br> private String name;</p>
+<p> @Size(min = 6, max = 6, message = “密码必须是6位数字”)<br> @Pattern(regexp = “^[0-9]+$”, message = “密码必须是6位数字”)<br> private String password;</p>
+<p> @Range(min = 1, max = 9, message = “范围只能1到9”)<br> private Integer range;</p>
+<p> @NotNull(message = “邮箱不能为Null”)<br> @Email(regexp = “(?:[a-z0-9!#$%&amp;’<em>+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;’</em>+/=?^_`{|}~-]+)<em>|\”(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])</em>\”)@(?:(?:<a href="?:[a-z0-9-]*[a-z0-9]">a-z0-9</a>?\.)+<a href="?:[a-z0-9-]*[a-z0-9]">a-z0-9</a>?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])”,</p>
+<pre><code>     message = &quot;邮箱格式有误&quot;)
+</code></pre><p> private String email;</p>
 </li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$curl http://localhost:8080/validdemo?str=1&amp;a=15</span><br><span class="line">&#123;</span><br><span class="line">    &quot;message&quot;: &#123;</span><br><span class="line">        &quot;code&quot;: 202,</span><br><span class="line">        &quot;message&quot;: &quot;需要在0和10之间&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>}</p>
+<pre><code>3. controller方法入参加入校验(@Valid)
+</code></pre><p>@GetMapping(“/validdemo”)<br>public Map&lt;String,Object&gt; demo(@Valid ValidDemo validDemo){<br>    return ApiResultMap.successResult(validDemo);<br>}</p>
+<pre><code>
+4. 精简出参，加入全局异常处理
+</code></pre><p>@ExceptionHandler(value = { BindException.class })<br>public Map&lt;String, Object&gt; validationException(BindException ex) {<br>    log.error(ex.getBindingResult().getFieldError().getDefaultMessage());<br>    return ApiResultMap.errorResult(ex.getBindingResult().getFieldError().getDefaultMessage());<br>}</p>
+<pre><code>5. 测试结果：
+</code></pre><p>$curl <a href="http://localhost:8080/validdemo?email=xxxxx" target="_blank" rel="noopener">http://localhost:8080/validdemo?email=xxxxx</a></p>
+<p>{<br>    “message”: {<br>        “code”: -1,<br>        “message”: “邮箱格式有误”<br>    }<br>}</p>
+<pre><code>
+**另一种方式，使用 spring 的 @Validated 注解:**
+1. 配置 MethodValidationPostProcessor
+</code></pre><pre><code>@Bean
+public MethodValidationPostProcessor methodValidationPostProcessor() {
+    return new MethodValidationPostProcessor();
+}
+</code></pre><pre><code>2. 使用@Validated注解：
+</code></pre><p>@Validated<br>@RestController<br>public class DemoController {}</p>
+<pre><code>3. 方法上加上校验
+</code></pre><p>@GetMapping(“/validdemo3”)<br>public Map&lt;String,Object&gt; demo3(@NotNull String str, @NotNull @Range(min = 0, max = 10) Integer a){<br>    return ApiResultMap.successResult(str + a);<br>}</p>
+<pre><code>4. 测试 
+
+</code></pre><p>$curl <a href="http://localhost:8080/validdemo?str=1&amp;a=15" target="_blank" rel="noopener">http://localhost:8080/validdemo?str=1&amp;a=15</a><br>{<br>    “message”: {<br>        “code”: 202,<br>        “message”: “需要在0和10之间”<br>    }<br>}<br><code>`</code></p>
 <h1 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h1><p>java程序员张三和ios程序员李四开发某一需求，明天就要demo了，今天得抓紧联调。<br>李四:三哥，地址发下，调试绑卡。<br>张三启动服务…<br>李四：三哥，帮忙看下，这个接口报错 -1，看下上面错误呗。<br>张三打开控制台，看了一下日志与排查，数据库报错，身份证字段没传导致插入身份证为空报错。<br>张三：李四你身份证没传。…张三一边埋怨着一边加入一行if else，同时在思考别的接口是不是也有这种情况，也给加上if else.<br>没过一会儿，李四：三哥，帮我看下有报错-1了。<br>张三又去查看，同样的，这次是银行卡号没传。张三重复着以上操作可没过一会儿李四又….<br>就这样一天过去，伴随着晚霞下班的张三，心情却没那么高兴…</p>
 <p><strong>抛出问题</strong>：是什么导致张三忙碌一天却觉得碌碌无为？是道德的沦丧还是人性的丧失？  </p>
 <p>如果张三整合Bean Validation的话，可能就没有那么不愉快了。他只需要一次在入参model里加入校验，之后在控制器的通过轻松的 @Valid 注解，就可以省去李四重复的提问，也省去的检查其他接口是否也需要添加代码校验，代码又可以少些几行了，何乐而不为。</p>
@@ -535,14 +576,14 @@
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="陈瑞文 微信支付"/>
+        <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"/>
         <p>微信支付</p>
       </div>
     
 
     
       <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="陈瑞文 支付宝"/>
+        <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"/>
         <p>支付宝</p>
       </div>
     
@@ -658,7 +699,7 @@
                 alt="陈瑞文" />
             
               <p class="site-author-name" itemprop="name">陈瑞文</p>
-              <p class="site-description motion-element" itemprop="description">你好，旅行者</p>
+              <p class="site-description motion-element" itemprop="description">每天都在小小的改变</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -784,15 +825,43 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4
+<span>   |   </span>
+<span id="showDays"></span></div>
 
 
 
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共20.4k字</span>
+  <span class="post-count">本站累计共19.2k字</span>
 </div>
+
+<script>
+  var seconds = 1000;
+  var minutes = seconds * 60;
+  var hours = minutes * 60;
+  var days = hours * 24;
+  var years = days * 365;
+  var birthDay = Date.UTC(2018,04,14,00,00,00); // 这里设置建站时间
+  setInterval(function() {
+    var today = new Date();
+    var todayYear = today.getFullYear();
+    var todayMonth = today.getMonth()+1;
+    var todayDate = today.getDate();
+    var todayHour = today.getHours();
+    var todayMinute = today.getMinutes();
+    var todaySecond = today.getSeconds();
+    var now = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+    var diff = now - birthDay;
+    var diffYears = Math.floor(diff/years);
+    var diffDays = Math.floor((diff/days)-diffYears*365);
+    var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+    var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+    var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+      document.getElementById('showDays').innerHTML="本站已运行 "+diffYears+" 年 "+diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
+  }, 1000);
+</script>
 
         
 
@@ -942,6 +1011,20 @@
 
 
 
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script type="text/javascript">
+  new Valine({
+      av: AV,
+      el: '#comments' ,
+      app_id: '',
+      app_key: '',
+      placeholder: 'Just go go', // 默认 null
+      notify: false, // 默认 false
+      verify: false, // 默认 false
+      path: , // 默认 window.location.pathname
+      avatar: 'mm' // 默认 ''
+  });
+</script>
 
 
   
@@ -969,3 +1052,20 @@
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/love.js"></script>
+<!-- highlight 高亮 start-->
+<script src="http://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script type="text/javascript">
+  $(function() {
+    hljs.initHighlighting();
+    $('pre code').each(function() {
+      var lines = $(this).text().split('\n').length - 1;
+      var $numbering = $('<ul/>').addClass('pre-numbering');
+      $(this)
+        .addClass('has-numbering')
+        .parent()
+        .append($numbering);
+    });
+  });
+
+</script>
+<!-- highlight 高亮 end-->

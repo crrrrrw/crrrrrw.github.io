@@ -4,8 +4,39 @@
 
   
 
-
 <html class="theme-next pisces use-motion" lang="zh-Hans">
+<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
+<style>
+blockquote {
+  color: #888;
+  background-color: #eae6f3;
+  border-left: 1rem solid #5236a0;
+  padding: 0 1.5rem;
+  position: relative;
+  font-family: 'Roboto', sans-serif;
+}
+
+blockquote:before,
+blockquote:after {
+  color: #392570;
+  font-size: 2.5rem;
+  position: absolute;
+  line-height: 2.5rem;
+}
+
+blockquote:before {
+  content: "\201C";
+  left: -1rem;
+  top: 0;
+}
+
+blockquote:after {
+  content: "\201D";
+  right: 0;
+  bottom: -1rem;
+}
+</style>
+
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -127,7 +158,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -142,23 +173,23 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="陈瑞文的个人博客" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="陈瑞文的小院" type="application/atom+xml" />
 
 
 
 
 
 
-<meta name="description" content="你好，旅行者">
+<meta name="description" content="每天都在小小的改变">
 <meta property="og:type" content="website">
-<meta property="og:title" content="陈瑞文的个人博客">
+<meta property="og:title" content="陈瑞文的小院">
 <meta property="og:url" content="http://www.chenruiwen.cn/tags/java/index.html">
-<meta property="og:site_name" content="陈瑞文的个人博客">
-<meta property="og:description" content="你好，旅行者">
+<meta property="og:site_name" content="陈瑞文的小院">
+<meta property="og:description" content="每天都在小小的改变">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="陈瑞文的个人博客">
-<meta name="twitter:description" content="你好，旅行者">
+<meta name="twitter:title" content="陈瑞文的小院">
+<meta name="twitter:description" content="每天都在小小的改变">
 
 
 
@@ -194,7 +225,7 @@
 
 
 
-  <title>标签: java | 陈瑞文的个人博客</title>
+  <title>标签: java | 陈瑞文的小院</title>
   
 
 
@@ -226,7 +257,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">陈瑞文的个人博客</span>
+        <span class="site-title">陈瑞文的小院</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -488,7 +519,7 @@
                 alt="陈瑞文" />
             
               <p class="site-author-name" itemprop="name">陈瑞文</p>
-              <p class="site-description motion-element" itemprop="description">你好，旅行者</p>
+              <p class="site-description motion-element" itemprop="description">每天都在小小的改变</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -598,15 +629,43 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4
+<span>   |   </span>
+<span id="showDays"></span></div>
 
 
 
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共20.4k字</span>
+  <span class="post-count">本站累计共19.2k字</span>
 </div>
+
+<script>
+  var seconds = 1000;
+  var minutes = seconds * 60;
+  var hours = minutes * 60;
+  var days = hours * 24;
+  var years = days * 365;
+  var birthDay = Date.UTC(2018,04,14,00,00,00); // 这里设置建站时间
+  setInterval(function() {
+    var today = new Date();
+    var todayYear = today.getFullYear();
+    var todayMonth = today.getMonth()+1;
+    var todayDate = today.getDate();
+    var todayHour = today.getHours();
+    var todayMinute = today.getMinutes();
+    var todaySecond = today.getSeconds();
+    var now = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+    var diff = now - birthDay;
+    var diffYears = Math.floor(diff/years);
+    var diffDays = Math.floor((diff/days)-diffYears*365);
+    var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+    var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+    var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+      document.getElementById('showDays').innerHTML="本站已运行 "+diffYears+" 年 "+diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
+  }, 1000);
+</script>
 
         
 
@@ -752,6 +811,20 @@
 
 
 
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script type="text/javascript">
+  new Valine({
+      av: AV,
+      el: '#comments' ,
+      app_id: '',
+      app_key: '',
+      placeholder: 'Just go go', // 默认 null
+      notify: false, // 默认 false
+      verify: false, // 默认 false
+      path: , // 默认 window.location.pathname
+      avatar: 'mm' // 默认 ''
+  });
+</script>
 
 
   
@@ -779,3 +852,20 @@
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/love.js"></script>
+<!-- highlight 高亮 start-->
+<script src="http://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script type="text/javascript">
+  $(function() {
+    hljs.initHighlighting();
+    $('pre code').each(function() {
+      var lines = $(this).text().split('\n').length - 1;
+      var $numbering = $('<ul/>').addClass('pre-numbering');
+      $(this)
+        .addClass('has-numbering')
+        .parent()
+        .append($numbering);
+    });
+  });
+
+</script>
+<!-- highlight 高亮 end-->

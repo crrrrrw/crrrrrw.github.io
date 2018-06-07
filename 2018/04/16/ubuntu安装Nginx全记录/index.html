@@ -4,8 +4,39 @@
 
   
 
-
 <html class="theme-next pisces use-motion" lang="zh-Hans">
+<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
+<style>
+blockquote {
+  color: #888;
+  background-color: #eae6f3;
+  border-left: 1rem solid #5236a0;
+  padding: 0 1.5rem;
+  position: relative;
+  font-family: 'Roboto', sans-serif;
+}
+
+blockquote:before,
+blockquote:after {
+  color: #392570;
+  font-size: 2.5rem;
+  position: absolute;
+  line-height: 2.5rem;
+}
+
+blockquote:before {
+  content: "\201C";
+  left: -1rem;
+  top: 0;
+}
+
+blockquote:after {
+  content: "\201D";
+  right: 0;
+  bottom: -1rem;
+}
+</style>
+
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -127,7 +158,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -142,7 +173,7 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="陈瑞文的个人博客" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="陈瑞文的小院" type="application/atom+xml" />
 
 
 
@@ -154,7 +185,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="ubuntu安装Nginx全记录">
 <meta property="og:url" content="http://www.chenruiwen.cn/2018/04/16/ubuntu安装Nginx全记录/index.html">
-<meta property="og:site_name" content="陈瑞文的个人博客">
+<meta property="og:site_name" content="陈瑞文的小院">
 <meta property="og:description" content="前言记录下nginx安装过程。本文只演示源码包编译安装。个人比较喜欢自定义安装，灵活。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-04-30T10:12:36.000Z">
@@ -196,7 +227,7 @@
 
 
 
-  <title>ubuntu安装Nginx全记录 | 陈瑞文的个人博客</title>
+  <title>ubuntu安装Nginx全记录 | 陈瑞文的小院</title>
   
 
 
@@ -228,7 +259,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">陈瑞文的个人博客</span>
+        <span class="site-title">陈瑞文的小院</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -344,7 +375,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的个人博客">
+      <meta itemprop="name" content="陈瑞文的小院">
     </span>
 
     
@@ -427,21 +458,40 @@
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>记录下nginx安装过程。本文只演示源码包编译安装。个人比较喜欢自定义安装，灵活。<br><a id="more"></a></p>
 <h2 id="nginx下载相关"><a href="#nginx下载相关" class="headerlink" title="nginx下载相关"></a>nginx下载相关</h2><p>官方下载页面：<a href="http://nginx.org/en/download.html" target="_blank" rel="noopener">http://nginx.org/en/download.html</a>  </p>
 <p>configure配置文件详解：<a href="http://nginx.org/en/docs/configure.html" target="_blank" rel="noopener">http://nginx.org/en/docs/configure.html</a></p>
-<h2 id="安装编译工具及库文件"><a href="#安装编译工具及库文件" class="headerlink" title="安装编译工具及库文件"></a>安装编译工具及库文件</h2><p>安装gcc g++的依赖库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@chenruiwen:~# apt-get install build-essential</span><br><span class="line"></span><br><span class="line">root@chenruiwen:~# apt-get install libtool</span><br></pre></td></tr></table></figure></p>
-<p>安装pcre依赖库（<a href="http://www.pcre.org/）" target="_blank" rel="noopener">http://www.pcre.org/）</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@chenruiwen:~# apt-get update</span><br><span class="line"></span><br><span class="line">root@chenruiwen:~# apt-get install libpcre3 libpcre3-dev</span><br></pre></td></tr></table></figure></p>
-<p>安装zlib依赖库（<a href="http://www.zlib.net）" target="_blank" rel="noopener">http://www.zlib.net）</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@chenruiwen:~# apt-get install zlib1g-dev</span><br></pre></td></tr></table></figure></p>
-<p>安装SSL依赖库（16.04默认已经安装了）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@chenruiwen:~# apt-get install openssl</span><br></pre></td></tr></table></figure></p>
-<h2 id="安装nginx"><a href="#安装nginx" class="headerlink" title="安装nginx"></a>安装nginx</h2><p>下载nginx<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@chenruiwen:/data/nginx# wget http://nginx.org/download/nginx-1.6.2.tar.gz</span><br></pre></td></tr></table></figure></p>
-<p>解压<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@chenruiwen:/data/nginx# tar xf nginx-1.6.2.tar.gz</span><br></pre></td></tr></table></figure></p>
-<p>进入解压目录<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@chenruiwen:/data/nginx# cd nginx-1.6.2/</span><br></pre></td></tr></table></figure></p>
-<p>配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@chenruiwen:/data/nginx/nginx-1.6.2# ./configure --prefix=/usr/local/nginx</span><br></pre></td></tr></table></figure></p>
-<p>编译,安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@chenruiwen:/data/nginx/nginx-1.6.2# make</span><br><span class="line"></span><br><span class="line">root@chenruiwen:/data/nginx/nginx-1.6.2# make install</span><br></pre></td></tr></table></figure></p>
-<p>测试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@chenruiwen:/data/nginx/nginx-1.6.2# /usr/local/nginx/sbin/nginx -v</span><br><span class="line">nginx version: nginx/1.6.2</span><br></pre></td></tr></table></figure></p>
-<p>nginx安装完成</p>
-<p>配置软链接<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@chenruiwen:/data/nginx/nginx-1.6.2# ln -s /usr/local/nginx/sbin/nginx /usr/bin/nginx</span><br></pre></td></tr></table></figure></p>
-<p>现在就可以不用路径直接输入nginx启动。</p>
-<p>启动<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">root@chenruiwen:/data/nginx/nginx-1.6.2# nginx -c /usr/local/nginx/conf/nginx.conf</span><br></pre></td></tr></table></figure></p>
-<h2 id="Nginx-配置"><a href="#Nginx-配置" class="headerlink" title="Nginx 配置"></a>Nginx 配置</h2><p>跳转<a href="http://www.chenruiwen.cn/2018/04/16/Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/">Nginx配置文件详解</a></p>
+<h2 id="安装编译工具及库文件"><a href="#安装编译工具及库文件" class="headerlink" title="安装编译工具及库文件"></a>安装编译工具及库文件</h2><p>安装gcc g++的依赖库</p>
+<pre><code>root@chenruiwen:~# apt-get install build-essential
+
+root@chenruiwen:~# apt-get install libtool
+</code></pre><p>安装pcre依赖库（<a href="http://www.pcre.org/）" target="_blank" rel="noopener">http://www.pcre.org/）</a></p>
+<pre><code>root@chenruiwen:~# apt-get update
+
+root@chenruiwen:~# apt-get install libpcre3 libpcre3-dev
+</code></pre><p>安装zlib依赖库（<a href="http://www.zlib.net）" target="_blank" rel="noopener">http://www.zlib.net）</a></p>
+<pre><code>root@chenruiwen:~# apt-get install zlib1g-dev
+</code></pre><p>安装SSL依赖库（16.04默认已经安装了）</p>
+<pre><code>root@chenruiwen:~# apt-get install openssl
+</code></pre><h2 id="安装nginx"><a href="#安装nginx" class="headerlink" title="安装nginx"></a>安装nginx</h2><p>下载nginx</p>
+<pre><code>root@chenruiwen:/data/nginx# wget http://nginx.org/download/nginx-1.6.2.tar.gz
+</code></pre><p>解压</p>
+<pre><code>root@chenruiwen:/data/nginx# tar xf nginx-1.6.2.tar.gz
+</code></pre><p>进入解压目录</p>
+<pre><code>root@chenruiwen:/data/nginx# cd nginx-1.6.2/
+</code></pre><p>配置</p>
+<pre><code>root@chenruiwen:/data/nginx/nginx-1.6.2# ./configure --prefix=/usr/local/nginx
+</code></pre><p>编译,安装</p>
+<pre><code>root@chenruiwen:/data/nginx/nginx-1.6.2# make
+
+root@chenruiwen:/data/nginx/nginx-1.6.2# make install
+</code></pre><p>测试</p>
+<pre><code>root@chenruiwen:/data/nginx/nginx-1.6.2# /usr/local/nginx/sbin/nginx -v
+nginx version: nginx/1.6.2
+</code></pre><p>nginx安装完成</p>
+<p>配置软链接</p>
+<pre><code>root@chenruiwen:/data/nginx/nginx-1.6.2# ln -s /usr/local/nginx/sbin/nginx /usr/bin/nginx
+</code></pre><p>现在就可以不用路径直接输入nginx启动。</p>
+<p>启动</p>
+<pre><code>root@chenruiwen:/data/nginx/nginx-1.6.2# nginx -c /usr/local/nginx/conf/nginx.conf
+</code></pre><h2 id="Nginx-配置"><a href="#Nginx-配置" class="headerlink" title="Nginx 配置"></a>Nginx 配置</h2><p>跳转<a href="http://www.chenruiwen.cn/2018/04/16/Nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3/">Nginx配置文件详解</a></p>
 
       
     </div>
@@ -474,14 +524,14 @@
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="陈瑞文 微信支付"/>
+        <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"/>
         <p>微信支付</p>
       </div>
     
 
     
       <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="陈瑞文 支付宝"/>
+        <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"/>
         <p>支付宝</p>
       </div>
     
@@ -600,7 +650,7 @@
                 alt="陈瑞文" />
             
               <p class="site-author-name" itemprop="name">陈瑞文</p>
-              <p class="site-description motion-element" itemprop="description">你好，旅行者</p>
+              <p class="site-description motion-element" itemprop="description">每天都在小小的改变</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -726,15 +776,43 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4
+<span>   |   </span>
+<span id="showDays"></span></div>
 
 
 
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共20.4k字</span>
+  <span class="post-count">本站累计共19.2k字</span>
 </div>
+
+<script>
+  var seconds = 1000;
+  var minutes = seconds * 60;
+  var hours = minutes * 60;
+  var days = hours * 24;
+  var years = days * 365;
+  var birthDay = Date.UTC(2018,04,14,00,00,00); // 这里设置建站时间
+  setInterval(function() {
+    var today = new Date();
+    var todayYear = today.getFullYear();
+    var todayMonth = today.getMonth()+1;
+    var todayDate = today.getDate();
+    var todayHour = today.getHours();
+    var todayMinute = today.getMinutes();
+    var todaySecond = today.getSeconds();
+    var now = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+    var diff = now - birthDay;
+    var diffYears = Math.floor(diff/years);
+    var diffDays = Math.floor((diff/days)-diffYears*365);
+    var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+    var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+    var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+      document.getElementById('showDays').innerHTML="本站已运行 "+diffYears+" 年 "+diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
+  }, 1000);
+</script>
 
         
 
@@ -884,6 +962,20 @@
 
 
 
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script type="text/javascript">
+  new Valine({
+      av: AV,
+      el: '#comments' ,
+      app_id: '',
+      app_key: '',
+      placeholder: 'Just go go', // 默认 null
+      notify: false, // 默认 false
+      verify: false, // 默认 false
+      path: , // 默认 window.location.pathname
+      avatar: 'mm' // 默认 ''
+  });
+</script>
 
 
   
@@ -911,3 +1003,20 @@
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/love.js"></script>
+<!-- highlight 高亮 start-->
+<script src="http://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script type="text/javascript">
+  $(function() {
+    hljs.initHighlighting();
+    $('pre code').each(function() {
+      var lines = $(this).text().split('\n').length - 1;
+      var $numbering = $('<ul/>').addClass('pre-numbering');
+      $(this)
+        .addClass('has-numbering')
+        .parent()
+        .append($numbering);
+    });
+  });
+
+</script>
+<!-- highlight 高亮 end-->

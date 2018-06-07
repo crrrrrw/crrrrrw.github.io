@@ -4,8 +4,39 @@
 
   
 
-
 <html class="theme-next pisces use-motion" lang="zh-Hans">
+<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
+<style>
+blockquote {
+  color: #888;
+  background-color: #eae6f3;
+  border-left: 1rem solid #5236a0;
+  padding: 0 1.5rem;
+  position: relative;
+  font-family: 'Roboto', sans-serif;
+}
+
+blockquote:before,
+blockquote:after {
+  color: #392570;
+  font-size: 2.5rem;
+  position: absolute;
+  line-height: 2.5rem;
+}
+
+blockquote:before {
+  content: "\201C";
+  left: -1rem;
+  top: 0;
+}
+
+blockquote:after {
+  content: "\201D";
+  right: 0;
+  bottom: -1rem;
+}
+</style>
+
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -127,7 +158,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
 
 
   <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
@@ -142,7 +173,7 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="陈瑞文的个人博客" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="陈瑞文的小院" type="application/atom+xml" />
 
 
 
@@ -154,7 +185,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于hexo+nginx快速建站">
 <meta property="og:url" content="http://www.chenruiwen.cn/2018/04/18/基于hexo+nginx快速建站/index.html">
-<meta property="og:site_name" content="陈瑞文的个人博客">
+<meta property="og:site_name" content="陈瑞文的小院">
 <meta property="og:description" content="前言跟公司大神学习技术知识，发现大神们都有自己的技术博客，拥有个人网站，感觉很酷。所以趁着一波阿里云打折，开启自己个人网站之路。准备着手从个人博客网站开始，无奈自己是一个小小后端程序猿，前端技术了解不多，难道要开始先积累前端技术栈再建站吗？orz。当然不，网上有大量博客框架和教程可以快速建站，比如Hexo,Wordpress等。本人博客 1.0版本就准备用hexo开始。本文并非部署到github上">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-06-01T15:55:01.000Z">
@@ -196,7 +227,7 @@
 
 
 
-  <title>基于hexo+nginx快速建站 | 陈瑞文的个人博客</title>
+  <title>基于hexo+nginx快速建站 | 陈瑞文的小院</title>
   
 
 
@@ -228,7 +259,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">陈瑞文的个人博客</span>
+        <span class="site-title">陈瑞文的小院</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -344,7 +375,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的个人博客">
+      <meta itemprop="name" content="陈瑞文的小院">
     </span>
 
     
@@ -439,15 +470,49 @@
 <li><a href="https://git-scm.com/" target="_blank" rel="noopener">Git</a></li>
 <li><a href="https://nginx.org/" target="_blank" rel="noopener">Nginx</a></li>
 </ul>
-<p>Ubuntu安装Node.js<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装依赖包python-software-properties</span></span><br><span class="line">apt-get install python-software-properties</span><br><span class="line">curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -</span><br><span class="line">apt-get install nodejs</span><br></pre></td></tr></table></figure></p>
-<p>Ubuntu安装Git<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add-apt-repository ppa:git-core/ppa</span><br><span class="line">apt update</span><br><span class="line">apt install git</span><br></pre></td></tr></table></figure></p>
-<p>Ubuntu安装Nginx（略）</p>
-<p>安装 Hexo<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure></p>
-<h3 id="建站"><a href="#建站" class="headerlink" title="建站"></a>建站</h3><p>创建博客需要文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /data</span><br><span class="line">midir hexo-blog</span><br><span class="line">cd hexo-blog</span><br><span class="line">hexo init</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure></p>
-<h3 id="配置网站信息"><a href="#配置网站信息" class="headerlink" title="配置网站信息"></a>配置网站信息</h3><p>修改 _config.yml 文件, 仅修改了站点信息和地址信息, 更多的配置信息参考官网<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: 陈瑞文的个人网站</span><br><span class="line">subtitle:</span><br><span class="line">description: 你好，旅行者</span><br><span class="line">keywords:</span><br><span class="line">author: 陈瑞文</span><br><span class="line">language: zh-Hans</span><br><span class="line">timezone:</span><br><span class="line"></span><br><span class="line"># URL</span><br><span class="line">## If your site is put in a subdirectory, set url as &apos;http://yoursite.com/child&apos; and root as &apos;/child/&apos;</span><br><span class="line">url: http://www.chenruiwen.cn</span><br><span class="line">root: /</span><br><span class="line">permalink: :year/:month/:day/:title/</span><br><span class="line">permalink_defaults:</span><br></pre></td></tr></table></figure></p>
-<p>顺便下载了github上比较高排名的hexo主题：Next.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iissnan/hexo-theme-next</span><br></pre></td></tr></table></figure></p>
-<p>将文件夹拷贝到Hexo博客目录的themes文件夹下，并修改站点主题<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: next</span><br></pre></td></tr></table></figure></p>
-<p>剩下的个性化配置参考：<br><a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">http://theme-next.iissnan.com/getting-started.html</a><br>进行配置。此外，参考了大佬们的文章：</p>
+<p>Ubuntu安装Node.js</p>
+<pre><code class="python"># 安装依赖包python-software-properties
+apt-get install python-software-properties
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+apt-get install nodejs
+
+</code></pre>
+<p>Ubuntu安装Git</p>
+<pre><code>add-apt-repository ppa:git-core/ppa
+apt update
+apt install git
+</code></pre><p>Ubuntu安装Nginx（略）</p>
+<p>安装 Hexo</p>
+<pre><code>npm install -g hexo-cli
+</code></pre><h3 id="建站"><a href="#建站" class="headerlink" title="建站"></a>建站</h3><p>创建博客需要文件</p>
+<pre><code>cd /data
+midir hexo-blog
+cd hexo-blog
+hexo init
+$ npm install
+
+</code></pre><h3 id="配置网站信息"><a href="#配置网站信息" class="headerlink" title="配置网站信息"></a>配置网站信息</h3><p>修改 _config.yml 文件, 仅修改了站点信息和地址信息, 更多的配置信息参考官网</p>
+<pre><code># Site
+title: 陈瑞文的个人网站
+subtitle:
+description: 你好，旅行者
+keywords:
+author: 陈瑞文
+language: zh-Hans
+timezone:
+
+# URL
+## If your site is put in a subdirectory, set url as &#39;http://yoursite.com/child&#39; and root as &#39;/child/&#39;
+url: http://www.chenruiwen.cn
+root: /
+permalink: :year/:month/:day/:title/
+permalink_defaults:
+
+</code></pre><p>顺便下载了github上比较高排名的hexo主题：Next.</p>
+<pre><code>git clone https://github.com/iissnan/hexo-theme-next
+</code></pre><p>将文件夹拷贝到Hexo博客目录的themes文件夹下，并修改站点主题</p>
+<pre><code>theme: next
+</code></pre><p>剩下的个性化配置参考：<br><a href="http://theme-next.iissnan.com/getting-started.html" target="_blank" rel="noopener">http://theme-next.iissnan.com/getting-started.html</a><br>进行配置。此外，参考了大佬们的文章：</p>
 <ul>
 <li><a href="https://reuixiy.github.io/technology/computer/computer-aided-art/2017/06/09/hexo-next-optimization.html" target="_blank" rel="noopener">打造个性超赞博客Hexo+NexT+GithubPages的超深度优化</a></li>
 <li><a href="http://cherryblog.site/Hexo-high-level-tutorialcloudmusic,bg-customthemes-statistical.html" target="_blank" rel="noopener">hexo高阶教程next主题优化</a></li>
@@ -456,27 +521,47 @@
 <li><a href="http://www.dingxuewen.com/categories/Site/" target="_blank" rel="noopener">Hexo搭建博客的个性化设置</a></li>
 </ul>
 <h3 id="通过Nginx发布"><a href="#通过Nginx发布" class="headerlink" title="通过Nginx发布"></a>通过Nginx发布</h3><h4 id="Nginx下载安装"><a href="#Nginx下载安装" class="headerlink" title="Nginx下载安装"></a>Nginx下载安装</h4><p>略。  </p>
-<h4 id="部署静态站点"><a href="#部署静态站点" class="headerlink" title="部署静态站点"></a>部署静态站点</h4><p>生成静态文件:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜  hexo-blog hexo g</span><br><span class="line">➜  hexo-blog ls</span><br><span class="line">_config.yml       node_modules      public            themes</span><br><span class="line">db.json           package-lock.json scaffolds</span><br><span class="line">debug.log         package.json      source</span><br></pre></td></tr></table></figure></p>
-<p>生成好的静态文件在public 文件夹内。</p>
-<h4 id="修改nginx配置文件"><a href="#修改nginx配置文件" class="headerlink" title="修改nginx配置文件"></a>修改nginx配置文件</h4><p>修改nginx配置文件:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/nginx/conf/nginx.conf</span><br></pre></td></tr></table></figure></p>
-<p>仅需修改http模块的server配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        server_name  www.chenruiwen.cn;</span><br><span class="line">        charset utf-8;</span><br><span class="line">        </span><br><span class="line">        root   /data/hexo-blog/public;# 这里是静态文件地址</span><br><span class="line">        location / &#123;</span><br><span class="line">            index  index.html;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>重新加载nginx：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure></p>
-<p>至此，网站已初步建成。</p>
+<h4 id="部署静态站点"><a href="#部署静态站点" class="headerlink" title="部署静态站点"></a>部署静态站点</h4><p>生成静态文件:</p>
+<pre><code>➜  hexo-blog hexo g
+➜  hexo-blog ls
+_config.yml       node_modules      public            themes
+db.json           package-lock.json scaffolds
+debug.log         package.json      source
+</code></pre><p>生成好的静态文件在public 文件夹内。</p>
+<h4 id="修改nginx配置文件"><a href="#修改nginx配置文件" class="headerlink" title="修改nginx配置文件"></a>修改nginx配置文件</h4><p>修改nginx配置文件:</p>
+<pre><code>vi /usr/local/nginx/conf/nginx.conf
+</code></pre><p>仅需修改http模块的server配置：</p>
+<pre><code>server {
+        listen       80;
+        server_name  www.chenruiwen.cn;
+        charset utf-8;
+
+        root   /data/hexo-blog/public;# 这里是静态文件地址
+        location / {
+            index  index.html;
+        }
+}
+</code></pre><p>重新加载nginx：</p>
+<pre><code>nginx -s reload
+</code></pre><p>至此，网站已初步建成。</p>
 <h3 id="部署到github上"><a href="#部署到github上" class="headerlink" title="部署到github上"></a>部署到github上</h3><h5 id="通过git部署"><a href="#通过git部署" class="headerlink" title="通过git部署"></a>通过git部署</h5><ul>
 <li>创建GitHub Repository(略)</li>
-<li><p>修改配置文件_config.yml</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: https://github.com/crrrrrw/hexo_static_page.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>安装hexo git插件  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>部署</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo generate</span><br><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
-</li>
+<li>修改配置文件_config.yml<pre><code>deploy:
+type: git
+repo: https://github.com/crrrrrw/hexo_static_page.git
+branch: master
+</code></pre></li>
+<li>安装hexo git插件  <pre><code>npm install hexo-deployer-git --save
+</code></pre></li>
+<li>部署<pre><code>hexo generate
+hexo deploy
+</code></pre>这样，所有文件就都提交到github库上了。</li>
 </ul>
-<p>这样，所有文件就都提交到github库上了。</p>
-<p>服务器上，克隆静态文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /data</span><br><span class="line">git clone https://github.com/crrrrrw/hexo_static_page.git</span><br><span class="line">git pull origin master</span><br></pre></td></tr></table></figure></p>
-<p>即可实现静态文件的更新。然后nginx重新指向这个静态文件目录即可。</p>
+<p>服务器上，克隆静态文件</p>
+<pre><code>cd /data
+git clone https://github.com/crrrrrw/hexo_static_page.git
+git pull origin master
+</code></pre><p>即可实现静态文件的更新。然后nginx重新指向这个静态文件目录即可。</p>
 <h2 id="自动化部署"><a href="#自动化部署" class="headerlink" title="自动化部署"></a>自动化部署</h2><p>思路a:<br>脚本定时更新github地址。</p>
 <p>思路b:<br>基于git hooks实现push后的自动化部署。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总之，搭建博客环境很简单，不过还有很多的工作要做，比如优化自己博客的样式，增加一些有意思的功能等，以后会慢慢优化的。当然，最重要的是写出好的有用的博文分享出去。</p>
@@ -512,14 +597,14 @@
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="陈瑞文 微信支付"/>
+        <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"/>
         <p>微信支付</p>
       </div>
     
 
     
       <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="陈瑞文 支付宝"/>
+        <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"/>
         <p>支付宝</p>
       </div>
     
@@ -635,7 +720,7 @@
                 alt="陈瑞文" />
             
               <p class="site-author-name" itemprop="name">陈瑞文</p>
-              <p class="site-description motion-element" itemprop="description">你好，旅行者</p>
+              <p class="site-description motion-element" itemprop="description">每天都在小小的改变</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -761,15 +846,43 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4
+<span>   |   </span>
+<span id="showDays"></span></div>
 
 
 
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共20.4k字</span>
+  <span class="post-count">本站累计共19.2k字</span>
 </div>
+
+<script>
+  var seconds = 1000;
+  var minutes = seconds * 60;
+  var hours = minutes * 60;
+  var days = hours * 24;
+  var years = days * 365;
+  var birthDay = Date.UTC(2018,04,14,00,00,00); // 这里设置建站时间
+  setInterval(function() {
+    var today = new Date();
+    var todayYear = today.getFullYear();
+    var todayMonth = today.getMonth()+1;
+    var todayDate = today.getDate();
+    var todayHour = today.getHours();
+    var todayMinute = today.getMinutes();
+    var todaySecond = today.getSeconds();
+    var now = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+    var diff = now - birthDay;
+    var diffYears = Math.floor(diff/years);
+    var diffDays = Math.floor((diff/days)-diffYears*365);
+    var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+    var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+    var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+      document.getElementById('showDays').innerHTML="本站已运行 "+diffYears+" 年 "+diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
+  }, 1000);
+</script>
 
         
 
@@ -919,6 +1032,20 @@
 
 
 
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script type="text/javascript">
+  new Valine({
+      av: AV,
+      el: '#comments' ,
+      app_id: '',
+      app_key: '',
+      placeholder: 'Just go go', // 默认 null
+      notify: false, // 默认 false
+      verify: false, // 默认 false
+      path: , // 默认 window.location.pathname
+      avatar: 'mm' // 默认 ''
+  });
+</script>
 
 
   
@@ -946,3 +1073,20 @@
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/love.js"></script>
+<!-- highlight 高亮 start-->
+<script src="http://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script type="text/javascript">
+  $(function() {
+    hljs.initHighlighting();
+    $('pre code').each(function() {
+      var lines = $(this).text().split('\n').length - 1;
+      var $numbering = $('<ul/>').addClass('pre-numbering');
+      $(this)
+        .addClass('has-numbering')
+        .parent()
+        .append($numbering);
+    });
+  });
+
+</script>
+<!-- highlight 高亮 end-->
