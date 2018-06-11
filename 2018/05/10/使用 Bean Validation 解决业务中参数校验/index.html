@@ -173,7 +173,7 @@ blockquote:after {
 
 
 
-  <link rel="alternate" href="/atom.xml" title="陈瑞文的小院" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="陈瑞文的空间" type="application/atom+xml" />
 
 
 
@@ -185,10 +185,10 @@ blockquote:after {
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用 Bean Validation 解决业务中参数校验">
 <meta property="og:url" content="http://www.chenruiwen.cn/2018/05/10/使用 Bean Validation 解决业务中参数校验/index.html">
-<meta property="og:site_name" content="陈瑞文的小院">
+<meta property="og:site_name" content="陈瑞文的空间">
 <meta property="og:description" content="目的精简业务中的代码校验。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-06-05T13:48:00.000Z">
+<meta property="og:updated_time" content="2018-06-08T11:51:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 Bean Validation 解决业务中参数校验">
 <meta name="twitter:description" content="目的精简业务中的代码校验。">
@@ -227,7 +227,7 @@ blockquote:after {
 
 
 
-  <title>使用 Bean Validation 解决业务中参数校验 | 陈瑞文的小院</title>
+  <title>使用 Bean Validation 解决业务中参数校验 | 陈瑞文的空间</title>
   
 
 
@@ -259,7 +259,7 @@ blockquote:after {
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">陈瑞文的小院</span>
+        <span class="site-title">陈瑞文的空间</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -375,7 +375,7 @@ blockquote:after {
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的小院">
+      <meta itemprop="name" content="陈瑞文的空间">
     </span>
 
     
@@ -455,8 +455,8 @@ blockquote:after {
       
 
       
-        <h1 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h1><p>精简业务中的代码校验。<br><a id="more"></a></p>
-<h1 id="痛点及现状"><a href="#痛点及现状" class="headerlink" title="痛点及现状"></a>痛点及现状</h1><p>代码中常常见到如下代码：</p>
+        <h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>精简业务中的代码校验。<br><a id="more"></a></p>
+<h2 id="痛点及现状"><a href="#痛点及现状" class="headerlink" title="痛点及现状"></a>痛点及现状</h2><p>代码中常常见到如下代码：</p>
 <pre><code>if (Objects.equal(0L ,repertory)){
     return ApiResultMap.errorResult(-1 ,&quot;操作数量不可为0&quot;) ;
 }
@@ -468,12 +468,12 @@ blockquote:after {
 <li>每个程序员做参数验证的方式不一样，参数验证不通过抛出的异常也不一样。</li>
 </ul>
 <p><strong>抛出问题</strong>：那么有没有一种方式可以简化代码呢？</p>
-<h1 id="JSR-303-Bean-Validation"><a href="#JSR-303-Bean-Validation" class="headerlink" title="JSR 303 - Bean Validation"></a>JSR 303 - Bean Validation</h1><p>Bean Validation是一个通过配置注解来验证参数的框架，它包含两部分Bean Validation API和Hibernate Validator。</p>
+<h2 id="JSR-303-Bean-Validation"><a href="#JSR-303-Bean-Validation" class="headerlink" title="JSR 303 - Bean Validation"></a>JSR 303 - Bean Validation</h2><p>Bean Validation是一个通过配置注解来验证参数的框架，它包含两部分Bean Validation API和Hibernate Validator。</p>
 <ul>
 <li>Bean Validation API是Java定义的一个验证参数的规范。</li>
 <li>Hibernate Validator是Bean Validation API的一个实现。</li>
 </ul>
-<h1 id="QUICK-START"><a href="#QUICK-START" class="headerlink" title="QUICK START"></a>QUICK START</h1><ol>
+<h2 id="QUICK-START"><a href="#QUICK-START" class="headerlink" title="QUICK START"></a>QUICK START</h2><ol>
 <li><p>引入pom</p>
 <pre><code>&lt;dependency&gt;
  &lt;groupId&gt;org.hibernate&lt;/groupId&gt;
@@ -512,10 +512,10 @@ public MethodValidationPostProcessor methodValidationPostProcessor() {
 <pre><code>4. 测试 
 
 </code></pre><p>$curl <a href="http://localhost:8080/validdemo?str=1&amp;a=15" target="_blank" rel="noopener">http://localhost:8080/validdemo?str=1&amp;a=15</a><br>{<br>    “message”: {<br>        “code”: 202,<br>        “message”: “需要在0和10之间”<br>    }<br>}<br><code>`</code></p>
-<h1 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h1><p>java程序员张三和ios程序员李四开发某一需求，明天就要demo了，今天得抓紧联调。<br>李四:三哥，地址发下，调试绑卡。<br>张三启动服务…<br>李四：三哥，帮忙看下，这个接口报错 -1，看下上面错误呗。<br>张三打开控制台，看了一下日志与排查，数据库报错，身份证字段没传导致插入身份证为空报错。<br>张三：李四你身份证没传。…张三一边埋怨着一边加入一行if else，同时在思考别的接口是不是也有这种情况，也给加上if else.<br>没过一会儿，李四：三哥，帮我看下有报错-1了。<br>张三又去查看，同样的，这次是银行卡号没传。张三重复着以上操作可没过一会儿李四又….<br>就这样一天过去，伴随着晚霞下班的张三，心情却没那么高兴…</p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>java程序员张三和ios程序员李四开发某一需求，明天就要demo了，今天得抓紧联调。<br>李四:三哥，地址发下，调试绑卡。<br>张三启动服务…<br>李四：三哥，帮忙看下，这个接口报错 -1，看下上面错误呗。<br>张三打开控制台，看了一下日志与排查，数据库报错，身份证字段没传导致插入身份证为空报错。<br>张三：李四你身份证没传。…张三一边埋怨着一边加入一行if else，同时在思考别的接口是不是也有这种情况，也给加上if else.<br>没过一会儿，李四：三哥，帮我看下有报错-1了。<br>张三又去查看，同样的，这次是银行卡号没传。张三重复着以上操作可没过一会儿李四又….<br>就这样一天过去，伴随着晚霞下班的张三，心情却没那么高兴…</p>
 <p><strong>抛出问题</strong>：是什么导致张三忙碌一天却觉得碌碌无为？是道德的沦丧还是人性的丧失？  </p>
 <p>如果张三整合Bean Validation的话，可能就没有那么不愉快了。他只需要一次在入参model里加入校验，之后在控制器的通过轻松的 @Valid 注解，就可以省去李四重复的提问，也省去的检查其他接口是否也需要添加代码校验，代码又可以少些几行了，何乐而不为。</p>
-<h1 id="常用注解"><a href="#常用注解" class="headerlink" title="常用注解"></a>常用注解</h1><p>Bean Validation 中内置的 constraint：  </p>
+<h2 id="常用注解"><a href="#常用注解" class="headerlink" title="常用注解"></a>常用注解</h2><p>Bean Validation 中内置的 constraint：  </p>
 <ul>
 <li>@Null    被注释的元素必须为 null</li>
 <li>@NotNull    被注释的元素必须不为 null</li>
@@ -538,12 +538,12 @@ public MethodValidationPostProcessor methodValidationPostProcessor() {
 <li>@NotEmpty    被注释的字符串的必须非空</li>
 <li>@Range    被注释的元素必须在合适的范围内</li>
 </ul>
-<h1 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h1><ul>
+<h2 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h2><ul>
 <li>代码整洁</li>
 <li>代码可读性强</li>
 <li>解决不同开发者的不同的校验方式</li>
 </ul>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>推荐使用 Bean Validation 的方式解决业务中参数校验；<br>这里只给出了一些基本的参数校验constraint，在实际业务中可根据业务情形自定义业务constraint。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>推荐使用 Bean Validation 的方式解决业务中参数校验；<br>这里只给出了一些基本的参数校验constraint，在实际业务中可根据业务情形自定义业务constraint。</p>
 
       
     </div>
@@ -709,7 +709,7 @@ public MethodValidationPostProcessor methodValidationPostProcessor() {
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -781,7 +781,7 @@ public MethodValidationPostProcessor methodValidationPostProcessor() {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#目的"><span class="nav-number">1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#痛点及现状"><span class="nav-number">2.</span> <span class="nav-text">痛点及现状</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JSR-303-Bean-Validation"><span class="nav-number">3.</span> <span class="nav-text">JSR 303 - Bean Validation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QUICK-START"><span class="nav-number">4.</span> <span class="nav-text">QUICK START</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用场景"><span class="nav-number">5.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用注解"><span class="nav-number">6.</span> <span class="nav-text">常用注解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优势"><span class="nav-number">7.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目的"><span class="nav-number">1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#痛点及现状"><span class="nav-number">2.</span> <span class="nav-text">痛点及现状</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSR-303-Bean-Validation"><span class="nav-number">3.</span> <span class="nav-text">JSR 303 - Bean Validation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QUICK-START"><span class="nav-number">4.</span> <span class="nav-text">QUICK START</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用场景"><span class="nav-number">5.</span> <span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用注解"><span class="nav-number">6.</span> <span class="nav-text">常用注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优势"><span class="nav-number">7.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
@@ -834,7 +834,7 @@ public MethodValidationPostProcessor methodValidationPostProcessor() {
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共19.2k字</span>
+  <span class="post-count">本站累计共21.3k字</span>
 </div>
 
 <script>

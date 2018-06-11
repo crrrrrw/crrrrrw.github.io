@@ -173,7 +173,7 @@ blockquote:after {
 
 
 
-  <link rel="alternate" href="/atom.xml" title="陈瑞文的小院" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="陈瑞文的空间" type="application/atom+xml" />
 
 
 
@@ -182,13 +182,13 @@ blockquote:after {
 
 <meta name="description" content="每天都在小小的改变">
 <meta property="og:type" content="website">
-<meta property="og:title" content="陈瑞文的小院">
+<meta property="og:title" content="陈瑞文的空间">
 <meta property="og:url" content="http://www.chenruiwen.cn/index.html">
-<meta property="og:site_name" content="陈瑞文的小院">
+<meta property="og:site_name" content="陈瑞文的空间">
 <meta property="og:description" content="每天都在小小的改变">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="陈瑞文的小院">
+<meta name="twitter:title" content="陈瑞文的空间">
 <meta name="twitter:description" content="每天都在小小的改变">
 
 
@@ -225,7 +225,7 @@ blockquote:after {
 
 
 
-  <title>陈瑞文的小院</title>
+  <title>陈瑞文的空间</title>
   
 
 
@@ -258,7 +258,7 @@ blockquote:after {
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">陈瑞文的小院</span>
+        <span class="site-title">陈瑞文的空间</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -365,6 +365,162 @@ blockquote:after {
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/06/11/Dubbo扩展机制实现(二)之浅析ExtensionLoader/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈瑞文">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/touxiang.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="陈瑞文的空间">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/11/Dubbo扩展机制实现(二)之浅析ExtensionLoader/" itemprop="url">Dubbo扩展机制实现(二)之浅析ExtensionLoader</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-11T22:47:08+08:00">
+                2018-06-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/dubbo/" itemprop="url" rel="index">
+                    <span itemprop="name">dubbo</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前的文章有介绍jdk SPI一些基本的使用和源码分析，既然dubbo也想使用SPI机制，为什么不直接使用jdk的SPI呢？</p>
+<p>上篇文章开头也提到了：</p>
+<blockquote>
+<p>Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。</p>
+</blockquote>
+<p>看看官方文档上Dubbo加强了哪些地方：<br><img src="http://ww1.sinaimg.cn/large/87faef88ly1frb9d0bvqmj216q0dcdk3.jpg" alt="">  </p>
+<p>本文简单分析下Dubbo实现扩展点机制的ExtensionLoader类,分析其对比java的spi是怎么改进的。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/06/11/Dubbo扩展机制实现(二)之浅析ExtensionLoader/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+    </div>
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/06/04/Dubbo扩展机制实现(一)之java SPI/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -374,7 +530,7 @@ blockquote:after {
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的小院">
+      <meta itemprop="name" content="陈瑞文的空间">
     </span>
 
     
@@ -528,7 +684,7 @@ blockquote:after {
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的小院">
+      <meta itemprop="name" content="陈瑞文的空间">
     </span>
 
     
@@ -683,7 +839,7 @@ blockquote:after {
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的小院">
+      <meta itemprop="name" content="陈瑞文的空间">
     </span>
 
     
@@ -838,7 +994,7 @@ blockquote:after {
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的小院">
+      <meta itemprop="name" content="陈瑞文的空间">
     </span>
 
     
@@ -989,7 +1145,7 @@ blockquote:after {
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的小院">
+      <meta itemprop="name" content="陈瑞文的空间">
     </span>
 
     
@@ -1072,7 +1228,7 @@ blockquote:after {
 
       
         
-          <h1 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h1><p>精简业务中的代码校验。<br>
+          <h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>精简业务中的代码校验。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/05/10/使用 Bean Validation 解决业务中参数校验/#more" rel="contents">
@@ -1139,7 +1295,7 @@ blockquote:after {
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的小院">
+      <meta itemprop="name" content="陈瑞文的空间">
     </span>
 
     
@@ -1289,7 +1445,7 @@ blockquote:after {
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的小院">
+      <meta itemprop="name" content="陈瑞文的空间">
     </span>
 
     
@@ -1439,7 +1595,7 @@ blockquote:after {
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的小院">
+      <meta itemprop="name" content="陈瑞文的空间">
     </span>
 
     
@@ -1589,7 +1745,7 @@ blockquote:after {
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的小院">
+      <meta itemprop="name" content="陈瑞文的空间">
     </span>
 
     
@@ -1717,156 +1873,6 @@ blockquote:after {
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/04/16/ubuntu安装Nginx全记录/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="陈瑞文">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/touxiang.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="陈瑞文的小院">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/16/ubuntu安装Nginx全记录/" itemprop="url">ubuntu安装Nginx全记录</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-16T13:01:24+08:00">
-                2018-04-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/nginx/" itemprop="url" rel="index">
-                    <span itemprop="name">nginx</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>记录下nginx安装过程。本文只演示源码包编译安装。个人比较喜欢自定义安装，灵活。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/16/ubuntu安装Nginx全记录/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    <div>
-      
-    </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1921,7 +1927,7 @@ blockquote:after {
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2030,7 +2036,7 @@ blockquote:after {
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共19.2k字</span>
+  <span class="post-count">本站累计共21.3k字</span>
 </div>
 
 <script>
