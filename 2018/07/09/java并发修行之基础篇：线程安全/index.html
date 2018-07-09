@@ -167,7 +167,7 @@ blockquote:after {
 
 
 
-  <meta name="keywords" content="java,dubbo," />
+  <meta name="keywords" content="java,java concurrency," />
 
 
 
@@ -180,22 +180,20 @@ blockquote:after {
 
 
 
-<meta name="description" content="前言在之前的文章Dubbo暴露服务过程中提出了问题：@SPI这些东西究竟是什么?在Dubbo开发手册之扩展点加载中有这么解释过：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  所以在分析Dubbo扩展机制前，先看看jdk的SPI。">
-<meta name="keywords" content="java,dubbo">
+<meta name="description" content="前言在互联网应用广泛的今天，软件并发已经成为目前软件开发的必备基础。java作为一门成熟的语言，其拥有着极其高效的并发机制，是目前大中型企业的常用开发语言。想要开发大规模应用，java并发已成为java程序猿们的必备基础技能。 从今天开始，开启java并发修行之路。">
+<meta name="keywords" content="java,java concurrency">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Dubbo扩展机制实现(一)之java SPI">
-<meta property="og:url" content="http://www.chenruiwen.cn/2018/06/04/Dubbo扩展机制实现(一)之java SPI/index.html">
+<meta property="og:title" content="java并发修行之基础篇：线程安全">
+<meta property="og:url" content="http://www.chenruiwen.cn/2018/07/09/java并发修行之基础篇：线程安全/index.html">
 <meta property="og:site_name" content="陈瑞文的空间">
-<meta property="og:description" content="前言在之前的文章Dubbo暴露服务过程中提出了问题：@SPI这些东西究竟是什么?在Dubbo开发手册之扩展点加载中有这么解释过：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  所以在分析Dubbo扩展机制前，先看看jdk的SPI。">
+<meta property="og:description" content="前言在互联网应用广泛的今天，软件并发已经成为目前软件开发的必备基础。java作为一门成熟的语言，其拥有着极其高效的并发机制，是目前大中型企业的常用开发语言。想要开发大规模应用，java并发已成为java程序猿们的必备基础技能。 从今天开始，开启java并发修行之路。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fr6nptfm2aj20ig0cqgml.jpg">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fr6n9im7d1j20kq060aam.jpg">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fr9re67q83j20vk0jugp9.jpg">
-<meta property="og:updated_time" content="2018-06-05T13:38:03.000Z">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1ft3q0csqw0j20jn0fudgv.jpg">
+<meta property="og:updated_time" content="2018-07-09T14:17:19.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Dubbo扩展机制实现(一)之java SPI">
-<meta name="twitter:description" content="前言在之前的文章Dubbo暴露服务过程中提出了问题：@SPI这些东西究竟是什么?在Dubbo开发手册之扩展点加载中有这么解释过：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  所以在分析Dubbo扩展机制前，先看看jdk的SPI。">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fr6nptfm2aj20ig0cqgml.jpg">
+<meta name="twitter:title" content="java并发修行之基础篇：线程安全">
+<meta name="twitter:description" content="前言在互联网应用广泛的今天，软件并发已经成为目前软件开发的必备基础。java作为一门成熟的语言，其拥有着极其高效的并发机制，是目前大中型企业的常用开发语言。想要开发大规模应用，java并发已成为java程序猿们的必备基础技能。 从今天开始，开启java并发修行之路。">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1ft3q0csqw0j20jn0fudgv.jpg">
 
 
 
@@ -225,13 +223,13 @@ blockquote:after {
 
 
 
-  <link rel="canonical" href="http://www.chenruiwen.cn/2018/06/04/Dubbo扩展机制实现(一)之java SPI/"/>
+  <link rel="canonical" href="http://www.chenruiwen.cn/2018/07/09/java并发修行之基础篇：线程安全/"/>
 
 
 
 
 
-  <title>Dubbo扩展机制实现(一)之java SPI | 陈瑞文的空间</title>
+  <title>java并发修行之基础篇：线程安全 | 陈瑞文的空间</title>
   
 
 
@@ -370,7 +368,7 @@ blockquote:after {
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/06/04/Dubbo扩展机制实现(一)之java SPI/">
+    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/07/09/java并发修行之基础篇：线程安全/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈瑞文">
@@ -387,7 +385,7 @@ blockquote:after {
 
         
         
-          <h1 class="post-title" itemprop="name headline">Dubbo扩展机制实现(一)之java SPI</h1>
+          <h1 class="post-title" itemprop="name headline">java并发修行之基础篇：线程安全</h1>
         
 
         <div class="post-meta">
@@ -399,8 +397,8 @@ blockquote:after {
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-04T21:31:24+08:00">
-                2018-06-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-09T22:16:24+08:00">
+                2018-07-09
               </time>
             
 
@@ -422,8 +420,8 @@ blockquote:after {
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/dubbo/" itemprop="url" rel="index">
-                    <span itemprop="name">dubbo</span>
+                  <a href="/categories/java并发修行/" itemprop="url" rel="index">
+                    <span itemprop="name">java并发修行</span>
                   </a>
                 </span>
 
@@ -459,155 +457,167 @@ blockquote:after {
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在之前的文章<a href="http://www.chenruiwen.cn/2018/05/20/Dubbo%E6%9A%B4%E9%9C%B2%E6%9C%8D%E5%8A%A1%E8%BF%87%E7%A8%8B/">Dubbo暴露服务过程</a>中提出了问题：<em>@SPI</em>这些东西究竟是什么?<br>在<a href="http://dubbo.apache.org/books/dubbo-dev-book/SPI.html" target="_blank" rel="noopener">Dubbo开发手册之扩展点加载</a>中有这么解释过：</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在互联网应用广泛的今天，软件并发已经成为目前软件开发的必备基础。java作为一门成熟的语言，其拥有着极其高效的并发机制，是目前大中型企业的常用开发语言。想要开发大规模应用，java并发已成为java程序猿们的必备基础技能。</p>
+<p>从今天开始，开启java并发修行之路。</p>
+<a id="more"></a>
+<h2 id="什么是线程安全性"><a href="#什么是线程安全性" class="headerlink" title="什么是线程安全性"></a>什么是线程安全性</h2><p>线程的安全性总是难以定义的。<br>在阅读<a href="https://item.jd.com/10922250.html" target="_blank" rel="noopener">《java并发编程实战》</a>的过程中觉得说的很好：</p>
 <blockquote>
-<p>Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。</p>
+<p>在线程安全性的定义中，最核心的概念就是正确性。</p>
 </blockquote>
-<p>所以在分析Dubbo扩展机制前，先看看jdk的SPI。<br><a id="more"></a></p>
-<h2 id="什么是SPI"><a href="#什么是SPI" class="headerlink" title="什么是SPI"></a>什么是SPI</h2><p>SPI 全称为 (Service Provider Interface) ,是JDK内置的一种服务提供发现机制。<br>在面向对象设计里，我们不会针对实现编程，模块间面向接口编程来防止强耦合。java spi机制实现了一种放在程序以外的方式去动态装配模块，这就是java的服务发现。类似于ioc的思想，将模块装配放在程序外，比如xml等方式。</p>
-<p>Dubbo框架就是借鉴了这种机制，在jdk的基础上进行了改进。</p>
-<h2 id="java-SPI机制约定"><a href="#java-SPI机制约定" class="headerlink" title="java SPI机制约定"></a>java SPI机制约定</h2><p>java的spi是通过<a href="https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html" target="_blank" rel="noopener">ServiceLoader</a>来加载，根据官方文档来看一下SPI机制的约定：</p>
+<p>何为正确性？</p>
+<blockquote>
+<p>某个类的行为与其规范完全一致。</p>
+</blockquote>
+<p>通常我们并不规定类的规范，于是我们通俗对正确性的理解是，单线程的类的行为是按照我们“所见”来运行的，我们确保其可信，“所见即所知”。</p>
+<p>于是给出线程安全性的定义：</p>
+<blockquote>
+<p>当多个线程访问某个类时，这个类始终都能表现出正确的行为。</p>
+</blockquote>
+<p>某个对象保证多线程环境下共享、可修改的状态的正确性，那么即是线程安全。</p>
+<p>换个角度分析：</p>
 <ul>
-<li>Service实现类必须有一个无参构造器</li>
-<li>在META-INF/services/目录中提供一个文件名称为Service接口全限定名的文件，文件内容为Service接口实现类全限定名，编码格式为UTF-8</li>
-<li>使用java.util.ServiceLoader来动态加载Service接口的实现类。</li>
+<li>当某个类单线程条件都不是正确的，那么其肯定不是线程安全的。</li>
+<li>无状态对象一定线程安全</li>
+<li>状态不共享或不可修改，即不存在线程安全问题。</li>
 </ul>
-<h2 id="SPI示例"><a href="#SPI示例" class="headerlink" title="SPI示例"></a>SPI示例</h2><p><a href="https://github.com/crrrrrw/java-spi-demo" target="_blank" rel="noopener">代码地址传送门</a><br>目录结构如下:<br><img src="http://ww1.sinaimg.cn/large/87faef88ly1fr6nptfm2aj20ig0cqgml.jpg" alt=""><br>接口定义：</p>
-<pre><code>public interface HelloWorld {
-    void sayHello();
-}
-</code></pre><p>两个实现：</p>
-<pre><code>public class HelloWorldENimpl implements HelloWorld {
+<h2 id="如何做到线程安全"><a href="#如何做到线程安全" class="headerlink" title="如何做到线程安全"></a>如何做到线程安全</h2><p>线程安全要保证：</p>
+<ol>
+<li>原子性。保证一组相关操作在竞态条件下保证结果可靠。</li>
+<li>可见性。当多个线程访问同一个变量时，一个线程修改了这个变量的值，其他线程能够立即看得到修改的值。</li>
+<li>有序性。避免指令重排序。</li>
+</ol>
+<p>解释一下上面三个安全特性：</p>
+<h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>关键词：<code>一组相关操作</code>、<code>竞态条件</code>。</p>
+<p>先解释<code>竞态条件</code>：</p>
+<blockquote>
+<p>当某个计算的正确性取决于多个线程的交替执行时序时，就会发生竞态条件。</p>
+</blockquote>
+<p>简单的说，其本质就是基于了一个错误的状态去判断或执行计算。</p>
+<p>上代码举例。比如一个多线程累加并打印偶数的程序。</p>
+<h4 id="程序A："><a href="#程序A：" class="headerlink" title="程序A："></a>程序A：</h4><p>典型的竞态条件无处理:</p>
+<pre><code class="java">public class EchoEvenNumService implements Runnable {
+    private int num;
     @Override
-    public void sayHello() {
-        System.out.println(&quot;hello,world!&quot;);
+    public void run() {
+        if (num % 2 == 0) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.print(num + &quot;\t&quot;);
+        }
+
+        num++;
     }
 }
-public class HelloWorldCNimpl implements HelloWorld {
+</code></pre>
+<p>运行main程序:</p>
+<pre><code class="java">public static void main(String[] args) {
+    EchoEvenNumService service = new EchoEvenNumService();
+    for (int i = 0; i &lt; 100; i++) {
+        new Thread(service).start();
+    }
+}
+</code></pre>
+<p>结果是可想而知的，奇数偶数都有：</p>
+<pre><code>0    1    1    2    4    3    2    1    1    9    9    10    9    9    9    9    10    9    18    18    18    20    21    22    20    20    19 ...
+</code></pre><h4 id="程序B"><a href="#程序B" class="headerlink" title="程序B"></a>程序B</h4><p>有些同学会觉得，num改成线程安全的类型(<code>AtomicInteger</code>)就可以了，可是事实是这样吗？修改程序A:</p>
+<pre><code class="java">public class EchoEvenNumService implements Runnable {
+    private AtomicInteger num = new AtomicInteger(0);
     @Override
-    public void sayHello() {
-        System.out.println(&quot;你好，世界！&quot;);
+    public void run() {
+        if (num.get() % 2 == 0) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.print(num.get() + &quot;\t&quot;);
+        }
+        num.incrementAndGet();
     }
 }
-</code></pre><p>配置服务发现，在META-INF/service目录下创建文件：<em>com.crw.demo.spi.HelloWorld</em>，内容为接口实现类全名：</p>
-<pre><code>com.crw.demo.spi.impl.HelloWorldENimpl
-com.crw.demo.spi.impl.HelloWorldCNimpl
-</code></pre><p>编写调用端：</p>
-<pre><code>public class Run {
-    public static void main(String[] args) {
-        ServiceLoader&lt;HelloWorld&gt; loads = ServiceLoader.load(HelloWorld.class);
-        for (HelloWorld load : loads) {
-            load.sayHello();
-        }
-    }
-}
-</code></pre><p>运行结果如下：<br><img src="http://ww1.sinaimg.cn/large/87faef88ly1fr6n9im7d1j20kq060aam.jpg" alt="">  </p>
-<h2 id="ServiceLoader源码分析"><a href="#ServiceLoader源码分析" class="headerlink" title="ServiceLoader源码分析"></a>ServiceLoader源码分析</h2><p>从 <em>ServiceLoader.load(Class\&lt;S> service)</em> 方法点进去看一下</p>
-<pre><code>public static &lt;S&gt; ServiceLoader&lt;S&gt; load(Class&lt;S&gt; service) {
-    ClassLoader cl = Thread.currentThread().getContextClassLoader(); // 获取类加载器
-    return ServiceLoader.load(service, cl);
-}
-
-private ServiceLoader(Class&lt;S&gt; svc, ClassLoader cl) {
-    service = Objects.requireNonNull(svc, &quot;Service interface cannot be null&quot;);
-    loader = (cl == null) ? ClassLoader.getSystemClassLoader() : cl;
-    acc = (System.getSecurityManager() != null) ? AccessController.getContext() : null;
-    reload(); // 开始加载
-}
-
-public void reload() {
-    providers.clear(); // 清空提供者缓存
-    lookupIterator = new LazyIterator(service, loader); // 创建一个懒加载的提供者发现器
-}
-</code></pre><p>可以看到，实际上是交给了一个私有静态内部类处理new LazyIterator(service, loader); 通过名字就像是懒加载，所以我们看看什么时候类加载器会加载SPI实现服务。  </p>
-<p>答案是遍历的时候。</p>
-<p>ServiceLoader实现了iterator接口:</p>
-<pre><code>public Iterator&lt;S&gt; iterator() {
-    return new Iterator&lt;S&gt;() {
-
-        Iterator&lt;Map.Entry&lt;String,S&gt;&gt; knownProviders
-            = providers.entrySet().iterator();
-
-        public boolean hasNext() {
-            if (knownProviders.hasNext())
-                return true;
-            return lookupIterator.hasNext(); // 实际上是调用LazyIterator.hasNext()方法。
-        }
-
-        public S next() {
-            if (knownProviders.hasNext())
-                return knownProviders.next().getValue();
-            return lookupIterator.next(); // 实际上是调用LazyIterator.next()方法。
-        }
-
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
-
-    };
-}
-</code></pre><p>在客户端遍历的时候，首先调用了hasNext()方法，hasNext调用了LazyIterator.hasNext(),其实际上又调用了内部方法 <em>hasNextService()</em> :</p>
-<pre><code>private boolean hasNextService() {
-    if (nextName != null) { // 如果有服务提供者名称，直接返回
-        return true;
-    }
-    if (configs == null) {
+</code></pre>
+<p>运行main方法后，你会发现还是奇数偶数都有：</p>
+<pre><code>0    0    2    3    4    5    5    5    5    7    9    6    6    13    14    14    14    15    18    14    17    20    20    17    21    25    25    26    28    28    29    30 ...
+</code></pre><p>这么写是因为没有理解<code>一组相关操作</code>。在上面的程序中，实际上需要做到三个操作：1.num.get() % 2 == 0判断。2.打印偶数。3.num递增。</p>
+<p>即时上面三个操作各做各的做到了原子性，但是整体并不是原子性，程序依旧会错误。</p>
+<h4 id="程序C"><a href="#程序C" class="headerlink" title="程序C"></a>程序C</h4><p>做到整体的原子性，加锁同步。修改程序A：</p>
+<pre><code class="java">public class EchoEvenNumService implements Runnable {
+    private int num;
+    private ReentrantLock lock = new ReentrantLock();
+    @Override
+    public void run() {
         try {
-            String fullName = PREFIX + service.getName(); // META-INF/services/xxx.xxx.xxx.XxxImpl
-            // 获取配置文件加载路径
-            if (loader == null)
-                configs = ClassLoader.getSystemResources(fullName);
-            else
-                configs = loader.getResources(fullName);
-        } catch (IOException x) {
-            fail(service, &quot;Error locating configuration files&quot;, x);
+            lock.lock();
+            if (num % 2 == 0) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.print(num + &quot;\t&quot;);
+            }
+            num++;
+        } finally {
+            lock.unlock();
         }
     }
-    while ((pending == null) || !pending.hasNext()) {
-        if (!configs.hasMoreElements()) {
-            return false;
-        }
-        pending = parse(service, configs.nextElement()); //解析配置路径，用utf-8格式读取配置
-    }
-    nextName = pending.next(); // 服务提供者名称赋值
-    return true;
 }
-</code></pre><p>看一眼解析完的结构，在遍历的时候会读取配置，把服务提供者名称一次性获取：<br><img src="http://ww1.sinaimg.cn/large/87faef88ly1fr9re67q83j20vk0jugp9.jpg" alt="">  </p>
-<p>接着，在客户端遍历的时候调用了next()方法，<br>LazyIterator.next()方法里做了如下事情</p>
-<pre><code>private S nextService() {
-    if (!hasNextService()) // 如果配置里没有服务，则会抛异常
-        throw new NoSuchElementException();
-    String cn = nextName;
-    nextName = null;
-    Class&lt;?&gt; c = null;
-    try {
-        c = Class.forName(cn, false, loader); // 反射创建了配置文件里的实现类
-    } catch (ClassNotFoundException x) {
-        fail(service,
-             &quot;Provider &quot; + cn + &quot; not found&quot;);
-    }
-    if (!service.isAssignableFrom(c)) {
-        fail(service,
-             &quot;Provider &quot; + cn  + &quot; not a subtype&quot;);
-    }
-    try {
-        S p = service.cast(c.newInstance()); // 创建了一个实现类的实例
-        providers.put(cn, p); // 放入提供者缓存中
-        return p;
-    } catch (Throwable x) {
-        fail(service,
-             &quot;Provider &quot; + cn + &quot; could not be instantiated&quot;,
-             x);
-    }
-    throw new Error();          // This cannot happen
-}
-</code></pre><p>返回了一个服务提供者实例，就这样完成了一次SPI调用。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇文章主要介绍了jdk SPI机制：</p>
+</code></pre>
+<p>运行main方法后，程序终于保证了正确性:</p>
+<pre><code>0    2    4    6    8    10    12    14    16    18    20    22    24    26    28    30    32    34    36    38    40    42    44    46    48    50    52    54    56    58    60    62    64    66    68    70    72    74    76    78    80    82    84    86    88    90    92    94    96    98    
+</code></pre><h3 id="可见性"><a href="#可见性" class="headerlink" title="可见性"></a>可见性</h3><p>保证共享变量有效。<br>这里需要简单提一下Java的内存模型:<br><img src="http://ww1.sinaimg.cn/large/87faef88ly1ft3q0csqw0j20jn0fudgv.jpg" alt=""></p>
+<p>看图说话:  </p>
 <ul>
-<li>java如何编写一个SPI服务的。</li>
-<li>ServiceLoader源码如何实现SPI服务。  </li>
+<li>主内存(Main Memory),存储所有变量。</li>
+<li>工作内存(Working Memory),保存了该线程使用到的变量的主存副本拷贝。</li>
+<li>线程、工作内存、主存三者关系：线程对变量的所有操作(读写等)都必须在工作内存中进行，而不能之间读写主内存中的变量。</li>
 </ul>
-<p>本篇主要是为了Dubbo实现spi而做了铺垫。在看ServiceLoader的源码时，主要还是利用了java的类加载器 ClassLoader ，这些之后会单独写一写。鉴于鄙人才疏学浅，以上文章如有不对的地方希望大家予以指出，共同进步。</p>
+<p>如此可见，如果程序没有保证可见性，会使一部分线程读取到的是工作内存中的值(并不一定准确)，导致程序不正确执行。</p>
+<p>如何保证可见性？手段：加锁，volatile修饰。</p>
+<h3 id="有序性"><a href="#有序性" class="headerlink" title="有序性"></a>有序性</h3><p>解释下“重排序”现象：</p>
+<blockquote>
+<p>在没有同步的情况下，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整。</p>
+</blockquote>
+<p>比如赋值两个变量:</p>
+<pre><code class="java">private int a;
+private int b;
+</code></pre>
+<p>线程A对a,b进行赋值,代码中的逻辑是这样的:</p>
+<pre><code class="java">a = 1;
+b = 2;
+</code></pre>
+<p>线程A在运行时，对a变量赋值发现a变量在主存中被其他线程加锁不能访问，线程A并不会等待锁释放，它会去尝试获取b变量，当b变量没有被占用时，线程A的执行过程就会变成这样:</p>
+<pre><code class="java">b = 2;
+a = 1;
+</code></pre>
+<p>这就是JVM内部优化导致的“指令重排序”。</p>
+<p>重排序可能导致一些重要的状态值的读取顺序改变导致程序异常甚至会死循环发生OOM。</p>
+<p>比如如下程序：</p>
+<pre><code class="java">public class NoVisibility {
+    private static boolean ready;
+    private static int number;
+
+    private static class ReaderThread extends Thread {
+        public void run() {
+            while (!ready)
+                Thread.yield();
+            System.out.println(number);
+        }
+    }
+
+    public static void main(String[] args) {
+        new ReaderThread().start();
+        number = 42;
+        ready = true;
+    }
+}
+</code></pre>
+<p>这个程序的诡异之处在于，ReaderThread可能永远看不到ready值，更诡异的是ReaderThread的输出可能是0，ReaderThread只读到了ready的值但没有读到number值。这一切“归功于”神奇的“重排序”。</p>
+<p>解决方式:同步。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文java并发修行的第一篇，重在基础。本文简单讲解了线程安全的“定义”，以及线程安全的一些基础概念。核心在于线程并发处理共享变量时的三点保证：<code>原子性</code>，<code>可见性</code>，<code>有序性</code>。细细体会之，后续准备从源码层面详细对这三点进行分析。</p>
 
       
     </div>
@@ -669,8 +679,8 @@ public void reload() {
             <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i>
                java</a>
           
-            <a href="/tags/dubbo/" rel="tag"><i class="fa fa-tag"></i>
-               dubbo</a>
+            <a href="/tags/java-concurrency/" rel="tag"><i class="fa fa-tag"></i>
+               java concurrency</a>
           
         </div>
       
@@ -683,8 +693,8 @@ public void reload() {
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/28/MySQL查询性能优化/" rel="next" title="MySQL查询性能优化">
-                <i class="fa fa-chevron-left"></i> MySQL查询性能优化
+              <a href="/2018/07/04/从一份配置清单详解Nginx服务器配置/" rel="next" title="从一份配置清单详解Nginx服务器配置">
+                <i class="fa fa-chevron-left"></i> 从一份配置清单详解Nginx服务器配置
               </a>
             
           </div>
@@ -692,10 +702,6 @@ public void reload() {
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/11/Dubbo扩展机制实现(二)之浅析ExtensionLoader/" rel="prev" title="Dubbo扩展机制实现(二)之浅析ExtensionLoader">
-                Dubbo扩展机制实现(二)之浅析ExtensionLoader <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -848,7 +854,7 @@ public void reload() {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是SPI"><span class="nav-number">2.</span> <span class="nav-text">什么是SPI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java-SPI机制约定"><span class="nav-number">3.</span> <span class="nav-text">java SPI机制约定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SPI示例"><span class="nav-number">4.</span> <span class="nav-text">SPI示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ServiceLoader源码分析"><span class="nav-number">5.</span> <span class="nav-text">ServiceLoader源码分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是线程安全性"><span class="nav-number">2.</span> <span class="nav-text">什么是线程安全性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何做到线程安全"><span class="nav-number">3.</span> <span class="nav-text">如何做到线程安全</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原子性"><span class="nav-number">3.1.</span> <span class="nav-text">原子性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#程序A："><span class="nav-number">3.1.1.</span> <span class="nav-text">程序A：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#程序B"><span class="nav-number">3.1.2.</span> <span class="nav-text">程序B</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#程序C"><span class="nav-number">3.1.3.</span> <span class="nav-text">程序C</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可见性"><span class="nav-number">3.2.</span> <span class="nav-text">可见性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有序性"><span class="nav-number">3.3.</span> <span class="nav-text">有序性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
