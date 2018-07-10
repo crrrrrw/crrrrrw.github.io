@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>陈瑞文的空间</title>
+  <title>Chen RuiWen&#39;s Space</title>
   
-  
+  <subtitle>Life is real, life is earnest</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.chenruiwen.cn/"/>
