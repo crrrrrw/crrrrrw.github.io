@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.chenruiwen.cn/"/>
-  <updated>2018-07-14T01:29:59.000Z</updated>
+  <updated>2018-07-14T16:30:45.000Z</updated>
   <id>http://www.chenruiwen.cn/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>mybatis集成分页插件pageHelper</title>
+    <link href="http://www.chenruiwen.cn/2018/07/14/mybatis%E9%9B%86%E6%88%90%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6pageHelper/"/>
+    <id>http://www.chenruiwen.cn/2018/07/14/mybatis集成分页插件pageHelper/</id>
+    <published>2018-07-14T11:32:24.000Z</published>
+    <updated>2018-07-14T16:30:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>web开发少不了分页，本文将简单介绍使用基于<code>spring-boot</code> + <code>mybatis</code> + <code>pageHelper</code>技术实现数据库分页。</p><p>本文算是对上一篇<a href="http://note.youdao.com/noteshare?id=b126ede43c86463f93309b8d6836bfb3" target="_blank" rel="noopener">spring-boot集成mybatis</a>的一个补充。</p><a id="more"></a><h2 id="pageHelper简介"><a href="#pageHelper简介" class="headerlink" title="pageHelper简介"></a>pageHelper简介</h2><p>使用<code>MyBatis</code>作为数据访问层进行对sql语句分页的最好用的插件。</p><p>建议去<a href="https://pagehelper.github.io/" target="_blank" rel="noopener">pageHelper官网</a>看一看。</p><p>特点：</p><ul><li>物理分页：支持常见的12种数据库。Oracle,MySql,MariaDB,SQLite,DB2,PostgreSQL,SqlServer等。</li><li>支持多种分页方式：支持常见的RowBounds(PageRowBounds)，PageHelper.startPage 方法调用，Mapper 接口参数调用。</li><li>QueryInterceptor 规范：使用 QueryInterceptor 规范，开发插件更轻松。</li></ul><h2 id="集成pageHelper"><a href="#集成pageHelper" class="headerlink" title="集成pageHelper"></a>集成pageHelper</h2><p>三步完成集成：</p><ul><li>maven依赖</li><li>配置pageHelper</li><li>代码使用及测试</li></ul><h3 id="maven依赖"><a href="#maven依赖" class="headerlink" title="maven依赖"></a>maven依赖</h3><p>此处依赖在集成了mybatis的基础上增加:</p><pre><code>&lt;!-- pagehelper --&gt;&lt;dependency&gt;    &lt;groupId&gt;com.github.pagehelper&lt;/groupId&gt;    &lt;artifactId&gt;pagehelper-spring-boot-starter&lt;/artifactId&gt;    &lt;version&gt;1.2.3&lt;/version&gt;&lt;/dependency&gt;</code></pre><h3 id="配置pageHelper"><a href="#配置pageHelper" class="headerlink" title="配置pageHelper"></a>配置pageHelper</h3><p>在<code>application.yml</code>里增加:</p><pre><code># 分页配置pagehelper:  helper-dialect: mysql  reasonable: &quot;true&quot;  support-methods-arguments: &quot;true&quot;  params: count=countSql</code></pre><h3 id="代码使用及测试"><a href="#代码使用及测试" class="headerlink" title="代码使用及测试"></a>代码使用及测试</h3><p>根据<a href="https://pagehelper.github.io/docs/howtouse/#3-%E5%A6%82%E4%BD%95%E5%9C%A8%E4%BB%A3%E7%A0%81%E4%B8%AD%E4%BD%BF%E7%94%A8" target="_blank" rel="noopener">官网之如何在代码中使用</a>中的推荐，我们使用静态方法<code>PageHelper.startPage</code>来实现分页。</p><p>首先是SbpUserMapper接口增加方法：</p><pre><code class="java">public interface SbpUserMapper {    List&lt;SbpUser&gt; getAll();}</code></pre><p>对应的SbpUserMapper.xml增加sql:</p><pre><code>&lt;select id=&quot;getAll&quot; resultMap=&quot;BaseResultMap&quot;&gt;    SELECT * FROM sbp_user&lt;/select&gt;</code></pre><p>代码使用，传参当前页为1，每页条数显示5条:</p><pre><code>@Test@Rollbackpublic void pageByPageHelper() throws Exception {    PageHelper.startPage(1, 5);    List&lt;SbpUser&gt; users = sbpUserMapper.getAll();    Page&lt;SbpUser&gt; page = (Page&lt;SbpUser&gt;) users;    System.out.println(&quot;total count :&quot; + page.getTotal());    System.out.println(&quot;pages :&quot; + page.getPages());    System.out.println(&quot;data :&quot; + page.getResult());}</code></pre><p>输出:</p><pre><code>total count :21pages :5data :Page{count=true, pageNum=1, pageSize=5, startRow=0, endRow=5, total=21, pages=5, reasonable=true, pageSizeZero=false}</code></pre><p>还有更多的用法请参考官方文档。</p><h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><p>pageHelper还是非常好用的，简单，集成方便，是和mybatis搭配的分页插件首选。除此之外，大家一定要会自行写分页接口，除此之外还要 知其然，知其所以然。看其源码实现与设计理念，得到的不仅仅是分页。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;web开发少不了分页，本文将简单介绍使用基于&lt;code&gt;spring-boot&lt;/code&gt; + &lt;code&gt;mybatis&lt;/code&gt; + &lt;code&gt;pageHelper&lt;/code&gt;技术实现数据库分页。&lt;/p&gt;
+&lt;p&gt;本文算是对上一篇&lt;a href=&quot;http://note.youdao.com/noteshare?id=b126ede43c86463f93309b8d6836bfb3&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;spring-boot集成mybatis&lt;/a&gt;的一个补充。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="spring-boot" scheme="http://www.chenruiwen.cn/categories/spring-boot/"/>
+    
+    
+      <category term="spring-boot" scheme="http://www.chenruiwen.cn/tags/spring-boot/"/>
+    
+      <category term="mybatis" scheme="http://www.chenruiwen.cn/tags/mybatis/"/>
+    
+  </entry>
   
   <entry>
     <title>spring-boot集成Log4j2</title>
@@ -485,33 +510,6 @@
       <category term="nginx" scheme="http://www.chenruiwen.cn/tags/nginx/"/>
     
       <category term="运维" scheme="http://www.chenruiwen.cn/tags/%E8%BF%90%E7%BB%B4/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>开篇</title>
-    <link href="http://www.chenruiwen.cn/2018/04/15/%E5%BC%80%E7%AF%87/"/>
-    <id>http://www.chenruiwen.cn/2018/04/15/开篇/</id>
-    <published>2018-04-15T02:24:03.000Z</published>
-    <updated>2018-04-29T15:21:24.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>2018年，总感觉是个挺有好感的年份，今年也要经历人生的一件大事了，嘿嘿。</p><p>过去的一年收获很多，在新公司认识了很多让我敬佩的大牛和可爱的小伙伴们，遇到了让我有些敬畏的领导，严格的要求又让我体验到曾经上学时的感觉。</p><p>为什么要建立个人网站？因为coooooooool!</p><p>在工作和学习中经常要查询文档和资料，就经常看到某些大牛们的个人网站，博文的质量很高，网站简介又好看，记录下自己走过的坎和分享技术，让我萌生了做个人网站的想法。终于赶上了一次阿里云特价(错过了腾讯云的特价~~)。所以这篇文章就作为我个人网站的开篇了~</p><p>hey,hello,world. hello, 2018.</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;2018年，总感觉是个挺有好感的年份，今年也要经历人生的一件大事了，嘿嘿。&lt;/p&gt;
-&lt;p&gt;过去的一年收获很多，在新公司认识了很多让我敬佩的大牛和可爱的小伙伴们，遇到了让我有些敬畏的领导，严格的要求又让我体验到曾经上学时的感觉。&lt;/p&gt;
-&lt;p&gt;为什么要建立个人网站？因为coo
-      
-    
-    </summary>
-    
-      <category term="杂" scheme="http://www.chenruiwen.cn/categories/%E6%9D%82/"/>
-    
-    
-      <category term="杂" scheme="http://www.chenruiwen.cn/tags/%E6%9D%82/"/>
     
   </entry>
   

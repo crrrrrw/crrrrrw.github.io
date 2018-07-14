@@ -167,7 +167,7 @@ blockquote:after {
 
 
 
-  <meta name="keywords" content="mysql," />
+  <meta name="keywords" content="spring-boot,mybatis," />
 
 
 
@@ -180,20 +180,18 @@ blockquote:after {
 
 
 
-<meta name="description" content="目的 了解查询优化器的优化策略 了解和查看查询优化器优化后的执行计划 了解优化器是怎么优化的 了解优化器在关联语句中的处理 了解一些查询优化器的提示">
-<meta name="keywords" content="mysql">
+<meta name="description" content="前言web开发少不了分页，本文将简单介绍使用基于spring-boot + mybatis + pageHelper技术实现数据库分页。 本文算是对上一篇spring-boot集成mybatis的一个补充。">
+<meta name="keywords" content="spring-boot,mybatis">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL查询优化器">
-<meta property="og:url" content="http://www.chenruiwen.cn/2018/05/22/MySQL查询优化器/index.html">
+<meta property="og:title" content="mybatis集成分页插件pageHelper">
+<meta property="og:url" content="http://www.chenruiwen.cn/2018/07/14/mybatis集成分页插件pageHelper/index.html">
 <meta property="og:site_name" content="Chen RuiWen&#39;s Space">
-<meta property="og:description" content="目的 了解查询优化器的优化策略 了解和查看查询优化器优化后的执行计划 了解优化器是怎么优化的 了解优化器在关联语句中的处理 了解一些查询优化器的提示">
+<meta property="og:description" content="前言web开发少不了分页，本文将简单介绍使用基于spring-boot + mybatis + pageHelper技术实现数据库分页。 本文算是对上一篇spring-boot集成mybatis的一个补充。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqr12aclarj20tb02q3yf.jpg">
-<meta property="og:updated_time" content="2018-06-02T15:44:18.000Z">
+<meta property="og:updated_time" content="2018-07-14T16:30:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL查询优化器">
-<meta name="twitter:description" content="目的 了解查询优化器的优化策略 了解和查看查询优化器优化后的执行计划 了解优化器是怎么优化的 了解优化器在关联语句中的处理 了解一些查询优化器的提示">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqr12aclarj20tb02q3yf.jpg">
+<meta name="twitter:title" content="mybatis集成分页插件pageHelper">
+<meta name="twitter:description" content="前言web开发少不了分页，本文将简单介绍使用基于spring-boot + mybatis + pageHelper技术实现数据库分页。 本文算是对上一篇spring-boot集成mybatis的一个补充。">
 
 
 
@@ -223,13 +221,13 @@ blockquote:after {
 
 
 
-  <link rel="canonical" href="http://www.chenruiwen.cn/2018/05/22/MySQL查询优化器/"/>
+  <link rel="canonical" href="http://www.chenruiwen.cn/2018/07/14/mybatis集成分页插件pageHelper/"/>
 
 
 
 
 
-  <title>MySQL查询优化器 | Chen RuiWen's Space</title>
+  <title>mybatis集成分页插件pageHelper | Chen RuiWen's Space</title>
   
 
 
@@ -378,7 +376,7 @@ blockquote:after {
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/05/22/MySQL查询优化器/">
+    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/07/14/mybatis集成分页插件pageHelper/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈瑞文">
@@ -395,7 +393,7 @@ blockquote:after {
 
         
         
-          <h1 class="post-title" itemprop="name headline">MySQL查询优化器</h1>
+          <h1 class="post-title" itemprop="name headline">mybatis集成分页插件pageHelper</h1>
         
 
         <div class="post-meta">
@@ -407,8 +405,8 @@ blockquote:after {
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-22T23:42:47+08:00">
-                2018-05-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-14T19:32:24+08:00">
+                2018-07-14
               </time>
             
 
@@ -430,8 +428,8 @@ blockquote:after {
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/mysql/" itemprop="url" rel="index">
-                    <span itemprop="name">mysql</span>
+                  <a href="/categories/spring-boot/" itemprop="url" rel="index">
+                    <span itemprop="name">spring-boot</span>
                   </a>
                 </span>
 
@@ -467,155 +465,65 @@ blockquote:after {
       
 
       
-        <h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><ul>
-<li>了解查询优化器的优化策略</li>
-<li>了解和查看查询优化器优化后的执行计划</li>
-<li>了解优化器是怎么优化的</li>
-<li>了解优化器在关联语句中的处理</li>
-<li>了解一些查询优化器的提示<a id="more"></a>
-</li>
-</ul>
-<h2 id="MySQL查询优化器的优化策略"><a href="#MySQL查询优化器的优化策略" class="headerlink" title="MySQL查询优化器的优化策略"></a>MySQL查询优化器的优化策略</h2><p>简单分为 <strong>静态优化</strong> 和 <strong>动态优化</strong>。</p>
-<p>一、静态优化(“编译时优化”):</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>web开发少不了分页，本文将简单介绍使用基于<code>spring-boot</code> + <code>mybatis</code> + <code>pageHelper</code>技术实现数据库分页。</p>
+<p>本文算是对上一篇<a href="http://note.youdao.com/noteshare?id=b126ede43c86463f93309b8d6836bfb3" target="_blank" rel="noopener">spring-boot集成mybatis</a>的一个补充。</p>
+<a id="more"></a>
+<h2 id="pageHelper简介"><a href="#pageHelper简介" class="headerlink" title="pageHelper简介"></a>pageHelper简介</h2><p>使用<code>MyBatis</code>作为数据访问层进行对sql语句分页的最好用的插件。</p>
+<p>建议去<a href="https://pagehelper.github.io/" target="_blank" rel="noopener">pageHelper官网</a>看一看。</p>
+<p>特点：</p>
 <ul>
-<li>可以直接对解析树进行分析并完成优化。  </li>
-<li>优化器通过一些简单的代叔变换将WHERE条件转化为另一种等价形式。</li>
-<li>静态优化不依赖特别的数值，比如WHERE条件里带一些常数等。</li>
-<li>静态优化在第一次完成后一直有效，即使使用不同的参数值执行查询也不会发生变化。</li>
+<li>物理分页：支持常见的12种数据库。Oracle,MySql,MariaDB,SQLite,DB2,PostgreSQL,SqlServer等。</li>
+<li>支持多种分页方式：支持常见的RowBounds(PageRowBounds)，PageHelper.startPage 方法调用，Mapper 接口参数调用。</li>
+<li>QueryInterceptor 规范：使用 QueryInterceptor 规范，开发插件更轻松。</li>
 </ul>
-<p>二、动态优化(“运行时优化”):</p>
+<h2 id="集成pageHelper"><a href="#集成pageHelper" class="headerlink" title="集成pageHelper"></a>集成pageHelper</h2><p>三步完成集成：</p>
 <ul>
-<li>动态优化和查询上下文有关或者其他因素有关，比如WHERE条件中的取值，索引中条目对应的数据行数等。</li>
-<li>每次查询都需要重新评估。</li>
+<li>maven依赖</li>
+<li>配置pageHelper</li>
+<li>代码使用及测试</li>
 </ul>
-<h2 id="MySQL能够处理的优化类型"><a href="#MySQL能够处理的优化类型" class="headerlink" title="MySQL能够处理的优化类型"></a>MySQL能够处理的优化类型</h2><p>先说一点，MySQL优化器使用了很多复杂的优化技巧把查询转化为执行计划。“不要试着比优化器更聪明”，通常都应让MySQL按照自己优化的方式执行语句，绝大多数情况优化器都是更优的。<br>你也可以通过EXPLAIN EXTENDED SELECT … … ; SHOW WARNINGS; 查看最终优化后的执行sql。<br>如何使用“EXPLAIN EXTENDED”可参考<a href="https://dev.mysql.com/doc/refman/5.7/en/explain-extended.html" target="_blank" rel="noopener">官方文档上的Extended EXPLAIN Output Format</a></p>
-<ol>
-<li><font face="华文新魏" size="3">重新定义关联表顺序。</font><br>数据表的关联并不总是按照查询中指定顺序进行的。</li>
-<li><font face="华文新魏" size="3">将外链接转化为内连接。</font><br>优化器可以根据某些因素(比如WHERE条件，库表结构等)，使得一个外连接等价于一个内连接。</li>
-<li><p><font face="华文新魏" size="3">等价变换规则。</font><br>MySQL通过等价变换来简化并规范表达式。MySQL可以合并和减少比较。比如 (5=5 AND a&gt;5)会被改写为a&gt;5。(a &lt; b AND b=c) AND a=5会被改写为(b&gt;5 AND b=c AND a=5)</p>
-</li>
-<li><p><font face="华文新魏" size="3">优化</font> COUNT()、MIN()、MAX()。<br>查找某列最大/最小值，该列又有索引，查找最大值，则会直接找最后一行；最小值，则直接找第一行。因为索引已经排好序了。可以从EXPLAIN中看到：“Select tables optimized away”。这说明已经从执行计划中移除该表并用常数取代。</p>
-</li>
-<li><font face="华文新魏" size="3">预估并转化为常数表达式</font><br>如果一个表达式可以被简化为一个常量，那么这个表达式就会被转换。 在WHERE 、USING、ON这些连接条件强制值相等的条件中，常量具有传递性<br><code>`</code><br>EXPLAIN SELECT<br> table_a.id,<br> table_b.id<br>FROM<br> table_b<br>INNER JOIN table_a ON table_a.tb_id = table_b.id<br>WHERE<br> table_b.id = 1</li>
-</ol>
-<pre><code>![](http://ww1.sinaimg.cn/large/87faef88ly1fqnue0bqrbj20r102ut8o.jpg)
+<h3 id="maven依赖"><a href="#maven依赖" class="headerlink" title="maven依赖"></a>maven依赖</h3><p>此处依赖在集成了mybatis的基础上增加:</p>
+<pre><code>&lt;!-- pagehelper --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.github.pagehelper&lt;/groupId&gt;
+    &lt;artifactId&gt;pagehelper-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;1.2.3&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><h3 id="配置pageHelper"><a href="#配置pageHelper" class="headerlink" title="配置pageHelper"></a>配置pageHelper</h3><p>在<code>application.yml</code>里增加:</p>
+<pre><code># 分页配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: &quot;true&quot;
+  support-methods-arguments: &quot;true&quot;
+  params: count=countSql
+</code></pre><h3 id="代码使用及测试"><a href="#代码使用及测试" class="headerlink" title="代码使用及测试"></a>代码使用及测试</h3><p>根据<a href="https://pagehelper.github.io/docs/howtouse/#3-%E5%A6%82%E4%BD%95%E5%9C%A8%E4%BB%A3%E7%A0%81%E4%B8%AD%E4%BD%BF%E7%94%A8" target="_blank" rel="noopener">官网之如何在代码中使用</a>中的推荐，我们使用静态方法<code>PageHelper.startPage</code>来实现分页。</p>
+<p>首先是SbpUserMapper接口增加方法：</p>
+<pre><code class="java">public interface SbpUserMapper {
+    List&lt;SbpUser&gt; getAll();
+}
 
-6. &lt;font face=&quot;华文新魏&quot; size=&quot;3&quot;&gt;覆盖索引&lt;/font&gt;  
-当索引包含查询需要的列时，MySql就可以使用索引来避免读取行数据。
-
-7. &lt;font face=&quot;华文新魏&quot; size=&quot;3&quot;&gt;子查询优化&lt;/font&gt;  
-MySQL可以将某些类型的子查询转换成相等的效率更高的形式。
-
-8. &lt;font face=&quot;华文新魏&quot; size=&quot;3&quot;&gt;提前终止查询&lt;/font&gt;  
-- MySQL在发现已经满足查询需求时，会立刻终止查询。
-- MySQL检测一个不成立的条件也会立刻返回空结果。
-</code></pre><p>EXPLAIN SELECT * FROM table_a WHERE id = - 1;</p>
-<pre><code>![](http://ww1.sinaimg.cn/large/87faef88ly1fqongff9j4j20sx01rjra.jpg)
-
-9. &lt;font face=&quot;华文新魏&quot; size=&quot;3&quot;&gt;等值传播&lt;/font&gt;  
-如果两个列的值通过等式关联，那么MySQL能把其中一个列的WHERE条件传递到另一个列。
-比如：
-</code></pre><p>SELECT table_a.id, table_b.id FROM table_b INNER JOIN table_a ON table_a.tb_id = table_b.id WHERE table_b.id &lt; 100;</p>
-<pre><code>MySQL会判断把WHERE后面的关联作用于table_a表，等价于
-</code></pre><p>SELECT table_a.id, table_b.id FROM table_b INNER JOIN table_a ON table_a.tb_id = table_b.id WHERE table_b.id &lt; 100 AND table_a.tb_id &lt; 100;</p>
-<pre><code>10. &lt;font face=&quot;华文新魏&quot; size=&quot;3&quot;&gt;列表IN()的比较&lt;/font&gt;  
-MySql会对IN()里面的数据进行排序，然后用二分法查找某个值是否在列表中，这个算法的效率是O(Log n)。这其他数据库等价转换为多个OR条件连接的复杂度O(n)来说，IN()里大量取值时会更快。
-
-## MySQL如何关联查询
-MySQL关联查询策略:  
-其实就是嵌套循环查询。MySQL先从第一个表循环读，然后再嵌套循环到下一个表寻找匹配，如此反复，直到找到所有表的匹配的行为止。 
-
-举个栗子：  
-- 内连接sql
-</code></pre><p>SELECT tbl_user.name, tbl_bankcard.bankcard<br>FROM tbl_user INNER JOIN tbl_bankcard ON tbl_user.id = tbl_bankcard.user_id<br>WHERE tbl_user.moblie in (‘18611112222’,’18611113333’)</p>
-<pre><code>MySQL在查询这条SQL时，用伪代码表示查询过程如下:
-```ruby
-outer_iter = iterator over tbl_user where moblie in (&#39;18611112222&#39;,&#39;18611113333&#39;);
-outer_row = outer_iter.next;
-while outer_row:
-    inner_iter = iterator over tbl_bankcard where user_id = outer_row.id;
-    inner_row = inner_iter.next;
-    while inner_row:
-        output [outer_row.name, inner_row.bankcard]
-        inner_row = inner_iter.next;
-    end
-    outer_row = outer_iter.next;
-end    
-</code></pre><ul>
-<li>再看这个SQL左外连接版本：<pre><code>SELECT tbl_user.name, tbl_bankcard.bankcard 
-FROM tbl_user LEFT JOIN tbl_bankcard ON tbl_user.id = tbl_bankcard.user_id
-WHERE tbl_user.moblie in (&#39;18611112222&#39;,&#39;18611113333&#39;)
-</code></pre>MySQL在查询这条SQL时，用伪代码表示查询过程如下:<pre><code class="ruby">outer_iter = iterator over tbl_user where moblie in (&#39;18611112222&#39;,&#39;18611113333&#39;);
-outer_row = outer_iter.next;
-while outer_row:
-  inner_iter = iterator over tbl_bankcard where user_id = outer_row.id;
-  inner_row = inner_iter.next;
-  if inner_row:
-      while inner_row:
-          output [outer_row.name, inner_row.bankcard]
-          inner_row = inner_iter.next;
-      end
-  else 
-      output [outer_row.name, NULL]
-  end
-  outer_row = outer_iter.next;
-end    
 </code></pre>
-</li>
-</ul>
-<p>基本上MySQL所有类型的查询都是这种方式运行。包括子查询，也是生成一张临时表，被当做普通表进行循环嵌套。以及右外链接也是会改写成等价的左外连接。</p>
-<hr>
-<p>多表关联的一种方式：</p>
-<pre><code>graph TD
-    B(Join) --&gt; A[Join]
-    C(Join) --&gt; A
-    D(tbl1) --&gt; B
-    E(tbl2) --&gt; B
-    F(tbl3) --&gt; C
-    G(tbl4) --&gt; C
-</code></pre><p>但是MySQL是通过从一个表开始一直嵌套循环的方式：</p>
-<pre><code>graph TD
-    B(Join) --&gt; A[Join]
-    C(tbl4) --&gt; A
-    D[Join] --&gt; B
-    E[tbl3] --&gt; B
-    F[tbl1] --&gt; D
-    G[tbl2] --&gt; D 
-</code></pre><h2 id="关联查询优化器"><a href="#关联查询优化器" class="headerlink" title="关联查询优化器"></a>关联查询优化器</h2><ul>
-<li>MySQL查询优化器中最重要的一部分。它决定了多表查询的顺序。它评估不同顺序的成本选择成本最小的一个。</li>
-<li>有时优化器给出的并不是最优的关联顺序，可使用STRAIGHT_JOIN关键字替换JOIN关键字重写查询。还是那句，“不要试着比优化器更聪明”。</li>
-<li>不过，如果有超过n个表的关联，那么需要检查n的阶乘种关联顺序。我们称之为所有可能的执行计划的“搜索空间”。实际上，当需要关联的表超过 optimizer_search_depth 的限制的时候，就会选择“贪婪”搜索模式。</li>
-</ul>
-<h2 id="查询优化器的提示-hint"><a href="#查询优化器的提示-hint" class="headerlink" title="查询优化器的提示(hint)"></a>查询优化器的提示(hint)</h2><p>用于控制查询执行计划。列举一些课使用的提示：</p>
-<ol>
-<li><p>HIGH_PRIORITY 和 LOW_PRIORITY <br><br>当多条语句同时访问数据库时，设置语句优先级。HIGH_PRIORITY会使语句放在表的队列的最前面，LOW_PRIORITY则相反。这两个提示只对使用表锁的存储引擎有效。</p>
-</li>
-<li><p>DELAYED <br><br>这个提示用于INSERT和REPLACE。使用该提示会将插入的行数据放入缓冲区，然后在表空闲时批量写入数据。适合于日志插入等场景。但并不是所有存储引擎都支持，还会导致函数 LAST_INSERT_ID()无法正常工作。</p>
-</li>
-<li><p>STRAIGHT_JOIN <br><br>这个提示可用于SELECT语句中SELECT关键字之后，也可放置于两个关联表之间。该提示作用一是让查询中的表按语句出现的顺序关联。作用二是固定前后两个表的关联顺序。</p>
-</li>
-<li><p>SQL_SMALL_RESULT 和 SQL_BIG_RESULT <br><br>这个提示只对SELECT有效。它告诉优化器对GROUP BY或者DISTINCT查询如果使用临时表和排序。SQL_SMALL_RESULT会让优化器认为结果集很小，将结果放在内存中的索引临时表中，避免排序。SQL_BIG_RESULT 则告诉优化器结果集很大，在磁盘临时表进行排序。</p>
-</li>
-<li><p>SQL_BUFFER_RESULT <br><br>这个提示告诉优化器将结果放在临时表中，并且尽快释放掉表锁。</p>
-</li>
-<li><p>SQL_CACHE 和 SQL_NO_CACHE <br><br>这个提示告诉MySQL是否将结果集放在查询缓存中。</p>
-</li>
-<li><p>USING INDEX、IGNORE INDEX 和 FORCE INDEX <br><br>这几个提示分别告诉优化器 使用或者不使用或者强制使用索引。</p>
-</li>
-</ol>
-<h2 id="控制优化器的一些参数"><a href="#控制优化器的一些参数" class="headerlink" title="控制优化器的一些参数"></a>控制优化器的一些参数</h2><pre><code>SHOW VARIABLES LIKE &quot;optimizer_%&quot;;
-</code></pre><p><img src="http://ww1.sinaimg.cn/large/87faef88ly1fqr12aclarj20tb02q3yf.jpg" alt=""></p>
-<ul>
-<li>optimizer_search_depth<br>控制穷举执行计划的限度。</li>
-<li>optimizer_prune_level<br>默认打开的，让优化器根据需要扫描的行数来决定是否跳过某些执行计划</li>
-<li>optimizer_switch<br>此变量包含了一些开关优化器特性的标志位。</li>
-</ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
-<li>MySQL优化器做了很多工作把SQL语句变成更优的查询方式</li>
-<li>使用 EXPLAIN EXTENDED … SHOW WARNINGS关键字查看优化后的指令</li>
-<li>MySQL的关联查询是“嵌套循环”的</li>
-<li>可使用查询优化提示控制查询执行计划，但是，“不要试着比优化器更聪明”。</li>
-</ul>
+<p>对应的SbpUserMapper.xml增加sql:</p>
+<pre><code>&lt;select id=&quot;getAll&quot; resultMap=&quot;BaseResultMap&quot;&gt;
+    SELECT * FROM sbp_user
+&lt;/select&gt;
+</code></pre><p>代码使用，传参当前页为1，每页条数显示5条:</p>
+<pre><code>@Test
+@Rollback
+public void pageByPageHelper() throws Exception {
+    PageHelper.startPage(1, 5);
+    List&lt;SbpUser&gt; users = sbpUserMapper.getAll();
+    Page&lt;SbpUser&gt; page = (Page&lt;SbpUser&gt;) users;
+    System.out.println(&quot;total count :&quot; + page.getTotal());
+    System.out.println(&quot;pages :&quot; + page.getPages());
+    System.out.println(&quot;data :&quot; + page.getResult());
+}
+</code></pre><p>输出:</p>
+<pre><code>total count :21
+pages :5
+data :Page{count=true, pageNum=1, pageSize=5, startRow=0, endRow=5, total=21, pages=5, reasonable=true, pageSizeZero=false}
+</code></pre><p>还有更多的用法请参考官方文档。</p>
+<h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><p>pageHelper还是非常好用的，简单，集成方便，是和mybatis搭配的分页插件首选。除此之外，大家一定要会自行写分页接口，除此之外还要 知其然，知其所以然。看其源码实现与设计理念，得到的不仅仅是分页。</p>
 
       
     </div>
@@ -674,8 +582,11 @@ end
       
         <div class="post-tags">
           
-            <a href="/tags/mysql/" rel="tag"><i class="fa fa-tag"></i>
-               mysql</a>
+            <a href="/tags/spring-boot/" rel="tag"><i class="fa fa-tag"></i>
+               spring-boot</a>
+          
+            <a href="/tags/mybatis/" rel="tag"><i class="fa fa-tag"></i>
+               mybatis</a>
           
         </div>
       
@@ -688,8 +599,8 @@ end
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/05/20/Dubbo暴露服务过程/" rel="next" title="Dubbo暴露服务过程">
-                <i class="fa fa-chevron-left"></i> Dubbo暴露服务过程
+              <a href="/2018/07/13/spring-boot集成Log4j2/" rel="next" title="spring-boot集成Log4j2">
+                <i class="fa fa-chevron-left"></i> spring-boot集成Log4j2
               </a>
             
           </div>
@@ -697,10 +608,6 @@ end
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/05/28/MySQL查询性能优化/" rel="prev" title="MySQL查询性能优化">
-                MySQL查询性能优化 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -855,7 +762,7 @@ end
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目的"><span class="nav-number">1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL查询优化器的优化策略"><span class="nav-number">2.</span> <span class="nav-text">MySQL查询优化器的优化策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL能够处理的优化类型"><span class="nav-number">3.</span> <span class="nav-text">MySQL能够处理的优化类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关联查询优化器"><span class="nav-number">4.</span> <span class="nav-text">关联查询优化器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询优化器的提示-hint"><span class="nav-number">5.</span> <span class="nav-text">查询优化器的提示(hint)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制优化器的一些参数"><span class="nav-number">6.</span> <span class="nav-text">控制优化器的一些参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pageHelper简介"><span class="nav-number">2.</span> <span class="nav-text">pageHelper简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集成pageHelper"><span class="nav-number">3.</span> <span class="nav-text">集成pageHelper</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#maven依赖"><span class="nav-number">3.1.</span> <span class="nav-text">maven依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置pageHelper"><span class="nav-number">3.2.</span> <span class="nav-text">配置pageHelper</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码使用及测试"><span class="nav-number">3.3.</span> <span class="nav-text">代码使用及测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结束语"><span class="nav-number">4.</span> <span class="nav-text">结束语</span></a></li></ol></div>
             
 
           </div>
