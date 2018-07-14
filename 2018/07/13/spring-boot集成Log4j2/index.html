@@ -167,7 +167,7 @@ blockquote:after {
 
 
 
-  <meta name="keywords" content="tool," />
+  <meta name="keywords" content="spring-boot,log4j," />
 
 
 
@@ -180,21 +180,18 @@ blockquote:after {
 
 
 
-<meta name="description" content="前言寻找一个免费的图床软件，微博图床真的是太好不过了~~（手动感谢微博图床！）。之前安装微博图床的chrome插件，本人手贱删了，现在暂时也没翻到墙外，一时间需要重新安装微博图床的chrome插件，甚是着急。网上提供的一些插件也都没用，只能另求他路。">
-<meta name="keywords" content="tool">
+<meta name="description" content="前言在企业级项目里，日志框架种类杂乱不一，尤其是接手一些有些年头的老项目时，各种各样的日志框架依赖和使用让人看的头大。 如何解决各种各样日志框架的大一统呢？神器Slf4j。 spring-boot如何利用Slf4j集成其他日志框架？本文将以Log4j2为例。">
+<meta name="keywords" content="spring-boot,log4j">
 <meta property="og:type" content="article">
-<meta property="og:title" content="微博图床插件打包">
-<meta property="og:url" content="http://www.chenruiwen.cn/2018/04/20/微博图床插件打包/index.html">
+<meta property="og:title" content="spring-boot集成Log4j2">
+<meta property="og:url" content="http://www.chenruiwen.cn/2018/07/13/spring-boot集成Log4j2/index.html">
 <meta property="og:site_name" content="Chen RuiWen&#39;s Space">
-<meta property="og:description" content="前言寻找一个免费的图床软件，微博图床真的是太好不过了~~（手动感谢微博图床！）。之前安装微博图床的chrome插件，本人手贱删了，现在暂时也没翻到墙外，一时间需要重新安装微博图床的chrome插件，甚是着急。网上提供的一些插件也都没用，只能另求他路。">
+<meta property="og:description" content="前言在企业级项目里，日志框架种类杂乱不一，尤其是接手一些有些年头的老项目时，各种各样的日志框架依赖和使用让人看的头大。 如何解决各种各样日志框架的大一统呢？神器Slf4j。 spring-boot如何利用Slf4j集成其他日志框架？本文将以Log4j2为例。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fq68oqn95lj20mn09ygmb.jpg">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fq68qz213aj20fj04wmxd.jpg">
-<meta property="og:updated_time" content="2018-04-30T10:14:07.000Z">
+<meta property="og:updated_time" content="2018-07-14T01:29:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="微博图床插件打包">
-<meta name="twitter:description" content="前言寻找一个免费的图床软件，微博图床真的是太好不过了~~（手动感谢微博图床！）。之前安装微博图床的chrome插件，本人手贱删了，现在暂时也没翻到墙外，一时间需要重新安装微博图床的chrome插件，甚是着急。网上提供的一些插件也都没用，只能另求他路。">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fq68oqn95lj20mn09ygmb.jpg">
+<meta name="twitter:title" content="spring-boot集成Log4j2">
+<meta name="twitter:description" content="前言在企业级项目里，日志框架种类杂乱不一，尤其是接手一些有些年头的老项目时，各种各样的日志框架依赖和使用让人看的头大。 如何解决各种各样日志框架的大一统呢？神器Slf4j。 spring-boot如何利用Slf4j集成其他日志框架？本文将以Log4j2为例。">
 
 
 
@@ -224,13 +221,13 @@ blockquote:after {
 
 
 
-  <link rel="canonical" href="http://www.chenruiwen.cn/2018/04/20/微博图床插件打包/"/>
+  <link rel="canonical" href="http://www.chenruiwen.cn/2018/07/13/spring-boot集成Log4j2/"/>
 
 
 
 
 
-  <title>微博图床插件打包 | Chen RuiWen's Space</title>
+  <title>spring-boot集成Log4j2 | Chen RuiWen's Space</title>
   
 
 
@@ -379,7 +376,7 @@ blockquote:after {
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/04/20/微博图床插件打包/">
+    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/07/13/spring-boot集成Log4j2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈瑞文">
@@ -396,7 +393,7 @@ blockquote:after {
 
         
         
-          <h1 class="post-title" itemprop="name headline">微博图床插件打包</h1>
+          <h1 class="post-title" itemprop="name headline">spring-boot集成Log4j2</h1>
         
 
         <div class="post-meta">
@@ -408,8 +405,8 @@ blockquote:after {
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-20T14:31:43+08:00">
-                2018-04-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-13T10:10:10+08:00">
+                2018-07-13
               </time>
             
 
@@ -431,8 +428,8 @@ blockquote:after {
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tips/" itemprop="url" rel="index">
-                    <span itemprop="name">tips</span>
+                  <a href="/categories/spring-boot/" itemprop="url" rel="index">
+                    <span itemprop="name">spring-boot</span>
                   </a>
                 </span>
 
@@ -468,20 +465,119 @@ blockquote:after {
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>寻找一个免费的图床软件，微博图床真的是太好不过了~~（手动感谢微博图床！）。之前安装微博图床的chrome插件，本人手贱删了，现在暂时也没翻到墙外，一时间需要重新安装微博图床的chrome插件，甚是着急。网上提供的一些插件也都没用，只能另求他路。<br><a id="more"></a></p>
-<h1 id="通过自己打包安装微博图床插件"><a href="#通过自己打包安装微博图床插件" class="headerlink" title="通过自己打包安装微博图床插件"></a>通过自己打包安装微博图床插件</h1><ol>
-<li><p>链接到微博图床github地址并下载。url如下：</p>
-<pre><code>https://github.com/suxiaogang/WeiboPicBed
-</code></pre></li>
-<li><p>打开chrome扩展程序<br>打开chrome浏览器，输入如下地址：</p>
-<pre><code>chrome://extensions/
-</code></pre></li>
-<li><p>打开开发者模式，点击 打包扩展程序<br><img src="http://ww1.sinaimg.cn/large/87faef88ly1fq68oqn95lj20mn09ygmb.jpg" alt=""></p>
-</li>
-<li><p>打包扩展程序， 扩展程序目录选择 github上 clone下来的目录，点击打包即可。<br>会在同级目录下生成 .crx 和 .pem结尾文件，其中 .crx结尾文件即是扩展程序<br><img src="http://ww1.sinaimg.cn/large/87faef88ly1fq68qz213aj20fj04wmxd.jpg" alt=""></p>
-</li>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在企业级项目里，日志框架种类杂乱不一，尤其是接手一些有些年头的老项目时，各种各样的日志框架依赖和使用让人看的头大。</p>
+<p>如何解决各种各样日志框架的大一统呢？神器<code>Slf4j</code>。</p>
+<p>spring-boot如何利用<code>Slf4j</code>集成其他日志框架？本文将以<code>Log4j2</code>为例。</p>
+<a id="more"></a>
+<h2 id="Slf4j简单介绍"><a href="#Slf4j简单介绍" class="headerlink" title="Slf4j简单介绍"></a>Slf4j简单介绍</h2><p>去<a href="https://www.slf4j.org/" target="_blank" rel="noopener">Slf4j官网</a>瞧一瞧:</p>
+<blockquote>
+<p>The Simple Logging Facade for Java (SLF4J) serves as a simple facade or abstraction for various logging frameworks (e.g. java.util.logging, logback, log4j) allowing the end user to plug in the desired logging framework at deployment time.</p>
+</blockquote>
+<p>Slf4j:Simple Logging Facade for Java.<br>它并不是一个类似java.util.logging, logback, log4j等的日志框架实现，而是作为一个门面服务于这些各种日志框架。如同字面含义，类似外观设计模式，提供了一组简单统一的API接口，隐藏了各种日志不一致的复杂性。</p>
+<h2 id="日志框架选型"><a href="#日志框架选型" class="headerlink" title="日志框架选型"></a>日志框架选型</h2><p>几种日志框架简单对比:</p>
+<ul>
+<li><code>log4j</code>:元老级日志框架。它定义的Logger、Appender、Level等概念如今已经被广泛使用，里程碑式的日志框架</li>
+<li><code>java.util.logging</code>:简称<code>j.u.l</code>。java1.4版本引入，功能不如<code>log4j</code>，性能和可用性有限。</li>
+<li><code>logback</code>：<code>log4j</code>升级版。它比<code>log4j</code>增加了不少功能，比如：原生实现了<code>Slf4J</code>,支持XML、Groovy方式配置等，主要是性能比<code>log4j</code>提升不少。</li>
+<li><code>log4j2</code>:同样是<code>log4j</code>升级版。也比<code>log4j</code>添加不少功能，比如多线程下的异步日志等。性能也提升不少。</li>
+</ul>
+<p>至于<code>logback</code>和<code>log4j2</code>性能比对，可以参考网上博文：</p>
+<ul>
+<li><a href="https://blog.csdn.net/yjh1271845364/article/details/70888262" target="_blank" rel="noopener">logback log4j log4j2 性能实测</a></li>
+<li><a href="https://www.jianshu.com/p/570b406bddcd" target="_blank" rel="noopener">看log4j2如何秒杀一切日志组件</a></li>
+</ul>
+<p>根据官方推荐是<code>Slf4j</code>+<code>logback</code>，此处我使用<code>Slf4j2</code>+<code>log4j2</code>来集成日志框架。</p>
+<h2 id="集成Log4j2"><a href="#集成Log4j2" class="headerlink" title="集成Log4j2"></a>集成Log4j2</h2><p>三步完成Log4j2的集成:</p>
+<ol>
+<li>maven依赖</li>
+<li>配置日志文件</li>
+<li>测试日志</li>
 </ol>
-<h1 id="安装微博图床插件"><a href="#安装微博图床插件" class="headerlink" title="安装微博图床插件"></a>安装微博图床插件</h1><p>直接拖动微博图床插件(WeiboPicBed.crx)至chrome扩展程序即可。然后你就可以肆意上传图片了~</p>
+<h3 id="maven依赖"><a href="#maven依赖" class="headerlink" title="maven依赖"></a>maven依赖</h3><p>pom.xml：</p>
+<pre><code>&lt;!-- 需要排除logback --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
+    &lt;exclusions&gt;
+        &lt;exclusion&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-logging&lt;/artifactId&gt;
+        &lt;/exclusion&gt;
+    &lt;/exclusions&gt;
+&lt;/dependency&gt;
+
+&lt;!-- log4j2 --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-log4j2&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+</code></pre><h3 id="配置日志文件"><a href="#配置日志文件" class="headerlink" title="配置日志文件"></a>配置日志文件</h3><p>classpath下添加<code>log4j2.xml</code>:</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;configuration status=&quot;OFF&quot;&gt;
+    &lt;properties&gt;
+        &lt;property name=&quot;LOG_HOME&quot;&gt;../logs/&lt;/property&gt;
+        &lt;property name=&quot;STDOUT_FILE_NAME&quot;&gt;stdout&lt;/property&gt;
+    &lt;/properties&gt;
+
+    &lt;appenders&gt;
+        &lt;Console name=&quot;Console&quot; target=&quot;SYSTEM_OUT&quot;&gt;
+            &lt;PatternLayout pattern=&quot;%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n&quot;/&gt;
+        &lt;/Console&gt;
+
+        &lt;RollingRandomAccessFile name=&quot;stdout-log&quot;
+                                 fileName=&quot;${LOG_HOME}/${STDOUT_FILE_NAME}.log&quot;
+                                 filePattern=&quot;${LOG_HOME}/$${date:yyyy-MM}/${STDOUT_FILE_NAME}-%d{yyyy-MM-dd}-%i.log.gz&quot;&gt;
+            &lt;PatternLayout
+                    pattern=&quot;%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%file:%line] - %msg%n&quot;/&gt;
+            &lt;Policies&gt;
+                &lt;TimeBasedTriggeringPolicy/&gt;
+                &lt;SizeBasedTriggeringPolicy size=&quot;100 MB&quot;/&gt;
+            &lt;/Policies&gt;
+            &lt;DefaultRolloverStrategy max=&quot;20&quot;/&gt;
+        &lt;/RollingRandomAccessFile&gt;
+    &lt;/appenders&gt;
+
+    &lt;loggers&gt;
+        &lt;root level=&quot;error&quot;&gt;
+            &lt;AppenderRef ref=&quot;stdout-log&quot;/&gt;
+            &lt;AppenderRef ref=&quot;Console&quot;/&gt;
+        &lt;/root&gt;
+
+        &lt;logger name=&quot;com.crw&quot; level=&quot;info&quot; additivity=&quot;false&quot;&gt;
+            &lt;AppenderRef ref=&quot;stdout-log&quot;/&gt;
+            &lt;AppenderRef ref=&quot;Console&quot;/&gt;
+        &lt;/logger&gt;
+    &lt;/loggers&gt;
+
+&lt;/configuration&gt;
+</code></pre><p>修改应用日志文件路径，<code>application.yml</code>:</p>
+<pre><code>logging.config: classpath:log4j2.xml
+</code></pre><h3 id="测试日志"><a href="#测试日志" class="headerlink" title="测试日志"></a>测试日志</h3><p>增加一个EchoController:</p>
+<pre><code class="java">@RestController
+@Slf4j
+public class EchoController {
+
+    @GetMapping(&quot;/echo/hello&quot;)
+    public String echo(String msg) {
+        log.debug(&quot;DEBUG ----&gt; echo:{}&quot;, msg);
+        log.info(&quot;INFO  ----&gt; echo:{}&quot;, msg);
+        log.warn(&quot;WARN  ----&gt; echo:{}&quot;, msg);
+        log.error(&quot;ERROR  ----&gt; echo:{}&quot;, msg);
+        return &quot;hello, &quot; + msg;
+    }
+}
+</code></pre>
+<p>调用接口地址：</p>
+<pre><code>curl http://127.0.0.1:8080/echo/hello?msg=world  
+</code></pre><p>页面输出：</p>
+<pre><code>hello, world
+</code></pre><p>stdout.log文件输出：</p>
+<pre><code>2018-07-12 22:56:04.023 INFO [http-nio-8080-exec-3][EchoController.java:17] - INFO  ----&gt; echo:world
+2018-07-12 22:56:04.024 WARN [http-nio-8080-exec-3][EchoController.java:18] - WARN  ----&gt; echo:world
+2018-07-12 22:56:04.024 ERROR [http-nio-8080-exec-3][EchoController.java:19] - ERROR  ----&gt; echo:world
+</code></pre><p>debug级别的日志并未输出和打印在控制台，info级别以上日志打印并输出控制台。可见日志测试成功。</p>
+<h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><p>本文简单介绍了日志框架的种类已经统一日志API框架<code>Slf4j</code>,除此之外，apache下也有与<code>Slf4j</code>同一职能的框架<code>commons-logging</code>。之后可自行研究一下。</p>
 
       
     </div>
@@ -540,8 +636,11 @@ blockquote:after {
       
         <div class="post-tags">
           
-            <a href="/tags/tool/" rel="tag"><i class="fa fa-tag"></i>
-               tool</a>
+            <a href="/tags/spring-boot/" rel="tag"><i class="fa fa-tag"></i>
+               spring-boot</a>
+          
+            <a href="/tags/log4j/" rel="tag"><i class="fa fa-tag"></i>
+               log4j</a>
           
         </div>
       
@@ -554,8 +653,8 @@ blockquote:after {
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/18/基于hexo+nginx快速建站/" rel="next" title="基于hexo+nginx快速建站">
-                <i class="fa fa-chevron-left"></i> 基于hexo+nginx快速建站
+              <a href="/2018/07/12/spring-boot集成mybatis/" rel="next" title="spring-boot集成mybatis">
+                <i class="fa fa-chevron-left"></i> spring-boot集成mybatis
               </a>
             
           </div>
@@ -563,10 +662,6 @@ blockquote:after {
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/21/java8实战学习总结/" rel="prev" title="java8实战学习总结">
-                java8实战学习总结 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -719,7 +814,7 @@ blockquote:after {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通过自己打包安装微博图床插件"><span class="nav-number">2.</span> <span class="nav-text">通过自己打包安装微博图床插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装微博图床插件"><span class="nav-number">3.</span> <span class="nav-text">安装微博图床插件</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Slf4j简单介绍"><span class="nav-number">2.</span> <span class="nav-text">Slf4j简单介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志框架选型"><span class="nav-number">3.</span> <span class="nav-text">日志框架选型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集成Log4j2"><span class="nav-number">4.</span> <span class="nav-text">集成Log4j2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#maven依赖"><span class="nav-number">4.1.</span> <span class="nav-text">maven依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置日志文件"><span class="nav-number">4.2.</span> <span class="nav-text">配置日志文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试日志"><span class="nav-number">4.3.</span> <span class="nav-text">测试日志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结束语"><span class="nav-number">5.</span> <span class="nav-text">结束语</span></a></li></ol></div>
             
 
           </div>

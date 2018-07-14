@@ -2042,7 +2042,7 @@ hover {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #c941ff;
+  background: #ffff82;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2964,7 +2964,7 @@ embed {
   margin-bottom: 50px;
   padding: 45px 36px 36px 36px;
   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
-  background-color: #fff;
+  background-color: #c9eafd;
 }
 .posts-expand .post-title {
   font-size: 26px;
