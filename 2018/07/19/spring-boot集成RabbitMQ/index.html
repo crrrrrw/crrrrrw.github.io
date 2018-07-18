@@ -167,7 +167,7 @@ blockquote:after {
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="spring-boot,RabbitMQ" />
 
 
 
@@ -180,17 +180,18 @@ blockquote:after {
 
 
 
-<meta name="description" content="面向Google开发的java程序猿折腾指北">
-<meta name="keywords" content="技术博客,Java,web开发,Linux,spring-boot,微服务">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Chen RuiWen&#39;s Space">
-<meta property="og:url" content="http://www.chenruiwen.cn/page/3/index.html">
+<meta name="description" content="前言消息队列是日常开发中非常常用的工具，当调用方不需要关心执行结果时，你可以使用它来解耦。本文简单介绍下spring-boot中快速使用RabbitMQ完成队列的发送与消费。">
+<meta name="keywords" content="spring-boot,RabbitMQ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring-boot集成RabbitMQ">
+<meta property="og:url" content="http://www.chenruiwen.cn/2018/07/19/spring-boot集成RabbitMQ/index.html">
 <meta property="og:site_name" content="Chen RuiWen&#39;s Space">
-<meta property="og:description" content="面向Google开发的java程序猿折腾指北">
+<meta property="og:description" content="前言消息队列是日常开发中非常常用的工具，当调用方不需要关心执行结果时，你可以使用它来解耦。本文简单介绍下spring-boot中快速使用RabbitMQ完成队列的发送与消费。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-18T23:39:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chen RuiWen&#39;s Space">
-<meta name="twitter:description" content="面向Google开发的java程序猿折腾指北">
+<meta name="twitter:title" content="spring-boot集成RabbitMQ">
+<meta name="twitter:description" content="前言消息队列是日常开发中非常常用的工具，当调用方不需要关心执行结果时，你可以使用它来解耦。本文简单介绍下spring-boot中快速使用RabbitMQ完成队列的发送与消费。">
 
 
 
@@ -220,13 +221,13 @@ blockquote:after {
 
 
 
-  <link rel="canonical" href="http://www.chenruiwen.cn/page/3/"/>
+  <link rel="canonical" href="http://www.chenruiwen.cn/2018/07/19/spring-boot集成RabbitMQ/"/>
 
 
 
 
 
-  <title>Hexo, NexT - Chen RuiWen's Space - 面向Google开发的java程序猿折腾指北</title>
+  <title>spring-boot集成RabbitMQ | Chen RuiWen's Space</title>
   
 
 
@@ -245,8 +246,7 @@ blockquote:after {
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <a href="https://github.com/crrrrrw"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
@@ -395,9 +395,9 @@ blockquote:after {
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -410,7 +410,7 @@ blockquote:after {
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/04/16/Nginx配置文件详解/">
+    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/07/19/spring-boot集成RabbitMQ/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈瑞文">
@@ -427,9 +427,7 @@ blockquote:after {
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/16/Nginx配置文件详解/" itemprop="url">Nginx配置文件详解</a></h1>
+          <h1 class="post-title" itemprop="name headline">spring-boot集成RabbitMQ</h1>
         
 
         <div class="post-meta">
@@ -441,8 +439,8 @@ blockquote:after {
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-16T11:02:02+08:00">
-                2018-04-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-19T17:22:10+08:00">
+                2018-07-19
               </time>
             
 
@@ -451,6 +449,8 @@ blockquote:after {
             
           </span>
 
+          
+            <span id="busuanzi_container_page_pv">&nbsp;&nbsp;|&nbsp;&nbsp;阅读量 <span id="busuanzi_value_page_pv"></span> 次</span>
           
 
           
@@ -466,8 +466,8 @@ blockquote:after {
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/nginx/" itemprop="url" rel="index">
-                    <span itemprop="name">nginx</span>
+                  <a href="/categories/spring-boot/" itemprop="url" rel="index">
+                    <span itemprop="name">spring-boot</span>
                   </a>
                 </span>
 
@@ -478,6 +478,16 @@ blockquote:after {
           
 
           
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/19/spring-boot集成RabbitMQ/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/07/19/spring-boot集成RabbitMQ/" itemprop="commentsCount"></span>
+                </a>
+              </span>
             
           
 
@@ -503,16 +513,111 @@ blockquote:after {
       
 
       
-        
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>参考了网上一些博文和文档，总结了一下，方便日后查阅。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/16/Nginx配置文件详解/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>消息队列是日常开发中非常常用的工具，当调用方不需要关心执行结果时，你可以使用它来解耦。<br>本文简单介绍下spring-boot中快速使用RabbitMQ完成队列的发送与消费。<br><a id="more"></a></p>
+<h2 id="AMQP"><a href="#AMQP" class="headerlink" title="AMQP"></a>AMQP</h2><h3 id="AMQP协议"><a href="#AMQP协议" class="headerlink" title="AMQP协议"></a>AMQP协议</h3><p>AMQP，即Advanced Message Queuing Protocol,一个提供统一消息服务的应用层标准高级消息队列协议,是应用层协议的一个开放标准,为面向消息的中间件设计。</p>
+<h3 id="消息代理"><a href="#消息代理" class="headerlink" title="消息代理"></a>消息代理</h3><p>消息代理（message brokers）从发布者（publishers）亦称生产者（producers）那儿接收消息，并根据既定的路由规则把接收到的消息发送给处理消息的消费者（consumers）。</p>
+<p>由于AMQP是一个网络协议，所以这个过程中的发布者，消费者，消息代理 可以存在于不同的设备上。</p>
+<h3 id="AMQP协议模型"><a href="#AMQP协议模型" class="headerlink" title="AMQP协议模型"></a>AMQP协议模型</h3><p>这里推荐直接查看 <a href="https://www.rabbitmq.com/tutorials/amqp-concepts.html" target="_blank" rel="noopener">AMQP 0-9-1 模型解析</a>。</p>
+<h3 id="RabbitMQ与AMQP的关系"><a href="#RabbitMQ与AMQP的关系" class="headerlink" title="RabbitMQ与AMQP的关系"></a>RabbitMQ与AMQP的关系</h3><p><code>RabbitMQ</code>采用<code>Erlang</code>语言开发。是<code>AMQP</code>协议的一个实现。</p>
+<h2 id="安装rabbitMQ"><a href="#安装rabbitMQ" class="headerlink" title="安装rabbitMQ"></a>安装rabbitMQ</h2><p>根据<a href="http://www.rabbitmq.com/install-debian.html" target="_blank" rel="noopener">RabbitMQ文档 Installing on Debian and Ubuntu</a>进行安装。</p>
+<h3 id="Windows安装"><a href="#Windows安装" class="headerlink" title="Windows安装"></a>Windows安装</h3><p>一. 下载并安装Erlang。官网下载页：<code>http://www.erlang.org/downloads</code>。</p>
+<p>二. 下载并安装RabbitMQ。官网下载页：<code>https://www.rabbitmq.com/download.html</code>。安装完成后会自动注册到服务中启动。</p>
+<h3 id="Mac-OS-X安装"><a href="#Mac-OS-X安装" class="headerlink" title="Mac OS X安装"></a>Mac OS X安装</h3><p>一. 安装Erlang，执行命令：<code>brew install erlang</code>。</p>
+<p>二. 安装RabbitMQ，执行命令：<code>brew install rabbitmq</code>。</p>
+<h3 id="Ubuntu安装"><a href="#Ubuntu安装" class="headerlink" title="Ubuntu安装"></a>Ubuntu安装</h3><p>一. 安装Erlang，执行命令：<code>apt-get install erlang erlang-nox</code>。</p>
+<p>二. 在系统中加入RabbitMQ apt 仓库:</p>
+<pre><code>echo &#39;deb http://www.rabbitmq.com/debian/ testing main&#39; | sudo tee /etc/apt/sources.list.d/rabbitmq.list
+</code></pre><p>三. 添加signing key，执行命令:</p>
+<pre><code>wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc | sudo apt-key add -。
+</code></pre><p>四. 更新APT仓库的package list，执行命令:<code>apt-get update</code></p>
+<p>五. 安装Rabbit Server，执行命令：<code>apt-get install rabbitmq-server</code>。</p>
+<h3 id="web控制台"><a href="#web控制台" class="headerlink" title="web控制台"></a>web控制台</h3><p>RabbitMQ内置提供了Web管理插件。</p>
+<ul>
+<li>开启RabbitMQ web管理  <ul>
+<li>Windows系统：进入插件目录:<code>D:\rabbitmq\rabbitmq_server-3.7.7\sbin</code>，运行命令：<pre><code>rabbitmq-plugins.bat enable rabbitmq_management
+</code></pre></li>
+<li>Linux和Mac系统: 运行命令：<pre><code>rabbitmq-plugins enable rabbitmq_management。
+</code></pre></li>
+</ul>
+</li>
+<li>通过浏览器访问web管理界面：<code>http://localhost:15672/</code>，默认登录用户:<code>guest</code>,密码:<code>guest</code>。</li>
+</ul>
+<h2 id="spring-boot中使用RabbitMQ"><a href="#spring-boot中使用RabbitMQ" class="headerlink" title="spring-boot中使用RabbitMQ"></a>spring-boot中使用RabbitMQ</h2><p>三步完成集成:</p>
+<ul>
+<li>maven依赖</li>
+<li>配置RabbitMQ</li>
+<li>代码使用及测试</li>
+</ul>
+<h3 id="maven依赖"><a href="#maven依赖" class="headerlink" title="maven依赖"></a>maven依赖</h3><p>仅需添加</p>
+<pre><code>&lt;!-- amqp,用于支持RabbitMQ --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-amqp&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre><h3 id="配置rabbitMQ"><a href="#配置rabbitMQ" class="headerlink" title="配置rabbitMQ"></a>配置rabbitMQ</h3><p>配置非常简单，在<code>application.yml</code>添加rabbitMQ相关:</p>
+<pre><code class="java"># rabbitMQ
+spring:
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+</code></pre>
+<h3 id="代码中使用及测试"><a href="#代码中使用及测试" class="headerlink" title="代码中使用及测试"></a>代码中使用及测试</h3><p>一. 在配置类中创建一个<code>hello</code>队列：</p>
+<pre><code class="java">@Configuration
+public class MessageQueueConfig {
+
+    @Bean
+    public org.springframework.amqp.core.Queue helloQueueByRabbitMQ() {
+        return new org.springframework.amqp.core.Queue(&quot;hello&quot;);
+    }
+
+}
+</code></pre>
+<p>二. 消息推送端，向<code>hello</code>队列发送一条消息:</p>
+<pre><code class="java">@Component
+@Slf4j
+public class HelloRabbitMQSender {
+    @Autowired
+    private AmqpTemplate rabbitTemplate;
+
+    public void send(String content) {
+        log.info(&quot;RabbitMQ send : {}&quot;, content);
+        this.rabbitTemplate.convertAndSend(&quot;hello&quot;, content);
+    }
+}
+</code></pre>
+<p>三. 消息消费端，消费一条<code>hello</code>队列里的消息:</p>
+<pre><code class="java">@Component
+@RabbitListener(queues = &quot;hello&quot;)
+@Slf4j
+public class HelloRabbitMQConsumer {
+
+    @RabbitHandler
+    public void process(String hello) {
+        log.info(&quot;RabbitMQ receiver : {}&quot;, hello);
+    }
+
+}
+</code></pre>
+<p>四. 单元测试发送一条消息:</p>
+<pre><code class="java">@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = App.class)
+public class HelloRabbitMQSenderTest {
+    @Autowired
+    private HelloRabbitMQSender sender;
+
+    @Test
+    public void sendHello() {
+        sender.send(&quot;Hello &quot; + new Date());
+    }
+}
+</code></pre>
+<p>输出结果，可以确认消息发送并且被消费了：</p>
+<pre><code>2018-07-16 14:23:09.844 [main] INFO  com.crw.mq.HelloRabbitMQSender - RabbitMQ send : Hello Mon Jul 16 14:23:09 CST 2018
+2018-07-16 14:23:09.872 [SimpleAsyncTaskExecutor-1] INFO  com.crw.mq.HelloRabbitMQConsumer - RabbitMQ receiver : Hello Mon Jul 16 14:23:09 CST 2018
+</code></pre><p> 这里仅仅简单介绍了使用RabbitMQ基于队列完成简单的点对点的使用，这也是在web开发中最常用的方式(易于系统解耦、消峰)。更多的使用还是参考官方文档。</p>
+
       
     </div>
     
@@ -521,184 +626,97 @@ blockquote:after {
 
     <div>
       
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束,</i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+      
     </div>
 
     <div align="center">
+    
+      <div class="copyright">
+      <p><span>
+      <b>本文地址：</b><a href="/2018/07/19/spring-boot集成RabbitMQ/" title="spring-boot集成RabbitMQ">http://www.chenruiwen.cn/2018/07/19/spring-boot集成RabbitMQ/</a><br /><b>转载请注明出处，谢谢！</b>
+      </span></p>
+      </div>
     
   </div>
 
     
 
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您如果觉得本文不错，不妨打赏一下，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
     
 
     
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/04/15/开篇/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="陈瑞文">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/touxiang.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chen RuiWen's Space">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/15/开篇/" itemprop="url">开篇</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-15T10:24:03+08:00">
-                2018-04-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/spring-boot/" rel="tag"><i class="fa fa-tag"></i>
+               spring-boot</a>
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/杂/" itemprop="url" rel="index">
-                    <span itemprop="name">杂</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
+            <a href="/tags/RabbitMQ/" rel="tag"><i class="fa fa-tag"></i>
+               RabbitMQ</a>
           
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>2018年，总感觉是个挺有好感的年份，今年也要经历人生的一件大事了，嘿嘿。</p>
-<p>过去的一年收获很多，在新公司认识了很多让我敬佩的大牛和可爱的小伙伴们，遇到了让我有些敬畏的领导，严格的要求又让我体验到曾经上学时的感觉。</p>
-<p>为什么要建立个人网站？因为coooooooool!</p>
-<p>在工作和学习中经常要查询文档和资料，就经常看到某些大牛们的个人网站，博文的质量很高，网站简介又好看，记录下自己走过的坎和分享技术，让我萌生了做个人网站的想法。终于赶上了一次阿里云特价(错过了腾讯云的特价~~)。所以这篇文章就作为我个人网站的开篇了~</p>
-<p>hey,hello,world. hello, 2018.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    <div>
-      
-    </div>
-
-    <div align="center">
-    
-  </div>
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/14/mybatis集成分页插件pageHelper/" rel="next" title="mybatis集成分页插件pageHelper">
+                <i class="fa fa-chevron-left"></i> mybatis集成分页插件pageHelper
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
       
     </footer>
   </div>
@@ -708,14 +726,11 @@ blockquote:after {
   </article>
 
 
-    
-  </section>
 
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
-  </nav>
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -723,6 +738,17 @@ blockquote:after {
 
 
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
 
         </div>
         
@@ -745,8 +771,17 @@ blockquote:after {
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -827,6 +862,22 @@ blockquote:after {
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AMQP"><span class="nav-number">2.</span> <span class="nav-text">AMQP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AMQP协议"><span class="nav-number">2.1.</span> <span class="nav-text">AMQP协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#消息代理"><span class="nav-number">2.2.</span> <span class="nav-text">消息代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AMQP协议模型"><span class="nav-number">2.3.</span> <span class="nav-text">AMQP协议模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RabbitMQ与AMQP的关系"><span class="nav-number">2.4.</span> <span class="nav-text">RabbitMQ与AMQP的关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装rabbitMQ"><span class="nav-number">3.</span> <span class="nav-text">安装rabbitMQ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows安装"><span class="nav-number">3.1.</span> <span class="nav-text">Windows安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mac-OS-X安装"><span class="nav-number">3.2.</span> <span class="nav-text">Mac OS X安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ubuntu安装"><span class="nav-number">3.3.</span> <span class="nav-text">Ubuntu安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web控制台"><span class="nav-number">3.4.</span> <span class="nav-text">web控制台</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-boot中使用RabbitMQ"><span class="nav-number">4.</span> <span class="nav-text">spring-boot中使用RabbitMQ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#maven依赖"><span class="nav-number">4.1.</span> <span class="nav-text">maven依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置rabbitMQ"><span class="nav-number">4.2.</span> <span class="nav-text">配置rabbitMQ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码中使用及测试"><span class="nav-number">4.3.</span> <span class="nav-text">代码中使用及测试</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1017,6 +1068,10 @@ blockquote:after {
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -1063,6 +1118,30 @@ blockquote:after {
 
     
 
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: '1531992130000', 
+            owner: 'crrrrrw',
+            repo: 'hexo_static_page',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '0d296ed78cc7ba1265fa1c2cad8431b252b83756',
+            
+                client_id: 'f9fcf9ca7182a859f41b'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
     
 
 

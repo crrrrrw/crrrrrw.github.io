@@ -5,6 +5,28 @@
     
     
   <url>
+    <loc>http://www.chenruiwen.cn/2018/07/19/spring-boot%E9%9B%86%E6%88%90RabbitMQ/</loc>
+    <lastmod>2018-07-18T23:39:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring-boot集成RabbitMQ</title>
+        <pubTime>2018-07-19T09:22:10.000Z</pubTime>
+        
+        <tag>spring-boot</tag>
+         
+        <tag>RabbitMQ</tag>
+         
+         
+           
+             
+              <breadCrumb title="spring-boot" url="http://www.chenruiwen.cn/categories/spring-boot/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.chenruiwen.cn/2018/07/14/mybatis%E9%9B%86%E6%88%90%E5%88%86%E9%A1%B5%E6%8F%92%E4%BB%B6pageHelper/</loc>
     <lastmod>2018-07-14T16:30:45.000Z</lastmod>
     <data>
