@@ -201,7 +201,7 @@ blockquote:after {
     root: '/',
     scheme: 'Muse',
     version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":true},
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -590,16 +590,7 @@ data :Page{count=true, pageNum=1, pageSize=5, startRow=0, endRow=5, total=21, pa
 
       
     </div>
-
-    <div align="center">
     
-      <div class="copyright">
-      <p><span>
-      <b>本文地址：</b><a href="/2018/07/14/mybatis集成分页插件pageHelper/" title="mybatis集成分页插件pageHelper">http://www.chenruiwen.cn/2018/07/14/mybatis集成分页插件pageHelper/</a><br /><b>转载请注明出处，谢谢！</b>
-      </span></p>
-      </div>
-    
-  </div>
 
     
 
@@ -634,6 +625,24 @@ data :Page{count=true, pageNum=1, pageSize=5, startRow=0, endRow=5, total=21, pa
       </div>
     
 
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    陈瑞文
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.chenruiwen.cn/2018/07/14/mybatis集成分页插件pageHelper/" title="mybatis集成分页插件pageHelper">http://www.chenruiwen.cn/2018/07/14/mybatis集成分页插件pageHelper/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    欢迎转载~~本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
@@ -807,6 +816,18 @@ data :Page{count=true, pageNum=1, pageSize=5, startRow=0, endRow=5, total=21, pa
                         <i class="fa fa-fw fa-github"></i>GitHub</a>
                   </span>
                 
+                  <span class="links-of-author-item">
+                    <a href="mailto:crw4085501@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/chen-rui-wen-28/activities" target="_blank" title="知乎">
+                      
+                        <i class="iconfont icon-zhihu"></i>知乎</a>
+                  </span>
+                
             </div>
           
 
@@ -862,18 +883,13 @@ data :Page{count=true, pageNum=1, pageSize=5, startRow=0, endRow=5, total=21, pa
 </div>
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow" >Hexo</a> 强力驱动</div>
 
 
 
-  <span class="post-meta-divider">|</span>
 
-
-
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next" rel="external nofollow" >NexT.Muse</a> v5.1.4
-<span>   |   </span>
-<span id="showDays"></span></div>
-
+<div class="theme-info">
+  <span id="showDays"></span>
+</div><br/>
 
 
 
@@ -919,7 +935,7 @@ data :Page{count=true, pageNum=1, pageSize=5, startRow=0, endRow=5, total=21, pa
   (function() {
     var hm = document.createElement("script");
     hm.src = "https://hm.baidu.com/hm.js?24046c6beb6cd2056bee02dc2a0168c9";
-    var s = document.getElementsByTagName("script")[0]; 
+    var s = document.getElementsByTagName("script")[0];
     s.parentNode.insertBefore(hm, s);
   })();
 </script>
@@ -939,6 +955,8 @@ data :Page{count=true, pageNum=1, pageSize=5, startRow=0, endRow=5, total=21, pa
     
       <div class="back-to-top">
         <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
         
       </div>
     
