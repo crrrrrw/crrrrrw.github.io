@@ -167,7 +167,7 @@ blockquote:after {
 
 
 
-  <meta name="keywords" content="陈瑞文的空间站,技术博客,java,web开发" />
+  <meta name="keywords" content="spring-boot,ActiveMQ" />
 
 
 
@@ -180,17 +180,21 @@ blockquote:after {
 
 
 
-<meta name="description" content="面向Google编程的java程序猿折腾指北">
-<meta name="keywords" content="技术博客,Java,web开发,Linux,spring-boot,微服务">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Chen RuiWen&#39;s Space">
-<meta property="og:url" content="http://www.chenruiwen.cn/tags/mybatis/index.html">
+<meta name="description" content="前言之前的文章spring-boot集成RabbitMQ介绍了spring-boot如何集成RabbitMQ。本篇文章是spring-boot集成MQ的姊妹篇，看看spring-boot如何集成常用的ActiveMQ.">
+<meta name="keywords" content="spring-boot,ActiveMQ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring-boot集成ActiveMQ">
+<meta property="og:url" content="http://www.chenruiwen.cn/2018/07/20/spring-boot集成ActiveMQ/index.html">
 <meta property="og:site_name" content="Chen RuiWen&#39;s Space">
-<meta property="og:description" content="面向Google编程的java程序猿折腾指北">
+<meta property="og:description" content="前言之前的文章spring-boot集成RabbitMQ介绍了spring-boot如何集成RabbitMQ。本篇文章是spring-boot集成MQ的姊妹篇，看看spring-boot如何集成常用的ActiveMQ.">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1ftgrjn36onj20hj07vglv.jpg">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1ftgomuzm3pj20qo0gf3yu.jpg">
+<meta property="og:updated_time" content="2018-07-20T15:52:28.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chen RuiWen&#39;s Space">
-<meta name="twitter:description" content="面向Google编程的java程序猿折腾指北">
+<meta name="twitter:title" content="spring-boot集成ActiveMQ">
+<meta name="twitter:description" content="前言之前的文章spring-boot集成RabbitMQ介绍了spring-boot如何集成RabbitMQ。本篇文章是spring-boot集成MQ的姊妹篇，看看spring-boot如何集成常用的ActiveMQ.">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1ftgrjn36onj20hj07vglv.jpg">
 
 
 
@@ -220,13 +224,13 @@ blockquote:after {
 
 
 
-  <link rel="canonical" href="http://www.chenruiwen.cn/tags/mybatis/"/>
+  <link rel="canonical" href="http://www.chenruiwen.cn/2018/07/20/spring-boot集成ActiveMQ/"/>
 
 
 
 
 
-  <title>标签: mybatis | Chen RuiWen's Space</title>
+  <title>spring-boot集成ActiveMQ | Chen RuiWen's Space</title>
   
 
 
@@ -245,7 +249,7 @@ blockquote:after {
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <a href="https://github.com/crrrrrw"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
@@ -395,82 +399,391 @@ blockquote:after {
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>mybatis<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/2018/07/20/spring-boot集成ActiveMQ/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈瑞文">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/touxiang.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen RuiWen's Space">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/07/14/mybatis集成分页插件pageHelper/" itemprop="url">
-              
-                <span itemprop="name">mybatis集成分页插件pageHelper</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">spring-boot集成ActiveMQ</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-14T19:32:24+08:00"
-              content="2018-07-14" >
-          07-14
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-20T19:45:10+08:00">
+                2018-07-20
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span id="busuanzi_container_page_pv">&nbsp;&nbsp;|&nbsp;&nbsp;阅读量 <span id="busuanzi_value_page_pv"></span> 次</span>
+          
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/spring-boot/" itemprop="url" rel="index">
+                    <span itemprop="name">spring-boot</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/20/spring-boot集成ActiveMQ/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2018/07/20/spring-boot集成ActiveMQ/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
+      
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <p><img src="http://ww1.sinaimg.cn/large/87faef88ly1ftgrjn36onj20hj07vglv.jpg" alt=""></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前的文章<a href="http://www.chenruiwen.cn/2018/07/19/spring-boot%E9%9B%86%E6%88%90RabbitMQ/">spring-boot集成RabbitMQ</a>介绍了spring-boot如何集成RabbitMQ。本篇文章是spring-boot集成MQ的姊妹篇，看看spring-boot如何集成常用的ActiveMQ.<br><a id="more"></a></p>
+<h2 id="JMS"><a href="#JMS" class="headerlink" title="JMS"></a>JMS</h2><h3 id="JMS是什么"><a href="#JMS是什么" class="headerlink" title="JMS是什么"></a>JMS是什么</h3><p>百度百科：</p>
+<blockquote>
+<p>JMS即Java消息服务（Java Message Service）应用程序接口，是一个Java平台中关于面向消息中间件（MOM）的API，用于在两个应用程序之间，或分布式系统中发送消息，进行异步通信。Java消息服务是一个与具体平台无关的API，绝大多数MOM提供商都对JMS提供支持。</p>
+</blockquote>
+<p>简单的说，JMS是j2ee技术中的提供了访问消息中间件的规范。它的常见实现如ActiveMQ。</p>
+<h3 id="JMS-API简介"><a href="#JMS-API简介" class="headerlink" title="JMS API简介"></a>JMS API简介</h3><p><code>JMS 规范</code>和 <code>javax.jms</code> 包定义一组可供 Java 应用程序用于执行消息传递操作的接口。以下列表概括了主要的 JMS 接口：</p>
+<ul>
+<li>Destination：</li>
+</ul>
+<p>Destination 对象是应用程序将消息发往的位置和/或应用程序从其接收消息的源。</p>
+<ul>
+<li>ConnectionFactory：</li>
+</ul>
+<p>ConnectionFactory 对象包括连接的一组配置属性。应用程序使用连接工厂来创建连接。</p>
+<ul>
+<li>Connection：</li>
+</ul>
+<p>Connection 对象包括应用程序与消息传递服务器的活动连接。应用程序使用连接来创建会话。</p>
+<ul>
+<li>Session：</li>
+</ul>
+<p>Session 对象是用于发送和接收消息的单个线程上下文。应用程序使用会话来创建消息、消息生产者和消息使用者。会话是事务性或非事务性会话。</p>
+<ul>
+<li>Message：</li>
+</ul>
+<p>Message 对象包括应用程序发送或接收的消息。</p>
+<ul>
+<li>MessageProducer：</li>
+</ul>
+<p>应用程序使用消息生产者将消息发送到目标。</p>
+<ul>
+<li>MessageConsumer：</li>
+</ul>
+<p>应用程序使用消息使用者来接收已发送到目标的消息。</p>
+<p>JMS对象及其关系:<br><img src="http://ww1.sinaimg.cn/large/87faef88ly1ftgomuzm3pj20qo0gf3yu.jpg" alt=""></p>
+<h2 id="ActiveMQ介绍"><a href="#ActiveMQ介绍" class="headerlink" title="ActiveMQ介绍"></a>ActiveMQ介绍</h2><p>ActiveMQ 是Apache出品，最流行的，能力强劲的开源消息总线。ActiveMQ 是一个完全支持JMS1.1和J2EE 1.4规范的 JMS Provider实现，尽管JMS规范出台已经是很久的事情了，但是JMS在当今的J2EE应用中间仍然扮演着特殊的地位。</p>
+<p>特性：</p>
+<ul>
+<li>支持多种语言和协议。语言: Java,C,C++,C#,Ruby,Perl,Python,PHP。应用协议： OpenWire,Stomp REST,WS Notification,XMPP,AMQP。</li>
+<li>完全支持JMS1.1和J2EE 1.4规范 （持久化，XA消息，事务)</li>
+<li>对Spring的支持，ActiveMQ可以很容易内嵌到使用Spring的系统里面去</li>
+<li>支持多种传送协议：in-VM,TCP,SSL,NIO,UDP,JGroups,JXTA</li>
+<li>设计上保证了高性能的集群，客户端-服务器，点对点</li>
+</ul>
+<h2 id="ActiveMQ安装"><a href="#ActiveMQ安装" class="headerlink" title="ActiveMQ安装"></a>ActiveMQ安装</h2><p>通过国外地址下载通常比较慢，所以我们一般通过国内的镜像地址下载。</p>
+<p>一些常用的apache其下的国内镜像地址：</p>
+<ul>
+<li><a href="http://mirrors.hust.edu.cn/apache/" target="_blank" rel="noopener">http://mirrors.hust.edu.cn/apache/</a> </li>
+<li><a href="http://mirrors.shu.edu.cn/apache/" target="_blank" rel="noopener">http://mirrors.shu.edu.cn/apache/</a> </li>
+<li><a href="http://mirrors.tuna.tsinghua.edu.cn/apache/" target="_blank" rel="noopener">http://mirrors.tuna.tsinghua.edu.cn/apache/</a> </li>
+</ul>
+<p>通过<a href="http://mirror.bit.edu.cn/apache/" target="_blank" rel="noopener">国内镜像地址</a>下载</p>
+<pre><code>wget http://mirror.bit.edu.cn/apache/activemq/5.14.5/apache-activemq-5.14.5-bin.tar.gz
+</code></pre><p>解压：</p>
+<pre><code>tar xf apache-activemq-5.14.5-bin.tar.gz
+</code></pre><p>启动：</p>
+<pre><code>cd apache-activemq-5.14.5\bin\
+</code></pre><p>注意：如果一台机器启动RabbitMQ以及ActiveMQ,要注意端口冲突问题。<br>修改ActiveMQ端口,找到<code>..\apache-activemq-5.x.x\conf\</code>目录下的<code>activemq.xml</code>,修改<code>&lt;transportConnectors&gt;</code>标签下的<code>uri</code>属性，比如：</p>
+<pre><code>&lt;transportConnectors&gt;
+    &lt;transportConnector name=&quot;openwire&quot; uri=&quot;tcp://0.0.0.0:61616?maximumConnections=1000&amp;amp;wireFormat.maxFrameSize=104857600&quot;/&gt;
+    &lt;transportConnector name=&quot;amqp&quot; uri=&quot;amqp://0.0.0.0:5673?maximumConnections=1000&amp;amp;wireFormat.maxFrameSize=104857600&quot;/&gt;
+    &lt;transportConnector name=&quot;stomp&quot; uri=&quot;stomp://0.0.0.0:61613?maximumConnections=1000&amp;amp;wireFormat.maxFrameSize=104857600&quot;/&gt;
+    &lt;transportConnector name=&quot;mqtt&quot; uri=&quot;mqtt://0.0.0.0:1883?maximumConnections=1000&amp;amp;wireFormat.maxFrameSize=104857600&quot;/&gt;
+    &lt;transportConnector name=&quot;ws&quot; uri=&quot;ws://0.0.0.0:61614?maximumConnections=1000&amp;amp;wireFormat.maxFrameSize=104857600&quot;/&gt;
+&lt;/transportConnectors&gt;
+</code></pre><p>如何查看RabbitMQ的端口号？打开web控制台查看即可。</p>
+<h2 id="集成置ActiveMQ"><a href="#集成置ActiveMQ" class="headerlink" title="集成置ActiveMQ"></a>集成置ActiveMQ</h2><p>使用过程与<code>RabbitMQ</code>类似，三步完成：</p>
+<ul>
+<li>maven依赖</li>
+<li>配置ActiveMQ</li>
+<li>编写代码及单元自测</li>
+</ul>
+<h3 id="maven依赖"><a href="#maven依赖" class="headerlink" title="maven依赖"></a>maven依赖</h3><pre><code>&lt;!-- activemq --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-activemq&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre><h3 id="配置ActiveMQ"><a href="#配置ActiveMQ" class="headerlink" title="配置ActiveMQ"></a>配置ActiveMQ</h3><p>在<code>application.yml</code>里添加几行即可:</p>
+<pre><code>spring:
+  activemq:
+    broker-url: tcp://127.0.0.1:61616   #activeMQ地址
+    user: admin                         #用户名
+    password: admin                     #密码
+    in-memory: true                     #是否启用内存模式（也就是不安装MQ，项目启动时同时也启动一个MQ实例
+    pool:
+      enabled: false                    #是否替换默认的connectionFactory
+    packages:
+      trust-all: true                   #信任所有的包
+</code></pre><h3 id="编写代码及单元自测"><a href="#编写代码及单元自测" class="headerlink" title="编写代码及单元自测"></a>编写代码及单元自测</h3><p>一. 配置一个<code>hello</code>队列：</p>
+<pre><code class="java">@Configuration
+public class MessageQueueConfig {
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/07/12/spring-boot集成mybatis/" itemprop="url">
-              
-                <span itemprop="name">spring-boot集成mybatis</span>
-              
-            </a>
-        
-      </h2>
+    @Bean
+    public javax.jms.Queue helloQueueByActiveMQ() {
+        return new ActiveMQQueue(&quot;hello&quot;);
+    }
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-12T22:05:24+08:00"
-              content="2018-07-12" >
-          07-12
-        </time>
-      </div>
+}
 
-    </header>
-  </article>
+</code></pre>
+<p>二. 消息推送端，向<code>hello</code>队列发送一条消息:</p>
+<pre><code class="java">@Component
+@Slf4j
+public class HelloActiveMQSender {
+
+    @Autowired
+    private JmsMessagingTemplate jmsMessagingTemplate;
+
+    public void send(String content) {
+        log.info(&quot;ActiveMQ send : {}&quot;, content);
+        this.jmsMessagingTemplate.convertAndSend(&quot;hello&quot;, content);
+    }
+}
+</code></pre>
+<p>三. 消息消费端，消费一条<code>hello</code>队列里的消息:</p>
+<pre><code class="java">@Slf4j
+@Component
+@EnableJms
+public class HelloActiveMQConsumer {
+
+    @JmsListener(destination = &quot;hello&quot;)
+    public void process(String hello) {
+        log.info(&quot;ActiveMQ receiver : {}&quot;, hello);
+    }
+}
+</code></pre>
+<p>四. 单元测试发送一条消息:</p>
+<pre><code class="java">@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = App.class)
+public class HelloActiveMQSenderTest {
+
+    @Autowired
+    private HelloActiveMQSender sender;
+
+    @Test
+    public void sendHello() {
+        sender.send(&quot;Hello &quot; + new Date());
+    }
+}
+</code></pre>
+<p>输出结果，可以确认消息发送并且被消费了：</p>
+<pre><code>2018-07-17 16:56:16.320 [main] INFO  com.crw.mq.HelloActiveMQSender - ActiveMQ send : Hello Tue Jul 17 16:56:16 CST 2018
+2018-07-17 16:56:16.355 [DefaultMessageListenerContainer-1] INFO  com.crw.mq.HelloActiveMQConsumer - ActiveMQ receiver : Hello Tue Jul 17 16:56:16 CST 2018
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束,</i>感谢您的阅读-------------</div>
+    
+</div>
 
 
       
     </div>
+    
 
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>贵在坚持，如果您觉得本文还不错，不妨打赏一下~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    陈瑞文
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://www.chenruiwen.cn/2018/07/20/spring-boot集成ActiveMQ/" title="spring-boot集成ActiveMQ">http://www.chenruiwen.cn/2018/07/20/spring-boot集成ActiveMQ/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    欢迎转载~~本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spring-boot/" rel="tag"><i class="fa fa-tag"></i>
+               spring-boot</a>
+          
+            <a href="/tags/ActiveMQ/" rel="tag"><i class="fa fa-tag"></i>
+               ActiveMQ</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/19/spring-boot集成RabbitMQ/" rel="next" title="spring-boot集成RabbitMQ">
+                <i class="fa fa-chevron-left"></i> spring-boot集成RabbitMQ
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -478,6 +791,17 @@ blockquote:after {
 
 
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
 
         </div>
         
@@ -500,8 +824,17 @@ blockquote:after {
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -594,6 +927,22 @@ blockquote:after {
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMS"><span class="nav-number">2.</span> <span class="nav-text">JMS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JMS是什么"><span class="nav-number">2.1.</span> <span class="nav-text">JMS是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JMS-API简介"><span class="nav-number">2.2.</span> <span class="nav-text">JMS API简介</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ActiveMQ介绍"><span class="nav-number">3.</span> <span class="nav-text">ActiveMQ介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ActiveMQ安装"><span class="nav-number">4.</span> <span class="nav-text">ActiveMQ安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集成置ActiveMQ"><span class="nav-number">5.</span> <span class="nav-text">集成置ActiveMQ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#maven依赖"><span class="nav-number">5.1.</span> <span class="nav-text">maven依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置ActiveMQ"><span class="nav-number">5.2.</span> <span class="nav-text">配置ActiveMQ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编写代码及单元自测"><span class="nav-number">5.3.</span> <span class="nav-text">编写代码及单元自测</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -781,6 +1130,10 @@ blockquote:after {
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -827,6 +1180,30 @@ blockquote:after {
 
     
 
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: '1532087110000', 
+            owner: 'crrrrrw',
+            repo: 'hexo_static_page',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '0d296ed78cc7ba1265fa1c2cad8431b252b83756',
+            
+                client_id: 'f9fcf9ca7182a859f41b'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
     
 
 

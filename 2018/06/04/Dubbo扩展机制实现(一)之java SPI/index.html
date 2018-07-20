@@ -188,14 +188,15 @@ blockquote:after {
 <meta property="og:site_name" content="Chen RuiWen&#39;s Space">
 <meta property="og:description" content="前言在之前的文章Dubbo暴露服务过程中提出了问题：@SPI这些东西究竟是什么?在Dubbo开发手册之扩展点加载中有这么解释过：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  所以在分析Dubbo扩展机制前，先看看jdk的SPI。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1ftgqxq94j8j20h109kdfs.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fr6nptfm2aj20ig0cqgml.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fr6n9im7d1j20kq060aam.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fr9re67q83j20vk0jugp9.jpg">
-<meta property="og:updated_time" content="2018-06-05T13:38:03.000Z">
+<meta property="og:updated_time" content="2018-07-20T15:31:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dubbo扩展机制实现(一)之java SPI">
 <meta name="twitter:description" content="前言在之前的文章Dubbo暴露服务过程中提出了问题：@SPI这些东西究竟是什么?在Dubbo开发手册之扩展点加载中有这么解释过：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  所以在分析Dubbo扩展机制前，先看看jdk的SPI。">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fr6nptfm2aj20ig0cqgml.jpg">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1ftgqxq94j8j20h109kdfs.jpg">
 
 
 
@@ -517,7 +518,8 @@ blockquote:after {
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在之前的文章<a href="http://www.chenruiwen.cn/2018/05/20/Dubbo%E6%9A%B4%E9%9C%B2%E6%9C%8D%E5%8A%A1%E8%BF%87%E7%A8%8B/">Dubbo暴露服务过程</a>中提出了问题：<em>@SPI</em>这些东西究竟是什么?<br>在<a href="http://dubbo.apache.org/books/dubbo-dev-book/SPI.html" target="_blank" rel="noopener">Dubbo开发手册之扩展点加载</a>中有这么解释过：</p>
+        <p><img src="http://ww1.sinaimg.cn/large/87faef88ly1ftgqxq94j8j20h109kdfs.jpg" alt=""></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在之前的文章<a href="http://www.chenruiwen.cn/2018/05/20/Dubbo%E6%9A%B4%E9%9C%B2%E6%9C%8D%E5%8A%A1%E8%BF%87%E7%A8%8B/">Dubbo暴露服务过程</a>中提出了问题：<em>@SPI</em>这些东西究竟是什么?<br>在<a href="http://dubbo.apache.org/books/dubbo-dev-book/SPI.html" target="_blank" rel="noopener">Dubbo开发手册之扩展点加载</a>中有这么解释过：</p>
 <blockquote>
 <p>Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。</p>
 </blockquote>
@@ -691,7 +693,7 @@ public void reload() {
     
       <div>
         <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-  <div>坚持原创技术分享，您如果觉得本文不错，不妨打赏一下，您的支持将鼓励我继续创作！</div>
+  <div>贵在坚持，如果您觉得本文还不错，不妨打赏一下~</div>
   <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
     <span>打赏</span>
   </button>
@@ -852,7 +854,7 @@ public void reload() {
                 alt="陈瑞文" />
             
               <p class="site-author-name" itemprop="name">陈瑞文</p>
-              <p class="site-description motion-element" itemprop="description">面向Google开发的java程序猿折腾指北</p>
+              <p class="site-description motion-element" itemprop="description">面向Google编程的java程序猿折腾指北</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -862,7 +864,7 @@ public void reload() {
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -884,7 +886,7 @@ public void reload() {
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -989,7 +991,7 @@ public void reload() {
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共39.6k字</span>
+  <span class="post-count">本站累计共40.8k字</span>
 </div>
 
 &nbsp;&nbsp;|&nbsp;&nbsp;本站总点击 <span id="busuanzi_value_site_pv"></span> 次

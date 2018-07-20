@@ -180,20 +180,21 @@ blockquote:after {
 
 
 
-<meta name="description" content="前言之前的文章有介绍jdk SPI一些基本的使用和源码分析，既然dubbo也想使用SPI机制，为什么不直接使用jdk的SPI呢？ 上篇文章开头也提到了：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  看看官方文档上Dubbo加强了哪些地方：   本文简单分析下Dubbo实现扩展点机制的ExtensionL">
+<meta name="description" content="前言之前的文章有介绍jdk SPI一些基本的使用和源码分析，既然dubbo也想使用SPI机制，为什么不直接使用jdk的SPI呢？ 上篇文章开头也提到了：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  看看官方文档上Dubbo加强了哪些地方：   本文简单分析下Dubbo实现扩展点机制的Extension">
 <meta name="keywords" content="dubbo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Dubbo扩展机制实现(二)之浅析ExtensionLoader">
 <meta property="og:url" content="http://www.chenruiwen.cn/2018/06/11/Dubbo扩展机制实现(二)之浅析ExtensionLoader/index.html">
 <meta property="og:site_name" content="Chen RuiWen&#39;s Space">
-<meta property="og:description" content="前言之前的文章有介绍jdk SPI一些基本的使用和源码分析，既然dubbo也想使用SPI机制，为什么不直接使用jdk的SPI呢？ 上篇文章开头也提到了：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  看看官方文档上Dubbo加强了哪些地方：   本文简单分析下Dubbo实现扩展点机制的ExtensionL">
+<meta property="og:description" content="前言之前的文章有介绍jdk SPI一些基本的使用和源码分析，既然dubbo也想使用SPI机制，为什么不直接使用jdk的SPI呢？ 上篇文章开头也提到了：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  看看官方文档上Dubbo加强了哪些地方：   本文简单分析下Dubbo实现扩展点机制的Extension">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1ftgr9divhvj20go09cwf7.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1frb9d0bvqmj216q0dcdk3.jpg">
-<meta property="og:updated_time" content="2018-06-11T14:52:58.000Z">
+<meta property="og:updated_time" content="2018-07-20T15:42:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dubbo扩展机制实现(二)之浅析ExtensionLoader">
-<meta name="twitter:description" content="前言之前的文章有介绍jdk SPI一些基本的使用和源码分析，既然dubbo也想使用SPI机制，为什么不直接使用jdk的SPI呢？ 上篇文章开头也提到了：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  看看官方文档上Dubbo加强了哪些地方：   本文简单分析下Dubbo实现扩展点机制的ExtensionL">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1frb9d0bvqmj216q0dcdk3.jpg">
+<meta name="twitter:description" content="前言之前的文章有介绍jdk SPI一些基本的使用和源码分析，既然dubbo也想使用SPI机制，为什么不直接使用jdk的SPI呢？ 上篇文章开头也提到了：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  看看官方文档上Dubbo加强了哪些地方：   本文简单分析下Dubbo实现扩展点机制的Extension">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1ftgr9divhvj20go09cwf7.jpg">
 
 
 
@@ -515,7 +516,8 @@ blockquote:after {
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前的文章有介绍jdk SPI一些基本的使用和源码分析，既然dubbo也想使用SPI机制，为什么不直接使用jdk的SPI呢？</p>
+        <p><img src="http://ww1.sinaimg.cn/large/87faef88ly1ftgr9divhvj20go09cwf7.jpg" alt=""></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前的文章有介绍jdk SPI一些基本的使用和源码分析，既然dubbo也想使用SPI机制，为什么不直接使用jdk的SPI呢？</p>
 <p>上篇文章开头也提到了：</p>
 <blockquote>
 <p>Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。</p>
@@ -741,7 +743,7 @@ public interface Protocol {}
     
       <div>
         <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-  <div>坚持原创技术分享，您如果觉得本文不错，不妨打赏一下，您的支持将鼓励我继续创作！</div>
+  <div>贵在坚持，如果您觉得本文还不错，不妨打赏一下~</div>
   <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
     <span>打赏</span>
   </button>
@@ -899,7 +901,7 @@ public interface Protocol {}
                 alt="陈瑞文" />
             
               <p class="site-author-name" itemprop="name">陈瑞文</p>
-              <p class="site-description motion-element" itemprop="description">面向Google开发的java程序猿折腾指北</p>
+              <p class="site-description motion-element" itemprop="description">面向Google编程的java程序猿折腾指北</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -909,7 +911,7 @@ public interface Protocol {}
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -931,7 +933,7 @@ public interface Protocol {}
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1036,7 +1038,7 @@ public interface Protocol {}
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共39.6k字</span>
+  <span class="post-count">本站累计共40.8k字</span>
 </div>
 
 &nbsp;&nbsp;|&nbsp;&nbsp;本站总点击 <span id="busuanzi_value_site_pv"></span> 次

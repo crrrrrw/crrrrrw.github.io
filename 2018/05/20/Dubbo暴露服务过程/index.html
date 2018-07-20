@@ -188,6 +188,7 @@ blockquote:after {
 <meta property="og:site_name" content="Chen RuiWen&#39;s Space">
 <meta property="og:description" content="前言dubbo框架也用了有一年了，一直没有详细的研究过dubbo源码。所以趁有时间好好学习体会dubbo的博大精深。本人才疏学浅，如有不对，请大神指点。这里使用的dubbo版本是2.6.1。 如何看源码？跟着Dubbo开发手册(中文)来喽。带着目的看源码，这次看dubbo是怎么暴露服务的。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1ftgr6acju4j20m80cijt7.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqz30w0utyj21e70lftdv.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqz3wdhv82j20ns0n7q8q.jpg">
 <meta property="og:image" content="http://dubbo.apache.org/books/dubbo-dev-book/sources/images/dubbo-export.jpg">
@@ -198,11 +199,11 @@ blockquote:after {
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fr5791ve67j208j05v74f.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fr5fm6vuzfj20i40dwwfj.jpg">
 <meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fr5gaayhnwj20y20lcq8q.jpg">
-<meta property="og:updated_time" content="2018-06-04T15:13:06.000Z">
+<meta property="og:updated_time" content="2018-07-20T15:39:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dubbo暴露服务过程">
 <meta name="twitter:description" content="前言dubbo框架也用了有一年了，一直没有详细的研究过dubbo源码。所以趁有时间好好学习体会dubbo的博大精深。本人才疏学浅，如有不对，请大神指点。这里使用的dubbo版本是2.6.1。 如何看源码？跟着Dubbo开发手册(中文)来喽。带着目的看源码，这次看dubbo是怎么暴露服务的。">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1fqz30w0utyj21e70lftdv.jpg">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1ftgr6acju4j20m80cijt7.jpg">
 
 
 
@@ -524,7 +525,8 @@ blockquote:after {
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>dubbo框架也用了有一年了，一直没有详细的研究过dubbo源码。所以趁有时间好好学习体会dubbo的博大精深。本人才疏学浅，如有不对，请大神指点。这里使用的dubbo版本是2.6.1。</p>
+        <p><img src="http://ww1.sinaimg.cn/large/87faef88ly1ftgr6acju4j20m80cijt7.jpg" alt=""></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>dubbo框架也用了有一年了，一直没有详细的研究过dubbo源码。所以趁有时间好好学习体会dubbo的博大精深。本人才疏学浅，如有不对，请大神指点。这里使用的dubbo版本是2.6.1。</p>
 <p>如何看源码？跟着<a href="http://dubbo.apache.org/books/dubbo-dev-book/" target="_blank" rel="noopener">Dubbo开发手册(中文)</a>来喽。带着目的看源码，这次看dubbo是怎么暴露服务的。<br><a id="more"></a></p>
 <h2 id="先瞜一眼启动日志"><a href="#先瞜一眼启动日志" class="headerlink" title="先瞜一眼启动日志"></a>先瞜一眼启动日志</h2><p>一般像这种大型的开源框架，都会有健全的启动日志，看看日志输出利于我们理解dubbo启动流程。<br><img src="http://ww1.sinaimg.cn/large/87faef88ly1fqz30w0utyj21e70lftdv.jpg" alt=""><br>日志输出从上往下看，dubbo做了哪些事：</p>
 <ol>
@@ -1073,7 +1075,7 @@ public interface Protocol {
     
       <div>
         <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-  <div>坚持原创技术分享，您如果觉得本文不错，不妨打赏一下，您的支持将鼓励我继续创作！</div>
+  <div>贵在坚持，如果您觉得本文还不错，不妨打赏一下~</div>
   <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
     <span>打赏</span>
   </button>
@@ -1234,7 +1236,7 @@ public interface Protocol {
                 alt="陈瑞文" />
             
               <p class="site-author-name" itemprop="name">陈瑞文</p>
-              <p class="site-description motion-element" itemprop="description">面向Google开发的java程序猿折腾指北</p>
+              <p class="site-description motion-element" itemprop="description">面向Google编程的java程序猿折腾指北</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -1244,7 +1246,7 @@ public interface Protocol {
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1266,7 +1268,7 @@ public interface Protocol {
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1371,7 +1373,7 @@ public interface Protocol {
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共39.6k字</span>
+  <span class="post-count">本站累计共40.8k字</span>
 </div>
 
 &nbsp;&nbsp;|&nbsp;&nbsp;本站总点击 <span id="busuanzi_value_site_pv"></span> 次

@@ -188,10 +188,12 @@ blockquote:after {
 <meta property="og:site_name" content="Chen RuiWen&#39;s Space">
 <meta property="og:description" content="前言消息队列是日常开发中非常常用的工具，当调用方不需要关心执行结果时，你可以使用它来解耦。本文简单介绍下spring-boot中快速使用RabbitMQ完成队列的发送与消费。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-18T23:39:45.000Z">
+<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1ftgrlo2wfzj20ji0atmx4.jpg">
+<meta property="og:updated_time" content="2018-07-20T15:54:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spring-boot集成RabbitMQ">
 <meta name="twitter:description" content="前言消息队列是日常开发中非常常用的工具，当调用方不需要关心执行结果时，你可以使用它来解耦。本文简单介绍下spring-boot中快速使用RabbitMQ完成队列的发送与消费。">
+<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1ftgrlo2wfzj20ji0atmx4.jpg">
 
 
 
@@ -513,7 +515,8 @@ blockquote:after {
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>消息队列是日常开发中非常常用的工具，当调用方不需要关心执行结果时，你可以使用它来解耦。<br>本文简单介绍下spring-boot中快速使用RabbitMQ完成队列的发送与消费。<br><a id="more"></a></p>
+        <p><img src="http://ww1.sinaimg.cn/large/87faef88ly1ftgrlo2wfzj20ji0atmx4.jpg" alt=""></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>消息队列是日常开发中非常常用的工具，当调用方不需要关心执行结果时，你可以使用它来解耦。<br>本文简单介绍下spring-boot中快速使用RabbitMQ完成队列的发送与消费。<br><a id="more"></a></p>
 <h2 id="AMQP"><a href="#AMQP" class="headerlink" title="AMQP"></a>AMQP</h2><h3 id="AMQP协议"><a href="#AMQP协议" class="headerlink" title="AMQP协议"></a>AMQP协议</h3><p>AMQP，即Advanced Message Queuing Protocol,一个提供统一消息服务的应用层标准高级消息队列协议,是应用层协议的一个开放标准,为面向消息的中间件设计。</p>
 <h3 id="消息代理"><a href="#消息代理" class="headerlink" title="消息代理"></a>消息代理</h3><p>消息代理（message brokers）从发布者（publishers）亦称生产者（producers）那儿接收消息，并根据既定的路由规则把接收到的消息发送给处理消息的消费者（consumers）。</p>
 <p>由于AMQP是一个网络协议，所以这个过程中的发布者，消费者，消息代理 可以存在于不同的设备上。</p>
@@ -642,7 +645,7 @@ public class HelloRabbitMQSenderTest {
     
       <div>
         <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-  <div>坚持原创技术分享，您如果觉得本文不错，不妨打赏一下，您的支持将鼓励我继续创作！</div>
+  <div>贵在坚持，如果您觉得本文还不错，不妨打赏一下~</div>
   <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
     <span>打赏</span>
   </button>
@@ -720,6 +723,10 @@ public class HelloRabbitMQSenderTest {
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/20/spring-boot集成ActiveMQ/" rel="prev" title="spring-boot集成ActiveMQ">
+                spring-boot集成ActiveMQ <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -799,7 +806,7 @@ public class HelloRabbitMQSenderTest {
                 alt="陈瑞文" />
             
               <p class="site-author-name" itemprop="name">陈瑞文</p>
-              <p class="site-description motion-element" itemprop="description">面向Google开发的java程序猿折腾指北</p>
+              <p class="site-description motion-element" itemprop="description">面向Google编程的java程序猿折腾指北</p>
           </div>
 
           <nav class="site-state motion-element">
@@ -809,7 +816,7 @@ public class HelloRabbitMQSenderTest {
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -831,7 +838,7 @@ public class HelloRabbitMQSenderTest {
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -936,7 +943,7 @@ public class HelloRabbitMQSenderTest {
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共39.6k字</span>
+  <span class="post-count">本站累计共40.8k字</span>
 </div>
 
 &nbsp;&nbsp;|&nbsp;&nbsp;本站总点击 <span id="busuanzi_value_site_pv"></span> 次
