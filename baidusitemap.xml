@@ -4,178 +4,8 @@
 
     
   <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbeg001puifng5cjn2eo/</loc>
-    <lastmod>2018-07-21T10:57:52.000Z</lastmod>
-    <data>
-        <display>
-        <title>基于hexo+nginx快速建站</title>
-        <pubTime>2018-04-18T15:10:32.000Z</pubTime>
-        
-        <tag>blog</tag>
-         
-         
-           
-             
-              <breadCrumb title="blog" url="http://www.chenruiwen.cn/categories/blog/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbeh001suifn1vr8zpze/</loc>
-    <lastmod>2018-07-21T10:57:52.000Z</lastmod>
-    <data>
-        <display>
-        <title>开篇</title>
-        <pubTime>2018-04-15T02:24:03.000Z</pubTime>
-        
-        <tag>杂</tag>
-         
-         
-           
-             
-              <breadCrumb title="杂" url="http://www.chenruiwen.cn/categories/%E6%9D%82/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbej001xuifn2vk5hoz5/</loc>
-    <lastmod>2018-07-21T10:57:52.000Z</lastmod>
-    <data>
-        <display>
-        <title>微博图床插件打包</title>
-        <pubTime>2018-04-20T06:31:43.000Z</pubTime>
-        
-        <tag>tool</tag>
-         
-         
-           
-             
-              <breadCrumb title="tips" url="http://www.chenruiwen.cn/categories/tips/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbe9001buifnsw61kvn5/</loc>
-    <lastmod>2018-07-21T10:56:48.000Z</lastmod>
-    <data>
-        <display>
-        <title>ubuntu安装Nginx全记录</title>
-        <pubTime>2018-04-16T05:01:24.000Z</pubTime>
-        
-        <tag>nginx</tag>
-         
-        <tag>运维</tag>
-         
-         
-           
-             
-              <breadCrumb title="nginx" url="http://www.chenruiwen.cn/categories/nginx/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbe80017uifn60vvtzhd/</loc>
-    <lastmod>2018-07-21T10:56:13.000Z</lastmod>
-    <data>
-        <display>
-        <title>spring-boot集成RabbitMQ</title>
-        <pubTime>2018-07-19T09:22:10.000Z</pubTime>
-        
-        <tag>spring-boot</tag>
-         
-        <tag>RabbitMQ</tag>
-         
-         
-           
-             
-              <breadCrumb title="spring-boot" url="http://www.chenruiwen.cn/categories/spring-boot/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbe70016uifnq3cs2lnv/</loc>
-    <lastmod>2018-07-21T10:56:13.000Z</lastmod>
-    <data>
-        <display>
-        <title>spring-boot集成ActiveMQ</title>
-        <pubTime>2018-07-20T11:45:10.000Z</pubTime>
-        
-        <tag>spring-boot</tag>
-         
-        <tag>ActiveMQ</tag>
-         
-         
-           
-             
-              <breadCrumb title="spring-boot" url="http://www.chenruiwen.cn/categories/spring-boot/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbeb001duifne1okewm3/</loc>
-    <lastmod>2018-07-21T10:56:13.000Z</lastmod>
-    <data>
-        <display>
-        <title>spring-boot集成mybatis</title>
-        <pubTime>2018-07-12T14:05:24.000Z</pubTime>
-        
-        <tag>spring-boot</tag>
-         
-        <tag>mybatis</tag>
-         
-         
-           
-             
-              <breadCrumb title="spring-boot" url="http://www.chenruiwen.cn/categories/spring-boot/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbdz000muifnnki47ysi/</loc>
-    <lastmod>2018-07-21T10:53:50.000Z</lastmod>
-    <data>
-        <display>
-        <title>Nginx配置文件详解</title>
-        <pubTime>2018-04-16T03:02:02.000Z</pubTime>
-        
-        <tag>nginx</tag>
-         
-        <tag>运维</tag>
-         
-         
-           
-             
-              <breadCrumb title="nginx" url="http://www.chenruiwen.cn/categories/nginx/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbdx000kuifnzqebv537/</loc>
-    <lastmod>2018-07-21T10:53:50.000Z</lastmod>
+    <loc>http://www.chenruiwen.cn/mysql/mysql-select-performance-optimize/</loc>
+    <lastmod>2018-07-21T14:47:27.000Z</lastmod>
     <data>
         <display>
         <title>MySQL查询性能优化</title>
@@ -194,19 +24,21 @@
 
     
   <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbdv000fuifnjpty2nib/</loc>
-    <lastmod>2018-07-21T10:52:27.000Z</lastmod>
+    <loc>http://www.chenruiwen.cn/dubbo/dubbo-spi-java/</loc>
+    <lastmod>2018-07-21T14:46:38.000Z</lastmod>
     <data>
         <display>
-        <title>MySQL查询优化器</title>
-        <pubTime>2018-05-22T15:42:47.000Z</pubTime>
+        <title>Dubbo扩展机制实现(一)之java SPI</title>
+        <pubTime>2018-06-04T13:31:24.000Z</pubTime>
         
-        <tag>mysql</tag>
+        <tag>java</tag>
+         
+        <tag>dubbo</tag>
          
          
            
              
-              <breadCrumb title="mysql" url="http://www.chenruiwen.cn/categories/mysql/"/>
+              <breadCrumb title="dubbo" url="http://www.chenruiwen.cn/categories/dubbo/"/>
           
         </display>
     </data>
@@ -214,8 +46,8 @@
 
     
   <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbe4000zuifnki9k0j1j/</loc>
-    <lastmod>2018-07-21T10:52:27.000Z</lastmod>
+    <loc>http://www.chenruiwen.cn/spring-boot/mybatis-plugins-pagehelper/</loc>
+    <lastmod>2018-07-21T14:45:21.000Z</lastmod>
     <data>
         <display>
         <title>mybatis集成分页插件pageHelper</title>
@@ -236,19 +68,21 @@
 
     
   <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbe1000ruifnuttwnjcu/</loc>
-    <lastmod>2018-07-21T10:50:39.000Z</lastmod>
+    <loc>http://www.chenruiwen.cn/spring-boot/spring-boot-use-activemq/</loc>
+    <lastmod>2018-07-21T14:44:21.000Z</lastmod>
     <data>
         <display>
-        <title>java8实战学习总结</title>
-        <pubTime>2018-04-21T15:38:49.000Z</pubTime>
+        <title>spring-boot集成ActiveMQ</title>
+        <pubTime>2018-07-20T11:45:10.000Z</pubTime>
         
-        <tag>java</tag>
+        <tag>spring-boot</tag>
+         
+        <tag>ActiveMQ</tag>
          
          
            
              
-              <breadCrumb title="java" url="http://www.chenruiwen.cn/categories/java/"/>
+              <breadCrumb title="spring-boot" url="http://www.chenruiwen.cn/categories/spring-boot/"/>
           
         </display>
     </data>
@@ -256,21 +90,21 @@
 
     
   <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbe2000uuifndd05143i/</loc>
-    <lastmod>2018-07-21T10:50:39.000Z</lastmod>
+    <loc>http://www.chenruiwen.cn/nginx/ubuntu-install-nginx-options/</loc>
+    <lastmod>2018-07-21T14:43:09.000Z</lastmod>
     <data>
         <display>
-        <title>java并发修行之基础篇：线程安全</title>
-        <pubTime>2018-07-09T14:16:24.000Z</pubTime>
+        <title>ubuntu安装Nginx全记录</title>
+        <pubTime>2018-04-16T05:01:24.000Z</pubTime>
         
-        <tag>java</tag>
+        <tag>nginx</tag>
          
-        <tag>java concurrency</tag>
+        <tag>运维</tag>
          
          
            
              
-              <breadCrumb title="java并发修行" url="http://www.chenruiwen.cn/categories/java%E5%B9%B6%E5%8F%91%E4%BF%AE%E8%A1%8C/"/>
+              <breadCrumb title="nginx" url="http://www.chenruiwen.cn/categories/nginx/"/>
           
         </display>
     </data>
@@ -278,19 +112,21 @@
 
     
   <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbdm0006uifnjvwmmhl2/</loc>
-    <lastmod>2018-07-21T10:49:08.000Z</lastmod>
+    <loc>http://www.chenruiwen.cn/nginx/explain-nginx-config-file/</loc>
+    <lastmod>2018-07-21T14:42:04.000Z</lastmod>
     <data>
         <display>
-        <title>Dubbo扩展机制实现(二)之浅析ExtensionLoader</title>
-        <pubTime>2018-06-11T14:47:08.000Z</pubTime>
+        <title>Nginx配置文件详解</title>
+        <pubTime>2018-04-16T03:02:02.000Z</pubTime>
         
-        <tag>dubbo</tag>
+        <tag>nginx</tag>
+         
+        <tag>运维</tag>
          
          
            
              
-              <breadCrumb title="dubbo" url="http://www.chenruiwen.cn/categories/dubbo/"/>
+              <breadCrumb title="nginx" url="http://www.chenruiwen.cn/categories/nginx/"/>
           
         </display>
     </data>
@@ -298,8 +134,8 @@
 
     
   <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbdh0002uifnjkuxb445/</loc>
-    <lastmod>2018-07-21T10:49:08.000Z</lastmod>
+    <loc>http://www.chenruiwen.cn/dubbo/dubbo-spi-extension-feature/</loc>
+    <lastmod>2018-07-21T14:36:57.000Z</lastmod>
     <data>
         <display>
         <title>Dubbo扩展机制实现(三)之扩展点特性</title>
@@ -318,8 +154,28 @@
 
     
   <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbdt000euifnvwp89rvq/</loc>
-    <lastmod>2018-07-21T10:49:08.000Z</lastmod>
+    <loc>http://www.chenruiwen.cn/dubbo/dubbo-spi-extensionloader/</loc>
+    <lastmod>2018-07-21T14:35:51.000Z</lastmod>
+    <data>
+        <display>
+        <title>Dubbo扩展机制实现(二)之浅析ExtensionLoader</title>
+        <pubTime>2018-06-11T14:47:08.000Z</pubTime>
+        
+        <tag>dubbo</tag>
+         
+         
+           
+             
+              <breadCrumb title="dubbo" url="http://www.chenruiwen.cn/categories/dubbo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.chenruiwen.cn/dubbo/dubbo-service-export-process/</loc>
+    <lastmod>2018-07-21T14:34:58.000Z</lastmod>
     <data>
         <display>
         <title>Dubbo暴露服务过程</title>
@@ -340,30 +196,8 @@
 
     
   <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbdp000auifn3y7likjn/</loc>
-    <lastmod>2018-07-21T10:49:08.000Z</lastmod>
-    <data>
-        <display>
-        <title>Intellij IDEA神器那些让人爱不释手的小技巧</title>
-        <pubTime>2018-06-15T14:51:24.000Z</pubTime>
-        
-        <tag>转载摘抄</tag>
-         
-        <tag>Intellij IDEA</tag>
-         
-         
-           
-             
-              <breadCrumb title="Intellij IDEA" url="http://www.chenruiwen.cn/categories/Intellij-IDEA/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbdo0008uifn85p3jw2s/</loc>
-    <lastmod>2018-07-21T10:49:08.000Z</lastmod>
+    <loc>http://www.chenruiwen.cn/Intellij-IDEA/Intellij-idea-skills-one/</loc>
+    <lastmod>2018-07-21T14:34:14.000Z</lastmod>
     <data>
         <display>
         <title>Intellij IDEA神器居然还有这些小技巧</title>
@@ -384,32 +218,94 @@
 
     
   <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbdd0000uifncl8zje5c/</loc>
-    <lastmod>2018-07-21T10:47:10.000Z</lastmod>
+    <loc>http://www.chenruiwen.cn/Intellij-IDEA/Intellij-idea-skills-two/</loc>
+    <lastmod>2018-07-21T14:33:45.000Z</lastmod>
     <data>
         <display>
-        <title>Dubbo扩展机制实现(一)之java SPI</title>
-        <pubTime>2018-06-04T13:31:24.000Z</pubTime>
+        <title>Intellij IDEA神器那些让人爱不释手的小技巧</title>
+        <pubTime>2018-06-15T14:51:24.000Z</pubTime>
         
-        <tag>java</tag>
+        <tag>转载摘抄</tag>
          
-        <tag>dubbo</tag>
+        <tag>Intellij IDEA</tag>
          
          
            
              
-              <breadCrumb title="dubbo" url="http://www.chenruiwen.cn/categories/dubbo/"/>
+              <breadCrumb title="Intellij IDEA" url="http://www.chenruiwen.cn/categories/Intellij-IDEA/"/>
           
         </display>
     </data>
     </url>
 
     
-    
+  <url>
+    <loc>http://www.chenruiwen.cn/java/java8-in-action/</loc>
+    <lastmod>2018-07-21T14:32:41.000Z</lastmod>
+    <data>
+        <display>
+        <title>java8实战学习总结</title>
+        <pubTime>2018-04-21T15:38:49.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>java8</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://www.chenruiwen.cn/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
     
   <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbe50011uifnri95nowd/</loc>
-    <lastmod>2018-07-14T01:29:59.000Z</lastmod>
+    <loc>http://www.chenruiwen.cn/java-concurrency/java-concurrency-base-threadsafe/</loc>
+    <lastmod>2018-07-21T14:32:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>java并发修行之基础篇：线程安全</title>
+        <pubTime>2018-07-09T14:16:24.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>java concurrency</tag>
+         
+         
+           
+             
+              <breadCrumb title="java-concurrency" url="http://www.chenruiwen.cn/categories/java-concurrency/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.chenruiwen.cn/mysql/mysql-optimizer/</loc>
+    <lastmod>2018-07-21T12:34:11.000Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL查询优化器</title>
+        <pubTime>2018-05-22T15:42:47.000Z</pubTime>
+        
+        <tag>mysql</tag>
+         
+         
+           
+             
+              <breadCrumb title="mysql" url="http://www.chenruiwen.cn/categories/mysql/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.chenruiwen.cn/spring-boot/spring-boot-use-log4j2/</loc>
+    <lastmod>2018-07-21T12:30:12.000Z</lastmod>
     <data>
         <display>
         <title>spring-boot集成Log4j2</title>
@@ -430,8 +326,74 @@
 
     
   <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbed001juifnzpywwr2t/</loc>
-    <lastmod>2018-07-03T23:48:49.000Z</lastmod>
+    <loc>http://www.chenruiwen.cn/spring-boot/spring-boot-use-mybatis/</loc>
+    <lastmod>2018-07-21T12:29:35.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring-boot集成mybatis</title>
+        <pubTime>2018-07-12T14:05:24.000Z</pubTime>
+        
+        <tag>spring-boot</tag>
+         
+        <tag>mybatis</tag>
+         
+         
+           
+             
+              <breadCrumb title="spring-boot" url="http://www.chenruiwen.cn/categories/spring-boot/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.chenruiwen.cn/spring-boot/spring-boot-use-rabbitmq/</loc>
+    <lastmod>2018-07-21T12:29:25.000Z</lastmod>
+    <data>
+        <display>
+        <title>spring-boot集成RabbitMQ</title>
+        <pubTime>2018-07-19T09:22:10.000Z</pubTime>
+        
+        <tag>spring-boot</tag>
+         
+        <tag>RabbitMQ</tag>
+         
+         
+           
+             
+              <breadCrumb title="spring-boot" url="http://www.chenruiwen.cn/categories/spring-boot/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.chenruiwen.cn/mysql/ubuntu-install-mysql-options/</loc>
+    <lastmod>2018-07-21T12:28:11.000Z</lastmod>
+    <data>
+        <display>
+        <title>ubuntu自定义安装Mysql全记录</title>
+        <pubTime>2018-04-22T12:18:49.000Z</pubTime>
+        
+        <tag>mysql</tag>
+         
+        <tag>运维</tag>
+         
+         
+           
+             
+              <breadCrumb title="mysql" url="http://www.chenruiwen.cn/categories/mysql/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.chenruiwen.cn/nginx/explain-nginx-server-config/</loc>
+    <lastmod>2018-07-21T12:26:23.000Z</lastmod>
     <data>
         <display>
         <title>从一份配置清单详解Nginx服务器配置</title>
@@ -452,33 +414,8 @@
 
     
   <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbec001iuifn4i7tb0mb/</loc>
-    <lastmod>2018-06-27T23:57:08.000Z</lastmod>
-    <data>
-        <display>
-        <title>ubuntu自定义安装Mysql全记录</title>
-        <pubTime>2018-04-22T12:18:49.000Z</pubTime>
-        
-        <tag>mysql</tag>
-         
-        <tag>运维</tag>
-         
-         
-           
-             
-              <breadCrumb title="mysql" url="http://www.chenruiwen.cn/categories/mysql/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-    
-    
-    
-  <url>
-    <loc>http://www.chenruiwen.cn/2018/cjjvavbef001nuifndofaacer/</loc>
-    <lastmod>2018-06-08T11:51:00.000Z</lastmod>
+    <loc>http://www.chenruiwen.cn/java/use-bean-validation-solve-params/</loc>
+    <lastmod>2018-07-21T12:26:07.000Z</lastmod>
     <data>
         <display>
         <title>使用 Bean Validation 解决业务中参数校验</title>
@@ -495,4 +432,69 @@
     </data>
     </url>
 
+    
+  <url>
+    <loc>http://www.chenruiwen.cn/blog/hexo-and-nginx-build-site/</loc>
+    <lastmod>2018-07-21T12:24:42.000Z</lastmod>
+    <data>
+        <display>
+        <title>基于hexo+nginx快速建站</title>
+        <pubTime>2018-04-18T15:10:32.000Z</pubTime>
+        
+        <tag>blog</tag>
+         
+         
+           
+             
+              <breadCrumb title="blog" url="http://www.chenruiwen.cn/categories/blog/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.chenruiwen.cn/tips/package-weibo-drawing-plugin/</loc>
+    <lastmod>2018-07-21T12:23:44.000Z</lastmod>
+    <data>
+        <display>
+        <title>微博图床插件打包</title>
+        <pubTime>2018-04-20T06:31:43.000Z</pubTime>
+        
+        <tag>tool</tag>
+         
+         
+           
+             
+              <breadCrumb title="tips" url="http://www.chenruiwen.cn/categories/tips/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.chenruiwen.cn/essay/first-blog/</loc>
+    <lastmod>2018-07-21T12:15:11.000Z</lastmod>
+    <data>
+        <display>
+        <title>开篇</title>
+        <pubTime>2018-04-15T02:24:03.000Z</pubTime>
+        
+        <tag>essay</tag>
+         
+         
+           
+             
+              <breadCrumb title="essay" url="http://www.chenruiwen.cn/categories/essay/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+    
+    
+    
 </urlset>
