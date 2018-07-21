@@ -2085,7 +2085,7 @@ hover {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ffffe8;
+  background: #87aca1;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3711,6 +3711,42 @@ code.description {
 }
 .icon-zhihu:before {
   content: "\e69a";
+}
+.recommended_posts {
+  margin-top: 15px;
+}
+.post-body .note.primary {
+  background-color: #f9f9f9;
+  border-left-color: #666;
+}
+.post-body .note:not(.no-icon) {
+  padding-left: 45px;
+}
+.post-body .note {
+  position: relative;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: initial;
+  border-left: 3px solid #eee;
+  background-color: #f9f9f9;
+  border-radius: 3px;
+}
+.post-body .note:not(.no-icon):before {
+  position: absolute;
+  font-family: FontAwesome;
+  font-size: larger;
+  top: 13px;
+  left: 15px;
+}
+.post-body .note.primary:not(.no-icon):before {
+  content: "⭐️";
+  color: #666;
+}
+h3.recommended {
+  margin-top: 5px !important;
+  border-left: none !important;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
 }
 @-moz-keyframes heartAnimate {
   0%, 100% {
