@@ -5,7 +5,7 @@
   
 
 <html class="theme-next muse use-motion" lang="zh-Hans">
-<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
 <style>
 blockquote {
   color: #888;
@@ -192,7 +192,7 @@ blockquote:after {
 <meta property="og:image" content="https://ww1.sinaimg.cn/large/87faef88ly1fr6nptfm2aj20ig0cqgml.jpg">
 <meta property="og:image" content="https://ww1.sinaimg.cn/large/87faef88ly1fr6n9im7d1j20kq060aam.jpg">
 <meta property="og:image" content="https://ww1.sinaimg.cn/large/87faef88ly1fr9re67q83j20vk0jugp9.jpg">
-<meta property="og:updated_time" content="2018-07-21T14:46:38.000Z">
+<meta property="og:updated_time" content="2018-07-22T00:56:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dubbo扩展机制实现(一)之java SPI">
 <meta name="twitter:description" content="前言在之前的文章Dubbo暴露服务过程中提出了问题：@SPI这些东西究竟是什么?在Dubbo开发手册之扩展点加载中有这么解释过：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  所以在分析Dubbo扩展机制前，先看看jdk的SPI。">
@@ -564,11 +564,12 @@ blockquote:after {
 <li>使用java.util.ServiceLoader来动态加载Service接口的实现类。</li>
 </ul>
 <h2 id="SPI示例"><a href="#SPI示例" class="headerlink" title="SPI示例"></a>SPI示例</h2><p><a href="https://github.com/crrrrrw/java-spi-demo" target="_blank" rel="noopener">代码地址传送门</a><br>目录结构如下:<br><img src="https://ww1.sinaimg.cn/large/87faef88ly1fr6nptfm2aj20ig0cqgml.jpg" alt=""><br>接口定义：</p>
-<pre><code>public interface HelloWorld {
+<pre><code class="java">public interface HelloWorld {
     void sayHello();
 }
-</code></pre><p>两个实现：</p>
-<pre><code>public class HelloWorldENimpl implements HelloWorld {
+</code></pre>
+<p>两个实现：</p>
+<pre><code class="java">public class HelloWorldENimpl implements HelloWorld {
     @Override
     public void sayHello() {
         System.out.println(&quot;hello,world!&quot;);
@@ -580,11 +581,12 @@ public class HelloWorldCNimpl implements HelloWorld {
         System.out.println(&quot;你好，世界！&quot;);
     }
 }
-</code></pre><p>配置服务发现，在META-INF/service目录下创建文件：<em>com.crw.demo.spi.HelloWorld</em>，内容为接口实现类全名：</p>
+</code></pre>
+<p>配置服务发现，在META-INF/service目录下创建文件：<em>com.crw.demo.spi.HelloWorld</em>，内容为接口实现类全名：</p>
 <pre><code>com.crw.demo.spi.impl.HelloWorldENimpl
 com.crw.demo.spi.impl.HelloWorldCNimpl
 </code></pre><p>编写调用端：</p>
-<pre><code>public class Run {
+<pre><code class="java">public class Run {
     public static void main(String[] args) {
         ServiceLoader&lt;HelloWorld&gt; loads = ServiceLoader.load(HelloWorld.class);
         for (HelloWorld load : loads) {
@@ -592,9 +594,10 @@ com.crw.demo.spi.impl.HelloWorldCNimpl
         }
     }
 }
-</code></pre><p>运行结果如下：<br><img src="https://ww1.sinaimg.cn/large/87faef88ly1fr6n9im7d1j20kq060aam.jpg" alt="">  </p>
+</code></pre>
+<p>运行结果如下：<br><img src="https://ww1.sinaimg.cn/large/87faef88ly1fr6n9im7d1j20kq060aam.jpg" alt="">  </p>
 <h2 id="ServiceLoader源码分析"><a href="#ServiceLoader源码分析" class="headerlink" title="ServiceLoader源码分析"></a>ServiceLoader源码分析</h2><p>从 <em>ServiceLoader.load(Class\&lt;S> service)</em> 方法点进去看一下</p>
-<pre><code>public static &lt;S&gt; ServiceLoader&lt;S&gt; load(Class&lt;S&gt; service) {
+<pre><code class="java">public static &lt;S&gt; ServiceLoader&lt;S&gt; load(Class&lt;S&gt; service) {
     ClassLoader cl = Thread.currentThread().getContextClassLoader(); // 获取类加载器
     return ServiceLoader.load(service, cl);
 }
@@ -610,10 +613,11 @@ public void reload() {
     providers.clear(); // 清空提供者缓存
     lookupIterator = new LazyIterator(service, loader); // 创建一个懒加载的提供者发现器
 }
-</code></pre><p>可以看到，实际上是交给了一个私有静态内部类处理new LazyIterator(service, loader); 通过名字就像是懒加载，所以我们看看什么时候类加载器会加载SPI实现服务。  </p>
+</code></pre>
+<p>可以看到，实际上是交给了一个私有静态内部类处理new LazyIterator(service, loader); 通过名字就像是懒加载，所以我们看看什么时候类加载器会加载SPI实现服务。  </p>
 <p>答案是遍历的时候。</p>
 <p>ServiceLoader实现了iterator接口:</p>
-<pre><code>public Iterator&lt;S&gt; iterator() {
+<pre><code class="java">public Iterator&lt;S&gt; iterator() {
     return new Iterator&lt;S&gt;() {
 
         Iterator&lt;Map.Entry&lt;String,S&gt;&gt; knownProviders
@@ -637,8 +641,9 @@ public void reload() {
 
     };
 }
-</code></pre><p>在客户端遍历的时候，首先调用了hasNext()方法，hasNext调用了LazyIterator.hasNext(),其实际上又调用了内部方法 <em>hasNextService()</em> :</p>
-<pre><code>private boolean hasNextService() {
+</code></pre>
+<p>在客户端遍历的时候，首先调用了hasNext()方法，hasNext调用了LazyIterator.hasNext(),其实际上又调用了内部方法 <em>hasNextService()</em> :</p>
+<pre><code class="java">private boolean hasNextService() {
     if (nextName != null) { // 如果有服务提供者名称，直接返回
         return true;
     }
@@ -663,9 +668,10 @@ public void reload() {
     nextName = pending.next(); // 服务提供者名称赋值
     return true;
 }
-</code></pre><p>看一眼解析完的结构，在遍历的时候会读取配置，把服务提供者名称一次性获取：<br><img src="https://ww1.sinaimg.cn/large/87faef88ly1fr9re67q83j20vk0jugp9.jpg" alt="">  </p>
+</code></pre>
+<p>看一眼解析完的结构，在遍历的时候会读取配置，把服务提供者名称一次性获取：<br><img src="https://ww1.sinaimg.cn/large/87faef88ly1fr9re67q83j20vk0jugp9.jpg" alt="">  </p>
 <p>接着，在客户端遍历的时候调用了next()方法，<br>LazyIterator.next()方法里做了如下事情</p>
-<pre><code>private S nextService() {
+<pre><code class="java">private S nextService() {
     if (!hasNextService()) // 如果配置里没有服务，则会抛异常
         throw new NoSuchElementException();
     String cn = nextName;
@@ -692,7 +698,8 @@ public void reload() {
     }
     throw new Error();          // This cannot happen
 }
-</code></pre><p>返回了一个服务提供者实例，就这样完成了一次SPI调用。</p>
+</code></pre>
+<p>返回了一个服务提供者实例，就这样完成了一次SPI调用。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇文章主要介绍了jdk SPI机制：</p>
 <ul>
 <li>java如何编写一个SPI服务的。</li>
@@ -899,7 +906,7 @@ public void reload() {
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -921,7 +928,7 @@ public void reload() {
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -959,6 +966,15 @@ public void reload() {
                         <i class="iconfont icon-zhihu"></i>知乎</a>
                   </span>
                 
+            </div>
+          
+
+          <!-- 添加音乐播放器 -->
+          
+            <div>
+              <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86
+                src="//music.163.com/outchain/player?type=2&id=18795423&auto=1&height=66">
+              </iframe>
             </div>
           
 
@@ -1026,7 +1042,7 @@ public void reload() {
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共40.8k字</span>
+  <span class="post-count">本站累计共43.3k字</span>
 </div>
 
 &nbsp;&nbsp;|&nbsp;&nbsp;本站总点击 <span id="busuanzi_value_site_pv"></span> 次

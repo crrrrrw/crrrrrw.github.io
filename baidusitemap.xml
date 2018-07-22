@@ -4,19 +4,108 @@
 
     
   <url>
-    <loc>http://www.chenruiwen.cn/mysql/mysql-select-performance-optimize/</loc>
-    <lastmod>2018-07-21T14:47:27.000Z</lastmod>
+    <loc>http://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/</loc>
+    <lastmod>2018-07-22T15:15:26.000Z</lastmod>
     <data>
         <display>
-        <title>MySQL查询性能优化</title>
-        <pubTime>2018-05-28T15:16:27.000Z</pubTime>
+        <title>spring-boot优雅的使用缓存</title>
+        <pubTime>2018-07-22T14:45:10.000Z</pubTime>
         
-        <tag>mysql</tag>
+        <tag>spring-boot</tag>
+         
+        <tag>cache</tag>
+         
+        <tag>guava</tag>
          
          
            
              
-              <breadCrumb title="mysql" url="http://www.chenruiwen.cn/categories/mysql/"/>
+              <breadCrumb title="spring-boot" url="http://www.chenruiwen.cn/categories/spring-boot/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+  <url>
+    <loc>http://www.chenruiwen.cn/java/java8-in-action/</loc>
+    <lastmod>2018-07-22T00:59:51.000Z</lastmod>
+    <data>
+        <display>
+        <title>java8实战学习总结</title>
+        <pubTime>2018-04-21T15:38:49.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>java8</tag>
+         
+         
+           
+             
+              <breadCrumb title="java" url="http://www.chenruiwen.cn/categories/java/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.chenruiwen.cn/dubbo/dubbo-service-export-process/</loc>
+    <lastmod>2018-07-22T00:58:57.000Z</lastmod>
+    <data>
+        <display>
+        <title>Dubbo暴露服务过程</title>
+        <pubTime>2018-05-20T07:11:24.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>dubbo</tag>
+         
+         
+           
+             
+              <breadCrumb title="dubbo" url="http://www.chenruiwen.cn/categories/dubbo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.chenruiwen.cn/dubbo/dubbo-spi-extensionloader/</loc>
+    <lastmod>2018-07-22T00:57:46.000Z</lastmod>
+    <data>
+        <display>
+        <title>Dubbo扩展机制实现(二)之浅析ExtensionLoader</title>
+        <pubTime>2018-06-11T14:47:08.000Z</pubTime>
+        
+        <tag>dubbo</tag>
+         
+         
+           
+             
+              <breadCrumb title="dubbo" url="http://www.chenruiwen.cn/categories/dubbo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.chenruiwen.cn/dubbo/dubbo-spi-extension-feature/</loc>
+    <lastmod>2018-07-22T00:57:07.000Z</lastmod>
+    <data>
+        <display>
+        <title>Dubbo扩展机制实现(三)之扩展点特性</title>
+        <pubTime>2018-06-25T14:22:22.000Z</pubTime>
+        
+        <tag>dubbo</tag>
+         
+         
+           
+             
+              <breadCrumb title="dubbo" url="http://www.chenruiwen.cn/categories/dubbo/"/>
           
         </display>
     </data>
@@ -25,7 +114,7 @@
     
   <url>
     <loc>http://www.chenruiwen.cn/dubbo/dubbo-spi-java/</loc>
-    <lastmod>2018-07-21T14:46:38.000Z</lastmod>
+    <lastmod>2018-07-22T00:56:21.000Z</lastmod>
     <data>
         <display>
         <title>Dubbo扩展机制实现(一)之java SPI</title>
@@ -39,6 +128,26 @@
            
              
               <breadCrumb title="dubbo" url="http://www.chenruiwen.cn/categories/dubbo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.chenruiwen.cn/mysql/mysql-select-performance-optimize/</loc>
+    <lastmod>2018-07-21T14:47:27.000Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL查询性能优化</title>
+        <pubTime>2018-05-28T15:16:27.000Z</pubTime>
+        
+        <tag>mysql</tag>
+         
+         
+           
+             
+              <breadCrumb title="mysql" url="http://www.chenruiwen.cn/categories/mysql/"/>
           
         </display>
     </data>
@@ -134,68 +243,6 @@
 
     
   <url>
-    <loc>http://www.chenruiwen.cn/dubbo/dubbo-spi-extension-feature/</loc>
-    <lastmod>2018-07-21T14:36:57.000Z</lastmod>
-    <data>
-        <display>
-        <title>Dubbo扩展机制实现(三)之扩展点特性</title>
-        <pubTime>2018-06-25T14:22:22.000Z</pubTime>
-        
-        <tag>dubbo</tag>
-         
-         
-           
-             
-              <breadCrumb title="dubbo" url="http://www.chenruiwen.cn/categories/dubbo/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.chenruiwen.cn/dubbo/dubbo-spi-extensionloader/</loc>
-    <lastmod>2018-07-21T14:35:51.000Z</lastmod>
-    <data>
-        <display>
-        <title>Dubbo扩展机制实现(二)之浅析ExtensionLoader</title>
-        <pubTime>2018-06-11T14:47:08.000Z</pubTime>
-        
-        <tag>dubbo</tag>
-         
-         
-           
-             
-              <breadCrumb title="dubbo" url="http://www.chenruiwen.cn/categories/dubbo/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.chenruiwen.cn/dubbo/dubbo-service-export-process/</loc>
-    <lastmod>2018-07-21T14:34:58.000Z</lastmod>
-    <data>
-        <display>
-        <title>Dubbo暴露服务过程</title>
-        <pubTime>2018-05-20T07:11:24.000Z</pubTime>
-        
-        <tag>java</tag>
-         
-        <tag>dubbo</tag>
-         
-         
-           
-             
-              <breadCrumb title="dubbo" url="http://www.chenruiwen.cn/categories/dubbo/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://www.chenruiwen.cn/Intellij-IDEA/Intellij-idea-skills-one/</loc>
     <lastmod>2018-07-21T14:34:14.000Z</lastmod>
     <data>
@@ -233,28 +280,6 @@
            
              
               <breadCrumb title="Intellij IDEA" url="http://www.chenruiwen.cn/categories/Intellij-IDEA/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.chenruiwen.cn/java/java8-in-action/</loc>
-    <lastmod>2018-07-21T14:32:41.000Z</lastmod>
-    <data>
-        <display>
-        <title>java8实战学习总结</title>
-        <pubTime>2018-04-21T15:38:49.000Z</pubTime>
-        
-        <tag>java</tag>
-         
-        <tag>java8</tag>
-         
-         
-           
-             
-              <breadCrumb title="java" url="http://www.chenruiwen.cn/categories/java/"/>
           
         </display>
     </data>
@@ -492,7 +517,6 @@
     </data>
     </url>
 
-    
     
     
     

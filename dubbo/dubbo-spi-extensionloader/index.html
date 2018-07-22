@@ -5,7 +5,7 @@
   
 
 <html class="theme-next muse use-motion" lang="zh-Hans">
-<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
 <style>
 blockquote {
   color: #888;
@@ -190,7 +190,7 @@ blockquote:after {
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ww1.sinaimg.cn/large/87faef88ly1ftgr9divhvj20go09cwf7.jpg">
 <meta property="og:image" content="https://ww1.sinaimg.cn/large/87faef88ly1frb9d0bvqmj216q0dcdk3.jpg">
-<meta property="og:updated_time" content="2018-07-21T14:35:51.000Z">
+<meta property="og:updated_time" content="2018-07-22T00:57:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dubbo扩展机制实现(二)之浅析ExtensionLoader">
 <meta name="twitter:description" content="前言之前的文章有介绍jdk SPI一些基本的使用和源码分析，既然dubbo也想使用SPI机制，为什么不直接使用jdk的SPI呢？ 上篇文章开头也提到了：  Dubbo 的扩展点加载从 JDK 标准的 SPI (Service Provider Interface) 扩展点发现机制加强而来。  看看官方文档上Dubbo加强了哪些地方：   本文简单分析下Dubbo实现扩展点机制的Extension">
@@ -583,7 +583,7 @@ blockquote:after {
     &lt;/dependency&gt;
 &lt;/dependencies&gt;
 </code></pre><p>第二步：以实现Protocol扩展为例，新建自定义实现:</p>
-<pre><code>/**
+<pre><code class="java">/**
  * MyRpcProtocol
  */
 public class MyRpcProtocol extends AbstractProtocol implements Protocol {
@@ -607,7 +607,8 @@ public class MyRpcProtocol extends AbstractProtocol implements Protocol {
         return null;
     }
 }
-</code></pre><p>第三步：在jar包里定义扩展点：META-INF/dubbo/internal/com.alibaba.dubbo.rpc.Protocol </p>
+</code></pre>
+<p>第三步：在jar包里定义扩展点：META-INF/dubbo/internal/com.alibaba.dubbo.rpc.Protocol </p>
 <pre><code>myrpc=com.alibaba.dubbo.rpc.protocol.myrpc.MyRpcProtocol
 </code></pre><p>大工完成，是不是so easy…</p>
 <p>第四步：测试。接下来测试一下，写一个提供者使用我们的自定义协议。<br>pom.xml里引用我们的自定义包</p>
@@ -652,7 +653,7 @@ Exception in thread &quot;main&quot; java.lang.IllegalArgumentException: exporte
 </ul>
 <h2 id="ExtensionLoader中的缓存"><a href="#ExtensionLoader中的缓存" class="headerlink" title="ExtensionLoader中的缓存"></a>ExtensionLoader中的缓存</h2><p>Dubbo官方文档也说了，扩展点的实例化并非一次性全部加载的。所以它可能是懒加载的，用到哪个实例化哪个扩展点，其次官方文档也说了Dubbo的扩展点性能提升不少，说到性能提升下意识就是想到万能的缓存。来看看 Dubbo的扩展点加载器 ExtensionLoader是怎么实现的提高性能的。</p>
 <p>ExtensionLoader各式各样的缓存：</p>
-<pre><code>public class ExtensionLoader&lt;T&gt; {
+<pre><code class="java">public class ExtensionLoader&lt;T&gt; {
     private static final ConcurrentMap&lt;Class&lt;?&gt;, ExtensionLoader&lt;?&gt;&gt; EXTENSION_LOADERS = new ConcurrentHashMap&lt;Class&lt;?&gt;, ExtensionLoader&lt;?&gt;&gt;();
     private static final ConcurrentMap&lt;Class&lt;?&gt;, Object&gt; EXTENSION_INSTANCES = new ConcurrentHashMap&lt;Class&lt;?&gt;, Object&gt;();
     private final ConcurrentMap&lt;Class&lt;?&gt;, String&gt; cachedNames = new ConcurrentHashMap&lt;Class&lt;?&gt;, String&gt;();
@@ -668,7 +669,8 @@ Exception in thread &quot;main&quot; java.lang.IllegalArgumentException: exporte
 
     ...
 }
-</code></pre><p>ExtensionLoader并没有提供public的构造器，获取一个ExtensionLoader实例是通过私有静态方法 <em>getExtensionLoader(Class<t> type)</t></em> 法获取。</p>
+</code></pre>
+<p>ExtensionLoader并没有提供public的构造器，获取一个ExtensionLoader实例是通过私有静态方法 <em>getExtensionLoader(Class<t> type)</t></em> 法获取。</p>
 <pre><code class="java">private ExtensionLoader(Class&lt;?&gt; type) {
     this.type = type;
     /** 
@@ -729,15 +731,17 @@ public static &lt;T&gt; ExtensionLoader&lt;T&gt; getExtensionLoader(Class&lt;T&g
 <p>这三个地方准备在下一篇扩展点自适应自动激活的分析时一并讲解一下。<br>这里可以看到Dubbo可以直接根据key就能获取到spi对象，而java的spi只能通过遍历然后根据if判断才能获取制定的spi对象。时间复杂度O(1) 比 O(n)快不少。而且用到了就加到缓存里，不用就不需要实例化，节约资源。</p>
 <p>问题二：<em>如果扩展点加载失败，连扩展点的名称都拿不到了。会把真正失败的原因吃掉</em></p>
 <p>答: Dubbo并不会这样，当拿不到扩展点的名字时，Dubbo会直接抛出异常：</p>
-<pre><code>public T getExtension(String name) {
+<pre><code class="java">public T getExtension(String name) {
     if (name == null || name.length() == 0)
         throw new IllegalArgumentException(&quot;Extension name == null&quot;);
     ...
 }
-</code></pre><p>其次，Dubbo非常好的一点，增加了默认值的设置。<br>比如：</p>
-<pre><code>@SPI(&quot;dubbo&quot;)
+</code></pre>
+<p>其次，Dubbo非常好的一点，增加了默认值的设置。<br>比如：</p>
+<pre><code class="java">@SPI(&quot;dubbo&quot;)
 public interface Protocol {}
-</code></pre><p>这样就默认提供了dubbo=xxx.xxx.XxxProtocol的s实现。如果使用默认的扩展点，可以这么做：</p>
+</code></pre>
+<p>这样就默认提供了dubbo=xxx.xxx.XxxProtocol的s实现。如果使用默认的扩展点，可以这么做：</p>
 <pre><code>Protocol protocol = ExtensionLoader.getExtensionLoader(Protocol.class).getDefaultExtension();
 </code></pre><p>这里的protocol对象即是com.alibaba.dubbo.rpc.protocol.dubbo.DubboProtocol</p>
 <p>问题三：<em>增加了对扩展点 IoC 和 AOP 的支持，一个扩展点可以直接 setter 注入其它扩展点</em></p>
@@ -946,7 +950,7 @@ public interface Protocol {}
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -968,7 +972,7 @@ public interface Protocol {}
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1006,6 +1010,15 @@ public interface Protocol {}
                         <i class="iconfont icon-zhihu"></i>知乎</a>
                   </span>
                 
+            </div>
+          
+
+          <!-- 添加音乐播放器 -->
+          
+            <div>
+              <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86
+                src="//music.163.com/outchain/player?type=2&id=18795423&auto=1&height=66">
+              </iframe>
             </div>
           
 
@@ -1073,7 +1086,7 @@ public interface Protocol {}
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共40.8k字</span>
+  <span class="post-count">本站累计共43.3k字</span>
 </div>
 
 &nbsp;&nbsp;|&nbsp;&nbsp;本站总点击 <span id="busuanzi_value_site_pv"></span> 次

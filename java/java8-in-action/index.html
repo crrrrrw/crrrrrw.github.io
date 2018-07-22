@@ -5,7 +5,7 @@
   
 
 <html class="theme-next muse use-motion" lang="zh-Hans">
-<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
 <style>
 blockquote {
   color: #888;
@@ -188,7 +188,7 @@ blockquote:after {
 <meta property="og:site_name" content="Chen RuiWen&#39;s Space">
 <meta property="og:description" content="前言java8作为一次大的升级，语法层面上有很大的改变，于是，来尝尝Java8的鲜。(ps: 哈哈，java10都出了，java8还不熟咋办呢~ 学学吧~)">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-21T14:32:41.000Z">
+<meta property="og:updated_time" content="2018-07-22T00:59:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java8实战学习总结">
 <meta name="twitter:description" content="前言java8作为一次大的升级，语法层面上有很大的改变，于是，来尝尝Java8的鲜。(ps: 哈哈，java10都出了，java8还不熟咋办呢~ 学学吧~)">
@@ -507,7 +507,7 @@ blockquote:after {
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  3,814 字
+                  3,815 字
                 </span>
               
 
@@ -696,9 +696,10 @@ Apple apple2 = biFunction.apply(155, &quot;green&quot;);
 </ul>
 <h6 id="2-3-1-归约和汇总"><a href="#2-3-1-归约和汇总" class="headerlink" title="2.3.1 归约和汇总"></a>2.3.1 归约和汇总</h6><p>Stream.reduce 与 Stream.collect的区别：<br>Stream.reduce，常用的方法有average, sum, min, max, and count，返回单个的结果值，并且reduce操作每处理一个元素总是创建一个新值。<br>Stream.collect修改现存的值，而不是每处理一个元素，创建一个新值。</p>
 <h6 id="2-3-2-数据分组"><a href="#2-3-2-数据分组" class="headerlink" title="2.3.2 数据分组"></a>2.3.2 数据分组</h6><ul>
-<li>一级分组<pre><code>Map&lt;Dish.Type, List&lt;Dish&gt;&gt; groupByType = menuList.stream().collect(groupingBy(Dish::getType));
-</code></pre></li>
-<li>多级分组<pre><code>Map&lt;Dish.Type, Map&lt;CaloricLevel, List&lt;Dish&gt;&gt;&gt; groupByTypeAndCalories = menuList.stream().collect(
+<li>一级分组<pre><code class="java">Map&lt;Dish.Type, List&lt;Dish&gt;&gt; groupByType = menuList.stream().collect(groupingBy(Dish::getType));
+</code></pre>
+</li>
+<li>多级分组<pre><code class="java">Map&lt;Dish.Type, Map&lt;CaloricLevel, List&lt;Dish&gt;&gt;&gt; groupByTypeAndCalories = menuList.stream().collect(
           groupingBy(Dish::getType,
                   groupingBy(dish -&gt; {
                       if (dish.getCalories() &lt;= 400) return CaloricLevel.DIET;
@@ -706,21 +707,25 @@ Apple apple2 = biFunction.apply(155, &quot;green&quot;);
                       else return CaloricLevel.FAT;
                   }))
   );
-</code></pre></li>
-<li>按子组收集数据<pre><code>Map&lt;Dish.Type, Long&gt; groupByTypeToCount = menuList.stream().collect(groupingBy(Dish::getType, counting()));
-</code></pre></li>
-<li>分区(分区是一种特殊的分组，结果map至少包含两个不同的分组——一个true，一个false。)<pre><code>Map&lt;Boolean, List&lt;Dish&gt;&gt; partitionByVegeterian =
+</code></pre>
+</li>
+<li>按子组收集数据<pre><code class="java">Map&lt;Dish.Type, Long&gt; groupByTypeToCount = menuList.stream().collect(groupingBy(Dish::getType, counting()));
+</code></pre>
+</li>
+<li>分区(分区是一种特殊的分组，结果map至少包含两个不同的分组——一个true，一个false。)<pre><code class="java">Map&lt;Boolean, List&lt;Dish&gt;&gt; partitionByVegeterian =
               menuList.stream().collect(partitioningBy(Dish::isVegetarian));
-</code></pre><h6 id="2-3-3-Collector接口"><a href="#2-3-3-Collector接口" class="headerlink" title="2.3.3 Collector接口"></a>2.3.3 Collector接口</h6></li>
+</code></pre>
+<h6 id="2-3-3-Collector接口"><a href="#2-3-3-Collector接口" class="headerlink" title="2.3.3 Collector接口"></a>2.3.3 Collector接口</h6></li>
 </ul>
-<pre><code>public interface Collector&lt;T, A, R&gt; {
+<pre><code class="java">public interface Collector&lt;T, A, R&gt; {
     Supplier&lt;A&gt; supplier()
     BiConsumer&lt;A, T&gt; accumulator()
     Function&lt;A, R&gt; finisher()
     BinaryOperator&lt;A&gt; combiner()
     Set&lt;Characteristics&gt; characteristics()
 }
-</code></pre><p>Collector接口的三个泛型：</p>
+</code></pre>
+<p>Collector接口的三个泛型：</p>
 <ul>
 <li>T：stream在调用collect方法收集前的数据类型</li>
 <li>A：A是T的累加器，遍历T的时候，会把T按照一定的方式添加到A中，换句话说就是把一些T通过一种方式变成A</li>
@@ -844,7 +849,7 @@ Apple apple2 = biFunction.apply(155, &quot;green&quot;);
 <li>DateTimeFormatter(DateTimeFormatter实例都是线程安全<br>的)</li>
 </ul>
 <h3 id="5-其他"><a href="#5-其他" class="headerlink" title="5. 其他"></a>5. 其他</h3><ol>
-<li>java类库标准base64编码使用方式:<br><code>`</code><br>final String text = “测试Abc123!!￥￥”;<br>final String encoded = Base64.getEncoder().encodeToString(text.getBytes(StandardCharsets.UTF_8));<br>System.out.println(encoded); // 5rWL6K+VQWJjMTIzISHvv6Xvv6U=<br>final String decoded = new String(Base64.getDecoder().decode(encoded), StandardCharsets.UTF_8);<br>System.out.println(decoded); // 测试Abc123!!￥￥</li>
+<li>java类库标准base64编码使用方式:<br><code>`</code>java<br>final String text = “测试Abc123!!￥￥”;<br>final String encoded = Base64.getEncoder().encodeToString(text.getBytes(StandardCharsets.UTF_8));<br>System.out.println(encoded); // 5rWL6K+VQWJjMTIzISHvv6Xvv6U=<br>final String decoded = new String(Base64.getDecoder().decode(encoded), StandardCharsets.UTF_8);<br>System.out.println(decoded); // 测试Abc123!!￥￥</li>
 </ol>
 <p>// url encode<br>final String url = “<a href="https://www.chenruiwen.cn/abc?foo=中文&amp;￥%&amp;bar=hello123&amp;baz=https://abc/def123&quot;">https://www.chenruiwen.cn/abc?foo=中文&amp;￥%&amp;bar=hello123&amp;baz=https://abc/def123&quot;</a>;<br>final String encoded2 = Base64.getUrlEncoder().encodeToString(url.getBytes(StandardCharsets.UTF_8));<br>System.out.println(encoded2); // aHR0cDovL3d3dy5qaW5odWkzNjUuY29tL2FiYz9mb2895Lit5paHJu-_pSUmYmFyPWhlbGxvMTIzJmJhej1odHRwOi8vYWJjL2RlZjEyMw==<br>final String decoded2 = new String(Base64.getUrlDecoder().decode(encoded2), StandardCharsets.UTF_8);<br>System.out.println(decoded2); // <a href="https://www.chenruiwen.cn/abc?foo=中文&amp;￥%&amp;bar=hello123&amp;baz=https://abc/def123">https://www.chenruiwen.cn/abc?foo=中文&amp;￥%&amp;bar=hello123&amp;baz=https://abc/def123</a></p>
 <p><code>`</code></p>
@@ -1053,7 +1058,7 @@ Apple apple2 = biFunction.apply(155, &quot;green&quot;);
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1075,7 +1080,7 @@ Apple apple2 = biFunction.apply(155, &quot;green&quot;);
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1113,6 +1118,15 @@ Apple apple2 = biFunction.apply(155, &quot;green&quot;);
                         <i class="iconfont icon-zhihu"></i>知乎</a>
                   </span>
                 
+            </div>
+          
+
+          <!-- 添加音乐播放器 -->
+          
+            <div>
+              <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86
+                src="//music.163.com/outchain/player?type=2&id=18795423&auto=1&height=66">
+              </iframe>
             </div>
           
 
@@ -1180,7 +1194,7 @@ Apple apple2 = biFunction.apply(155, &quot;green&quot;);
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共40.8k字</span>
+  <span class="post-count">本站累计共43.3k字</span>
 </div>
 
 &nbsp;&nbsp;|&nbsp;&nbsp;本站总点击 <span id="busuanzi_value_site_pv"></span> 次

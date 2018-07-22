@@ -5,7 +5,7 @@
   
 
 <html class="theme-next muse use-motion" lang="zh-Hans">
-<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
 <style>
 blockquote {
   color: #888;
@@ -199,7 +199,7 @@ blockquote:after {
 <meta property="og:image" content="https://ww1.sinaimg.cn/large/87faef88ly1fr5791ve67j208j05v74f.jpg">
 <meta property="og:image" content="https://ww1.sinaimg.cn/large/87faef88ly1fr5fm6vuzfj20i40dwwfj.jpg">
 <meta property="og:image" content="https://ww1.sinaimg.cn/large/87faef88ly1fr5gaayhnwj20y20lcq8q.jpg">
-<meta property="og:updated_time" content="2018-07-21T14:34:58.000Z">
+<meta property="og:updated_time" content="2018-07-22T00:58:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dubbo暴露服务过程">
 <meta name="twitter:description" content="前言dubbo框架也用了有一年了，一直没有详细的研究过dubbo源码。所以趁有时间好好学习体会dubbo的博大精深。本人才疏学浅，如有不对，请大神指点。这里使用的dubbo版本是2.6.1。 如何看源码？跟着Dubbo开发手册(中文)来喽。带着目的看源码，这次看dubbo是怎么暴露服务的。">
@@ -590,7 +590,7 @@ blockquote:after {
 }
 </code></pre>
 <p>暴露服务是调用 <strong>ServiceConfig#doExport</strong>方法</p>
-<pre><code>protected synchronized void doExport() {
+<pre><code class="java">protected synchronized void doExport() {
     if (unexported) {
         throw new IllegalStateException(&quot;Already unexported!&quot;);
     }
@@ -696,8 +696,9 @@ blockquote:after {
     ProviderModel providerModel = new ProviderModel(getUniqueServiceName(), this, ref);
     ApplicationModel.initProviderModel(getUniqueServiceName(), providerModel);
 }
-</code></pre><p><strong>ServiceConfig#doExportUrls</strong>暴露多个远程地址</p>
-<pre><code>private void doExportUrls() {
+</code></pre>
+<p><strong>ServiceConfig#doExportUrls</strong>暴露多个远程地址</p>
+<pre><code class="java">private void doExportUrls() {
     // dubbo支持多注册中心，所以这一步把 registry 配置信息封装为多个url,比如 registry://127.0.0.1:2181/com.alibaba.dubbo.registry.RegistryService?application=demo-provider...
     List&lt;URL&gt; registryURLs = loadRegistries(true);
     // dubbo是支持多协议的，将所有注册的url上对应的协议暴露出来
@@ -705,8 +706,9 @@ blockquote:after {
         doExportUrlsFor1Protocol(protocolConfig, registryURLs);
     }
 }
-</code></pre><p><strong>ServiceConfig#doExportUrlsFor1Protocol</strong>暴露单个地址</p>
-<pre><code>private void doExportUrlsFor1Protocol(ProtocolConfig protocolConfig, List&lt;URL&gt; registryURLs) {
+</code></pre>
+<p><strong>ServiceConfig#doExportUrlsFor1Protocol</strong>暴露单个地址</p>
+<pre><code class="java">private void doExportUrlsFor1Protocol(ProtocolConfig protocolConfig, List&lt;URL&gt; registryURLs) {
     String name = protocolConfig.getName();
     if (name == null || name.length() == 0) {
         name = &quot;dubbo&quot;;
@@ -822,13 +824,16 @@ blockquote:after {
         }
         this.urls.add(url);
     }
-</code></pre><h2 id="第二步，ProxyFactory-getInvoker"><a href="#第二步，ProxyFactory-getInvoker" class="headerlink" title="第二步，ProxyFactory.getInvoker"></a>第二步，ProxyFactory.getInvoker</h2><p>在<strong>ServiceConfig#doExportUrlsFor1Protocol</strong>暴露单个地址中的调用:</p>
-<pre><code>Invoker&lt;?&gt; invoker = proxyFactory.getInvoker(ref, (Class) interfaceClass, registryURL.addParameterAndEncoded(Constants.EXPORT_KEY, url.toFullString()));
-</code></pre><p>接下来看看这一行代码里做了什么。<br><img src="https://ww1.sinaimg.cn/large/87faef88ly1fr2vg3gsllj20rw02n0t2.jpg" alt=""></p>
+</code></pre>
+<h2 id="第二步，ProxyFactory-getInvoker"><a href="#第二步，ProxyFactory-getInvoker" class="headerlink" title="第二步，ProxyFactory.getInvoker"></a>第二步，ProxyFactory.getInvoker</h2><p>在<strong>ServiceConfig#doExportUrlsFor1Protocol</strong>暴露单个地址中的调用:</p>
+<pre><code class="java">Invoker&lt;?&gt; invoker = proxyFactory.getInvoker(ref, (Class) interfaceClass, registryURL.addParameterAndEncoded(Constants.EXPORT_KEY, url.toFullString()));
+</code></pre>
+<p>接下来看看这一行代码里做了什么。<br><img src="https://ww1.sinaimg.cn/large/87faef88ly1fr2vg3gsllj20rw02n0t2.jpg" alt=""></p>
 <p><em>问题二：这个 ProxyFactory$Adaptive是什么东东？</em><br>看看 proxyFactory 是怎么来的。</p>
-<pre><code>private static final ProxyFactory proxyFactory = ExtensionLoader.getExtensionLoader(ProxyFactory.class).getAdaptiveExtension();
-</code></pre><p>看来是和这个 ExtensionLoader 有关。看看接口:</p>
-<pre><code>@SPI(&quot;javassist&quot;)
+<pre><code class="java">private static final ProxyFactory proxyFactory = ExtensionLoader.getExtensionLoader(ProxyFactory.class).getAdaptiveExtension();
+</code></pre>
+<p>看来是和这个 ExtensionLoader 有关。看看接口:</p>
+<pre><code class="java">@SPI(&quot;javassist&quot;)
 public interface ProxyFactory {
     @Adaptive({Constants.PROXY_KEY})
     &lt;T&gt; T getProxy(Invoker&lt;T&gt; invoker) throws RpcException;
@@ -837,9 +842,10 @@ public interface ProxyFactory {
     &lt;T&gt; Invoker&lt;T&gt; getInvoker(T proxy, Class&lt;T&gt; type, URL url) throws RpcException;
 
 }
-</code></pre><p>@SPI 看起来和java SPI机制有关哦。先留个坑，回头再解决。</p>
+</code></pre>
+<p>@SPI 看起来和java SPI机制有关哦。先留个坑，回头再解决。</p>
 <p>但是通过我们debug发现，默认情况下 ProxyFactory的实现是 JavassistProxyFactory。</p>
-<pre><code>public &lt;T&gt; Invoker&lt;T&gt; getInvoker(T proxy, Class&lt;T&gt; type, URL url) {
+<pre><code class="java">public &lt;T&gt; Invoker&lt;T&gt; getInvoker(T proxy, Class&lt;T&gt; type, URL url) {
         // TODO Wrapper cannot handle this scenario correctly: the classname contains &#39;$&#39;
         final Wrapper wrapper = Wrapper.getWrapper(proxy.getClass().getName().indexOf(&#39;$&#39;) &lt; 0 ? proxy.getClass() : type);
         return new AbstractProxyInvoker&lt;T&gt;(proxy, type, url) {
@@ -851,12 +857,13 @@ public interface ProxyFactory {
             }
         };
     }
-</code></pre><p>正如官方文档所说:</p>
+</code></pre>
+<p>正如官方文档所说:</p>
 <blockquote>
 <p>首先 ServiceConfig 类拿到对外提供服务的实际类 ref(如：HelloWorldImpl),然后通过 ProxyFactory 类的 getInvoker 方法使用 ref 生成一个 AbstractProxyInvoker 实例，到这一步就完成具体服务到 Invoker 的转化。</p>
 </blockquote>
 <p>JavassistProxyFactory的getInvoker实现是先创建一个包装类Wrapper ，包装类来实现远程调用。简单看下这个包装类是什么吧，Wapper.makeWrapper(Class&lt;?&gt; c):<br><img src="https://ww1.sinaimg.cn/large/87faef88ly1fr3r8635d5j20tq0gojtu.jpg" alt=""><br>结果大致如下</p>
-<pre><code>public class Wrapper1 extends Wrapper {
+<pre><code class="java">public class Wrapper1 extends Wrapper {
     public static String[] pns;
     public static Map pts;
     public static String[] mns; // all method name array.
@@ -922,12 +929,15 @@ public interface ProxyFactory {
     }
 }
 
-</code></pre><h2 id="第三步，invoker转化为-exporter"><a href="#第三步，invoker转化为-exporter" class="headerlink" title="第三步，invoker转化为 exporter"></a>第三步，invoker转化为 exporter</h2><p>在<strong>ServiceConfig#doExportUrlsFor1Protocol</strong>暴露单个地址中的调用:</p>
-<pre><code>Exporter&lt;?&gt; exporter = protocol.export(wrapperInvoker);
-</code></pre><p>由代码可知，这里的 protocol 和第二步里的proxyFactory 一样</p>
-<pre><code>private static final Protocol protocol = ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
-</code></pre><p>我们再看看 Protocol接口，也是SPI机制：</p>
-<pre><code>@SPI(&quot;dubbo&quot;)
+</code></pre>
+<h2 id="第三步，invoker转化为-exporter"><a href="#第三步，invoker转化为-exporter" class="headerlink" title="第三步，invoker转化为 exporter"></a>第三步，invoker转化为 exporter</h2><p>在<strong>ServiceConfig#doExportUrlsFor1Protocol</strong>暴露单个地址中的调用:</p>
+<pre><code class="java">Exporter&lt;?&gt; exporter = protocol.export(wrapperInvoker);
+</code></pre>
+<p>由代码可知，这里的 protocol 和第二步里的proxyFactory 一样</p>
+<pre><code class="java">private static final Protocol protocol = ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
+</code></pre>
+<p>我们再看看 Protocol接口，也是SPI机制：</p>
+<pre><code class="java">@SPI(&quot;dubbo&quot;)
 public interface Protocol {
 
     int getDefaultPort();
@@ -941,9 +951,10 @@ public interface Protocol {
     void destroy();
 
 }
-</code></pre><p>凭感觉会使用dubbo协议调用到DubboProtocol。先debug,果不其然。看一眼调用栈：<br><img src="https://ww1.sinaimg.cn/large/87faef88ly1fr56why7woj20ic0awmyn.jpg" alt=""></p>
+</code></pre>
+<p>凭感觉会使用dubbo协议调用到DubboProtocol。先debug,果不其然。看一眼调用栈：<br><img src="https://ww1.sinaimg.cn/large/87faef88ly1fr56why7woj20ic0awmyn.jpg" alt=""></p>
 <p>从ServiceConfig之后，有两次协议调用，先是调用RegistryProtocol，然后RegistryProtocol里调用了DubboProtocol。<br>两次暴露协议前，都会调用到 ProtocolListenerWrapper 和 ProtocolFilterWrapper，看看这两个地方。<br><strong>ProtocolListenerWrapper#export</strong>方法</p>
-<pre><code>public &lt;T&gt; Exporter&lt;T&gt; export(Invoker&lt;T&gt; invoker) throws RpcException {
+<pre><code class="java">public &lt;T&gt; Exporter&lt;T&gt; export(Invoker&lt;T&gt; invoker) throws RpcException {
     // registry类型的Invoker，直接暴露
     if (Constants.REGISTRY_PROTOCOL.equals(invoker.getUrl().getProtocol())) {
         return protocol.export(invoker);
@@ -954,8 +965,9 @@ public interface Protocol {
             Collections.unmodifiableList(ExtensionLoader.getExtensionLoader(ExporterListener.class)
                     .getActivateExtension(invoker.getUrl(), Constants.EXPORTER_LISTENER_KEY)));
 }
-</code></pre><p><strong>ProtocolFilterWrapper#export</strong>方法</p>
-<pre><code>public &lt;T&gt; Exporter&lt;T&gt; export(Invoker&lt;T&gt; invoker) throws RpcException {
+</code></pre>
+<p><strong>ProtocolFilterWrapper#export</strong>方法</p>
+<pre><code class="java">public &lt;T&gt; Exporter&lt;T&gt; export(Invoker&lt;T&gt; invoker) throws RpcException {
     // registry类型的Invoker，直接暴露
     if (Constants.REGISTRY_PROTOCOL.equals(invoker.getUrl().getProtocol())) {
         return protocol.export(invoker);
@@ -963,9 +975,10 @@ public interface Protocol {
     //非Registry类型的Invoker需要先构建调用链，然后再暴露
     return protocol.export(buildInvokerChain(invoker, Constants.SERVICE_FILTER_KEY, Constants.PROVIDER));
 }
-</code></pre><p>这里构建调用链，控制invoker调用执行顺序，默认的filters如下图：<br><img src="https://ww1.sinaimg.cn/large/87faef88ly1fr5791ve67j208j05v74f.jpg" alt=""><br>暂且不谈Filter接口相关。</p>
+</code></pre>
+<p>这里构建调用链，控制invoker调用执行顺序，默认的filters如下图：<br><img src="https://ww1.sinaimg.cn/large/87faef88ly1fr5791ve67j208j05v74f.jpg" alt=""><br>暂且不谈Filter接口相关。</p>
 <p>按照调用顺序，先调用 <strong>RegistryProtocol#export</strong></p>
-<pre><code>public &lt;T&gt; Exporter&lt;T&gt; export(final Invoker&lt;T&gt; originInvoker) throws RpcException {
+<pre><code class="java">public &lt;T&gt; Exporter&lt;T&gt; export(final Invoker&lt;T&gt; originInvoker) throws RpcException {
     //export invoker
     final ExporterChangeableWrapper&lt;T&gt; exporter = doLocalExport(originInvoker); // 本地暴露
 
@@ -994,8 +1007,9 @@ public interface Protocol {
     //保证每次暴露服务返回一个新的exporter
     return new DestroyableExporter&lt;T&gt;(exporter, originInvoker, overrideSubscribeUrl, registedProviderUrl);
 }
-</code></pre><p>然后，上面的本地暴露 <strong>doLocalExport(originInvoker)</strong> 实际上是暴露的dubbo协议，看下DubboProtocol：</p>
-<pre><code>public &lt;T&gt; Exporter&lt;T&gt; export(Invoker&lt;T&gt; invoker) throws RpcException {
+</code></pre>
+<p>然后，上面的本地暴露 <strong>doLocalExport(originInvoker)</strong> 实际上是暴露的dubbo协议，看下DubboProtocol：</p>
+<pre><code class="java">public &lt;T&gt; Exporter&lt;T&gt; export(Invoker&lt;T&gt; invoker) throws RpcException {
     URL url = invoker.getUrl();
 
     // export service.
@@ -1022,7 +1036,8 @@ public interface Protocol {
     optimizeSerialization(url);// 优化序列化
     return exporter;
 }
-</code></pre><p>至此返回 exporter 之后，就完成了 invoker到exporter的转化。返回到ServiceConfig后服务发布过程到此结束。</p>
+</code></pre>
+<p>至此返回 exporter 之后，就完成了 invoker到exporter的转化。返回到ServiceConfig后服务发布过程到此结束。</p>
 <h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><h4 id="先看看之前遗留的两个问题："><a href="#先看看之前遗留的两个问题：" class="headerlink" title="先看看之前遗留的两个问题："></a>先看看之前遗留的两个问题：</h4><p><em>问题一：AbstractConfig 衍生的子类(ServiceConfig,ProviderConfig,RegistryConfig等) ，这么多的配置类是啥？</em> </p>
 <p><em>问题二：这个 ProxyFactory$Adaptive是什么东东？ 看看 proxyFactory 是怎么来的。</em></p>
 <h4 id="回答问题一："><a href="#回答问题一：" class="headerlink" title="回答问题一："></a>回答问题一：</h4><p>在dubbo-config模块中，代码里的解释已经很清楚了。这里简单介绍几个抽象配置:</p>
@@ -1035,7 +1050,7 @@ public interface Protocol {
 <p>再看一下dubbo-config-spring模块，与spring如何整合的：<br><img src="https://ww1.sinaimg.cn/large/87faef88ly1fr5fm6vuzfj20i40dwwfj.jpg" alt=""><br>spring.handlers文件里如是写道：</p>
 <pre><code>http\://code.alibabatech.com/schema/dubbo=com.alibaba.dubbo.config.spring.schema.DubboNamespaceHandler
 </code></pre><p>dubbo的schema标签的定义就在DubboNamespaceHandler类中:</p>
-<pre><code>public class DubboNamespaceHandler extends NamespaceHandlerSupport {
+<pre><code class="java">public class DubboNamespaceHandler extends NamespaceHandlerSupport {
 
     static {
         Version.checkDuplicate(DubboNamespaceHandler.class);
@@ -1055,11 +1070,12 @@ public interface Protocol {
     }
 
 }
-</code></pre><p>所以，一目了然。</p>
+</code></pre>
+<p>所以，一目了然。</p>
 <h4 id="回答问题二："><a href="#回答问题二：" class="headerlink" title="回答问题二："></a>回答问题二：</h4><p>这确实和dubbo插件机制有关，后面再单独写一篇文章分析。</p>
 <h4 id="提出问题三-dubbo怎么启动的？"><a href="#提出问题三-dubbo怎么启动的？" class="headerlink" title="提出问题三:dubbo怎么启动的？"></a>提出问题三:dubbo怎么启动的？</h4><p>本文的分析是直接从dubbo文档和启动日志起手的，那么dubbo是怎么从加载spring容器到ServiceConfig暴露服务的呢？</p>
 <p>再回顾看下dubbo暴露服务调用栈：<br><img src="https://ww1.sinaimg.cn/large/87faef88ly1fr5gaayhnwj20y20lcq8q.jpg" alt=""><br>还记得上面的 AbstractConfig家族的类图吗。ServiceBean继承自ServiceConfig。<br>ServiceBean实现了pplicationListener<contextrefreshedevent>接口，实现方法:</contextrefreshedevent></p>
-<pre><code>public void onApplicationEvent(ContextRefreshedEvent event) {
+<pre><code class="java">public void onApplicationEvent(ContextRefreshedEvent event) {
     if (isDelay() &amp;&amp; !isExported() &amp;&amp; !isUnexported()) {
         if (logger.isInfoEnabled()) {
             logger.info(&quot;The service ready on spring started. service: &quot; + getInterface());
@@ -1067,7 +1083,8 @@ public interface Protocol {
         export(); // 调用父类ServiceConfig的export()
     }
 }
-</code></pre><p>可见，在spring容器实例化bean完成后，发布ContextRefreshedEvent事件时调用ServiceConfig的export()方法。看看日志是不是有“The service ready on spring started. service:xxx”且在服务暴露日志前呢~</p>
+</code></pre>
+<p>可见，在spring容器实例化bean完成后，发布ContextRefreshedEvent事件时调用ServiceConfig的export()方法。看看日志是不是有“The service ready on spring started. service:xxx”且在服务暴露日志前呢~</p>
 <h2 id="后言"><a href="#后言" class="headerlink" title="后言"></a>后言</h2><p>至此，初步完成了dubbo服务暴露过程的解析（ServiceConfig-&gt; Invoker-&gt;Exporter），但是上面服务暴露过程有些内容并没有详细分析，比如</p>
 <ul>
 <li>本地暴露与远程暴露的细枝末节</li>
@@ -1281,7 +1298,7 @@ public interface Protocol {
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1303,7 +1320,7 @@ public interface Protocol {
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1341,6 +1358,15 @@ public interface Protocol {
                         <i class="iconfont icon-zhihu"></i>知乎</a>
                   </span>
                 
+            </div>
+          
+
+          <!-- 添加音乐播放器 -->
+          
+            <div>
+              <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86
+                src="//music.163.com/outchain/player?type=2&id=18795423&auto=1&height=66">
+              </iframe>
             </div>
           
 
@@ -1408,7 +1434,7 @@ public interface Protocol {
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共40.8k字</span>
+  <span class="post-count">本站累计共43.3k字</span>
 </div>
 
 &nbsp;&nbsp;|&nbsp;&nbsp;本站总点击 <span id="busuanzi_value_site_pv"></span> 次

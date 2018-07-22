@@ -5,7 +5,7 @@
   
 
 <html class="theme-next muse use-motion" lang="zh-Hans">
-<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
 <style>
 blockquote {
   color: #888;
@@ -190,7 +190,7 @@ blockquote:after {
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ww1.sinaimg.cn/large/87faef88ly1ftgrfhmr62j20jk0bfjrz.jpg">
 <meta property="og:image" content="https://ww1.sinaimg.cn/large/87faef88ly1fsl2mpd7q6j21cs0gm79z.jpg">
-<meta property="og:updated_time" content="2018-07-21T14:36:57.000Z">
+<meta property="og:updated_time" content="2018-07-22T00:57:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dubbo扩展机制实现(三)之扩展点特性">
 <meta name="twitter:description" content="前言上一篇简单分析了Dubbo的扩展点机制的实现，以及其与java spi的区别与改进。 本篇文章准备从扩展点特性的角度分析一下源码。">
@@ -686,14 +686,15 @@ blockquote:after {
 }
 </code></pre>
 <p><code>injectExtension(instance)</code>方法上面说明过了，是对扩展点自动装配。主要看<code>getAdaptiveExtensionClass()</code>方法：</p>
-<pre><code>private Class&lt;?&gt; getAdaptiveExtensionClass() {
+<pre><code class="java">private Class&lt;?&gt; getAdaptiveExtensionClass() {
     getExtensionClasses(); // 加载当前Extension的所有实现
     if (cachedAdaptiveClass != null) {
         return cachedAdaptiveClass;
     }
     return cachedAdaptiveClass = createAdaptiveExtensionClass(); // 动态创建自适应扩展类 Class 对象
 }
-</code></pre><p><code>getExtensionClasses()</code>是个很重要的方法，三种获取扩展点实现的方法都会用到这个方法，这个稍后说明一下。这里主要看<code>createAdaptiveExtensionClass()</code>:</p>
+</code></pre>
+<p><code>getExtensionClasses()</code>是个很重要的方法，三种获取扩展点实现的方法都会用到这个方法，这个稍后说明一下。这里主要看<code>createAdaptiveExtensionClass()</code>:</p>
 <pre><code class="java">private Class&lt;?&gt; createAdaptiveExtensionClass() {
     String code = createAdaptiveExtensionClassCode(); // 自适应扩展类拼装代码
     ClassLoader classLoader = findClassLoader();
@@ -1233,7 +1234,7 @@ public class CacheFilter implements Filter {}
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1255,7 +1256,7 @@ public class CacheFilter implements Filter {}
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-count">19</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1293,6 +1294,15 @@ public class CacheFilter implements Filter {}
                         <i class="iconfont icon-zhihu"></i>知乎</a>
                   </span>
                 
+            </div>
+          
+
+          <!-- 添加音乐播放器 -->
+          
+            <div>
+              <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86
+                src="//music.163.com/outchain/player?type=2&id=18795423&auto=1&height=66">
+              </iframe>
             </div>
           
 
@@ -1360,7 +1370,7 @@ public class CacheFilter implements Filter {}
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共40.8k字</span>
+  <span class="post-count">本站累计共43.3k字</span>
 </div>
 
 &nbsp;&nbsp;|&nbsp;&nbsp;本站总点击 <span id="busuanzi_value_site_pv"></span> 次
