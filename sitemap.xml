@@ -2,203 +2,210 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/</loc>
+    <loc>https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-redis/</loc>
     
-    <lastmod>2018-07-22T15:15:26.000Z</lastmod>
+    <lastmod>2018-07-25T12:40:59.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/photos/index.html</loc>
+    <loc>https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/</loc>
+    
+    <lastmod>2018-07-23T08:50:04.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn/photos/index.html</loc>
     
     <lastmod>2018-07-22T01:36:41.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/java/java8-in-action/</loc>
+    <loc>https://www.chenruiwen.cn/java/java8-in-action/</loc>
     
     <lastmod>2018-07-22T00:59:51.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/dubbo/dubbo-service-export-process/</loc>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-service-export-process/</loc>
     
     <lastmod>2018-07-22T00:58:57.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/dubbo/dubbo-spi-extensionloader/</loc>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-spi-extensionloader/</loc>
     
     <lastmod>2018-07-22T00:57:46.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/dubbo/dubbo-spi-extension-feature/</loc>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-spi-extension-feature/</loc>
     
     <lastmod>2018-07-22T00:57:07.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/dubbo/dubbo-spi-java/</loc>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-spi-java/</loc>
     
     <lastmod>2018-07-22T00:56:21.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/mysql/mysql-select-performance-optimize/</loc>
+    <loc>https://www.chenruiwen.cn/mysql/mysql-select-performance-optimize/</loc>
     
     <lastmod>2018-07-21T14:47:27.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/spring-boot/mybatis-plugins-pagehelper/</loc>
+    <loc>https://www.chenruiwen.cn/spring-boot/mybatis-plugins-pagehelper/</loc>
     
     <lastmod>2018-07-21T14:45:21.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/spring-boot/spring-boot-use-activemq/</loc>
+    <loc>https://www.chenruiwen.cn/spring-boot/spring-boot-use-activemq/</loc>
     
     <lastmod>2018-07-21T14:44:21.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/nginx/ubuntu-install-nginx-options/</loc>
+    <loc>https://www.chenruiwen.cn/nginx/ubuntu-install-nginx-options/</loc>
     
     <lastmod>2018-07-21T14:43:09.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/nginx/explain-nginx-config-file/</loc>
+    <loc>https://www.chenruiwen.cn/nginx/explain-nginx-config-file/</loc>
     
     <lastmod>2018-07-21T14:42:04.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/Intellij-IDEA/Intellij-idea-skills-one/</loc>
+    <loc>https://www.chenruiwen.cn/Intellij-IDEA/Intellij-idea-skills-one/</loc>
     
     <lastmod>2018-07-21T14:34:14.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/Intellij-IDEA/Intellij-idea-skills-two/</loc>
+    <loc>https://www.chenruiwen.cn/Intellij-IDEA/Intellij-idea-skills-two/</loc>
     
     <lastmod>2018-07-21T14:33:45.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/java-concurrency/java-concurrency-base-threadsafe/</loc>
+    <loc>https://www.chenruiwen.cn/java-concurrency/java-concurrency-base-threadsafe/</loc>
     
     <lastmod>2018-07-21T14:32:19.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/mysql/mysql-optimizer/</loc>
+    <loc>https://www.chenruiwen.cn/mysql/mysql-optimizer/</loc>
     
     <lastmod>2018-07-21T12:34:11.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/spring-boot/spring-boot-use-log4j2/</loc>
+    <loc>https://www.chenruiwen.cn/spring-boot/spring-boot-use-log4j2/</loc>
     
     <lastmod>2018-07-21T12:30:12.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/spring-boot/spring-boot-use-mybatis/</loc>
+    <loc>https://www.chenruiwen.cn/spring-boot/spring-boot-use-mybatis/</loc>
     
     <lastmod>2018-07-21T12:29:35.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/spring-boot/spring-boot-use-rabbitmq/</loc>
+    <loc>https://www.chenruiwen.cn/spring-boot/spring-boot-use-rabbitmq/</loc>
     
     <lastmod>2018-07-21T12:29:25.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/mysql/ubuntu-install-mysql-options/</loc>
+    <loc>https://www.chenruiwen.cn/mysql/ubuntu-install-mysql-options/</loc>
     
     <lastmod>2018-07-21T12:28:11.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/nginx/explain-nginx-server-config/</loc>
+    <loc>https://www.chenruiwen.cn/nginx/explain-nginx-server-config/</loc>
     
     <lastmod>2018-07-21T12:26:23.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/java/use-bean-validation-solve-params/</loc>
+    <loc>https://www.chenruiwen.cn/java/use-bean-validation-solve-params/</loc>
     
     <lastmod>2018-07-21T12:26:07.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/blog/hexo-and-nginx-build-site/</loc>
+    <loc>https://www.chenruiwen.cn/blog/hexo-and-nginx-build-site/</loc>
     
     <lastmod>2018-07-21T12:24:42.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/tips/package-weibo-drawing-plugin/</loc>
+    <loc>https://www.chenruiwen.cn/tips/package-weibo-drawing-plugin/</loc>
     
     <lastmod>2018-07-21T12:23:44.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/essay/first-blog/</loc>
+    <loc>https://www.chenruiwen.cn/essay/first-blog/</loc>
     
     <lastmod>2018-07-21T12:15:11.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/about/index_bak.html</loc>
+    <loc>https://www.chenruiwen.cn/about/index_bak.html</loc>
     
     <lastmod>2018-07-14T01:47:19.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/about/index.html</loc>
+    <loc>https://www.chenruiwen.cn/about/index.html</loc>
     
     <lastmod>2018-06-23T02:52:39.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/tags/index.html</loc>
+    <loc>https://www.chenruiwen.cn/tags/index.html</loc>
     
     <lastmod>2018-06-10T01:49:25.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.chenruiwen.cn/categories/index.html</loc>
+    <loc>https://www.chenruiwen.cn/categories/index.html</loc>
     
     <lastmod>2018-06-10T01:48:43.000Z</lastmod>
     

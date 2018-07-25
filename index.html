@@ -184,7 +184,7 @@ blockquote:after {
 <meta name="keywords" content="技术博客,Java,web开发,Linux,spring-boot,微服务">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Chen RuiWen&#39;s Space">
-<meta property="og:url" content="http://www.chenruiwen.cn/index.html">
+<meta property="og:url" content="https://www.chenruiwen.cn/index.html">
 <meta property="og:site_name" content="Chen RuiWen&#39;s Space">
 <meta property="og:description" content="面向Google编程的java程序猿折腾指北">
 <meta property="og:locale" content="zh-Hans">
@@ -220,7 +220,7 @@ blockquote:after {
 
 
 
-  <link rel="canonical" href="http://www.chenruiwen.cn/"/>
+  <link rel="canonical" href="https://www.chenruiwen.cn/"/>
 
 
 
@@ -410,7 +410,195 @@ blockquote:after {
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/">
+    <link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-redis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈瑞文">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/touxiang.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen RuiWen's Space">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/spring-boot/spring-boot-use-cache-redis/" itemprop="url">spring-boot优雅使用redis集中式缓存</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-25T20:26:10+08:00">
+                2018-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/spring-boot/" itemprop="url" rel="index">
+                    <span itemprop="name">spring-boot</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,264 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  11 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="https://ws1.sinaimg.cn/large/87faef88ly1ftmdpcaqwwj20dw08cq2w.jpg" alt=""></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前的文章<a href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/">spring-boot优雅的使用缓存</a>介绍了使用spring3开始的cache功能，<br>并使用<code>guava</code>实现完成一次示例。但是在分布式环境下，进程内的本地缓存是独立的，在一些场景并不使用。</p>
+<p>在现在互联网企业中广泛使用了一些中间件比如<code>memcache</code>,<code>redis</code>等来实现分布式环境下的集中式缓存。<br>本文将介绍spring-boot下集成redis做缓存的实现细节。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/spring-boot/spring-boot-use-cache-redis/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+    </div>
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈瑞文">
@@ -598,7 +786,7 @@ blockquote:after {
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/spring-boot/spring-boot-use-activemq/">
+    <link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-activemq/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈瑞文">
@@ -785,7 +973,7 @@ blockquote:after {
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/spring-boot/spring-boot-use-rabbitmq/">
+    <link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-rabbitmq/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈瑞文">
@@ -972,7 +1160,7 @@ blockquote:after {
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/spring-boot/mybatis-plugins-pagehelper/">
+    <link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/spring-boot/mybatis-plugins-pagehelper/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈瑞文">
@@ -1159,7 +1347,7 @@ blockquote:after {
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/spring-boot/spring-boot-use-log4j2/">
+    <link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-log4j2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈瑞文">
@@ -1347,7 +1535,7 @@ blockquote:after {
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/spring-boot/spring-boot-use-mybatis/">
+    <link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-mybatis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈瑞文">
@@ -1534,7 +1722,7 @@ blockquote:after {
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/java-concurrency/java-concurrency-base-threadsafe/">
+    <link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/java-concurrency/java-concurrency-base-threadsafe/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈瑞文">
@@ -1721,7 +1909,7 @@ blockquote:after {
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/nginx/explain-nginx-server-config/">
+    <link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/nginx/explain-nginx-server-config/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈瑞文">
@@ -1909,7 +2097,7 @@ blockquote:after {
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/dubbo/dubbo-spi-extension-feature/">
+    <link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/dubbo/dubbo-spi-extension-feature/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="陈瑞文">
@@ -2084,195 +2272,6 @@ blockquote:after {
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.chenruiwen.cn/Intellij-IDEA/Intellij-idea-skills-two/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="陈瑞文">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/touxiang.jpeg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chen RuiWen's Space">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/Intellij-IDEA/Intellij-idea-skills-two/" itemprop="url">Intellij IDEA神器那些让人爱不释手的小技巧</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-15T22:51:24+08:00">
-                2018-06-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Intellij-IDEA/" itemprop="url" rel="index">
-                    <span itemprop="name">Intellij IDEA</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,142 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  8 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><img src="https://ww1.sinaimg.cn/large/87faef88ly1ftgqaxwnn9j20sf0jrdlq.jpg" alt=""></p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Intellij IDEA，一个开发者甚爱的IDE，用了这么多年，其中有些小Tips你真的了解吗？Intellij IDEA神器小技巧第二弹来了！</p>
-<p>本文转载自<a href="https://blog.csdn.net/linsongbin1" target="_blank" rel="noopener">Sam哥哥聊技术</a>的技术博文。</p>
-<p>原文地址:<a href="https://blog.csdn.net/linsongbin1/article/details/80560332" target="_blank" rel="noopener">https://blog.csdn.net/linsongbin1/article/details/80560332</a><br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/Intellij-IDEA/Intellij-idea-skills-two/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    <div>
-      
-    </div>
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-  
-
-
-    
   </section>
 
   
@@ -2329,7 +2328,7 @@ blockquote:after {
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2351,7 +2350,7 @@ blockquote:after {
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">20</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -2449,7 +2448,7 @@ blockquote:after {
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">本站累计共43.3k字</span>
+  <span class="post-count">本站累计共45.6k字</span>
 </div>
 
 &nbsp;&nbsp;|&nbsp;&nbsp;本站总点击 <span id="busuanzi_value_site_pv"></span> 次
