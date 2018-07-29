@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.chenruiwen.cn/java-concurrency/java-concurrency-se-16-synchronized/</loc>
+    
+    <lastmod>2018-07-29T09:29:14.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-redis/</loc>
     
     <lastmod>2018-07-25T12:40:59.000Z</lastmod>

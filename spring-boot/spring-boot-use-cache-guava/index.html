@@ -1,4 +1,568 @@
-<!DOCTYPE html><html class="theme-next muse use-motion" lang="zh-Hans"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css"><style>blockquote{color:#888;background-color:#eae6f3;border-left:1rem solid #5236a0;padding:0 1.5rem;position:relative;font-family:Roboto,sans-serif}blockquote:after,blockquote:before{color:#392570;font-size:2.5rem;position:absolute;line-height:2.5rem}blockquote:before{content:"\201C";left:-1rem;top:0}blockquote:after{content:"\201D";right:0;bottom:-1rem}</style><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script><link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"><style>.pace .pace-progress{background:#1e92fb;height:3px}.pace .pace-progress-inner{box-shadow:0 0 10px #1e92fb,0 0 5px #1e92fb}.pace .pace-activity{border-top-color:#1e92fb;border-left-color:#1e92fb}</style><meta name="theme-color" content="#222"><script src="/lib/pace/pace.min.js?v=1.0.2"></script><link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"><link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"><link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-gui.ico?v=5.1.4"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-32x32-gui.ico?v=5.1.4"><link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222"><meta name="keywords" content="spring-boot,cache,guava"><link rel="alternate" href="/atom.xml" title="Chen RuiWen's Space" type="application/atom+xml"><meta name="description" content="前言如果说如何优化你的网站或者应用，大部分同学第一的反应可能就是缓存。缓存不是万能的，但是当用户和访问量加大的情况下，缓存是提高应用吞吐量非常有效的手段。 本文主要介绍如果通过spring-boot使用本地缓存，以guava cache为例。其实从spring3开始就已经提供了基于注解的缓存支持，其原理还是基于aop的思想，降低了缓存代码对我们应用代码的侵入。"><meta name="keywords" content="spring-boot,cache,guava"><meta property="og:type" content="article"><meta property="og:title" content="spring-boot优雅的使用缓存"><meta property="og:url" content="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/index.html"><meta property="og:site_name" content="Chen RuiWen&#39;s Space"><meta property="og:description" content="前言如果说如何优化你的网站或者应用，大部分同学第一的反应可能就是缓存。缓存不是万能的，但是当用户和访问量加大的情况下，缓存是提高应用吞吐量非常有效的手段。 本文主要介绍如果通过spring-boot使用本地缓存，以guava cache为例。其实从spring3开始就已经提供了基于注解的缓存支持，其原理还是基于aop的思想，降低了缓存代码对我们应用代码的侵入。"><meta property="og:locale" content="zh-Hans"><meta property="og:image" content="https://ww1.sinaimg.cn/large/87faef88ly1ftj1n4e5e2j20iz075q2y.jpg"><meta property="og:image" content="https://ww1.sinaimg.cn/large/87faef88ly1ftinmijpmuj21cw0pkjzh.jpg"><meta property="og:updated_time" content="2018-07-23T08:50:04.000Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="spring-boot优雅的使用缓存"><meta name="twitter:description" content="前言如果说如何优化你的网站或者应用，大部分同学第一的反应可能就是缓存。缓存不是万能的，但是当用户和访问量加大的情况下，缓存是提高应用吞吐量非常有效的手段。 本文主要介绍如果通过spring-boot使用本地缓存，以guava cache为例。其实从spring3开始就已经提供了基于注解的缓存支持，其原理还是基于aop的思想，降低了缓存代码对我们应用代码的侵入。"><meta name="twitter:image" content="https://ww1.sinaimg.cn/large/87faef88ly1ftj1n4e5e2j20iz075q2y.jpg"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Muse",version:"5.1.4",sidebar:{position:"left",display:"post",offset:12,b2t:!1,scrollpercent:!0,onmobile:!0},fancybox:!0,tabs:!0,motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"0",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/"><title>spring-boot优雅的使用缓存 | Chen RuiWen's Space</title></head><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div> <a href="https://github.com/crrrrrw"><img style="position:absolute;top:0;right:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">Chen RuiWen's Space</span><span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle">Life is real, life is earnest</p></div><div class="site-nav-toggle"> <button><span class="btn-bar"></span><span class="btn-bar"></span><span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br> 首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i><br> 关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br> 标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br> 分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br> 归档</a></li><li class="menu-item menu-item-photos"><a href="/photos/" rel="section"><i class="menu-item-icon fa fa-fw fa-image"></i><br> 相册</a></li><li class="menu-item menu-item-search"><a href="javascript:;" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br> 搜索</a></li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i></span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"> <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="陈瑞文"><meta itemprop="description" content=""><meta itemprop="image" content="/images/touxiang.jpeg"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Chen RuiWen's Space"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">spring-boot优雅的使用缓存</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span> <span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-22T22:45:10+08:00">2018-07-22</time></span> <span id="busuanzi_container_page_pv">&nbsp;&nbsp;|&nbsp;&nbsp;阅读量<span id="busuanzi_value_page_pv"></span> 次</span> <span class="post-category"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span> <span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/spring-boot/" itemprop="url" rel="index"><span itemprop="name">spring-boot</span></a></span></span> <span class="post-comments-count"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-comment-o"></i></span><a href="/spring-boot/spring-boot-use-cache-guava/#comments" itemprop="discussionUrl"><span class="post-comments-count gitment-comments-count" data-xid="/spring-boot/spring-boot-use-cache-guava/" itemprop="commentsCount"></span></a></span><div class="post-wordcount"><span class="post-meta-item-icon"><i class="fa fa-file-word-o"></i></span> <span class="post-meta-item-text">字数统计&#58;</span> <span title="字数统计">2,522 字</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-clock-o"></i></span> <span class="post-meta-item-text">阅读时长 &asymp;</span> <span title="阅读时长">11 分钟</span></div></div></header><div class="post-body" itemprop="articleBody"><p><img src="https://ww1.sinaimg.cn/large/87faef88ly1ftj1n4e5e2j20iz075q2y.jpg" alt=""></p><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>如果说如何优化你的网站或者应用，大部分同学第一的反应可能就是<code>缓存</code>。缓存不是万能的，但是当用户和访问量加大的情况下，缓存是提高应用吞吐量非常有效的手段。</p><p>本文主要介绍如果通过spring-boot使用本地缓存，以<code>guava cache</code>为例。其实从spring3开始就已经提供了基于注解的缓存支持，其原理还是基于<code>aop</code>的思想，降低了缓存代码对我们应用代码的侵入。</p><a id="more"></a><h2 id="spring-cache相关接口及注解"><a href="#spring-cache相关接口及注解" class="headerlink" title="spring cache相关接口及注解"></a>spring cache相关接口及注解</h2><p>从spring3开始，spring支持基于注解的缓存组件。其核心接口俩个，在<code>spring-context</code>包中:</p><ul><li>Cache</li><li>CacheManager</li></ul><p>spring中实现优雅使用缓存的方式还是基于注解的方式，其中常用的一些注解也是在<code>spring-context</code>包中。</p><p>接下来分别看下这些接口。</p><h3 id="Cache-接口"><a href="#Cache-接口" class="headerlink" title="Cache 接口"></a>Cache 接口</h3><p><code>Cache</code>接口，提供操作缓存的定义(比如放入、读取、清理等。</p><p>其中<code>Cache</code>接口Spring也提供了很多默认的实现，它们在<code>spring-context</code>包和<code>spring-context-support</code>包中:<br><img src="https://ww1.sinaimg.cn/large/87faef88ly1ftinmijpmuj21cw0pkjzh.jpg" alt=""></p><p><code>Cache</code>接口:</p><pre><code class="java">public interface Cache {
+<!DOCTYPE html>
+
+
+
+  
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
+<style>
+blockquote {
+  color: #888;
+  background-color: #eae6f3;
+  border-left: 1rem solid #5236a0;
+  padding: 0 1.5rem;
+  position: relative;
+  font-family: 'Roboto', sans-serif;
+}
+
+blockquote:before,
+blockquote:after {
+  color: #392570;
+  font-size: 2.5rem;
+  position: absolute;
+  line-height: 2.5rem;
+}
+
+blockquote:before {
+  content: "\201C";
+  left: -1rem;
+  top: 0;
+}
+
+blockquote:after {
+  content: "\201D";
+  right: 0;
+  bottom: -1rem;
+}
+</style>
+
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-gui.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-32x32-gui.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="spring-boot,cache,guava" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Chen RuiWen's Space" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="前言如果说如何优化你的网站或者应用，大部分同学第一的反应可能就是缓存。缓存不是万能的，但是当用户和访问量加大的情况下，缓存是提高应用吞吐量非常有效的手段。 本文主要介绍如果通过spring-boot使用本地缓存，以guava cache为例。其实从spring3开始就已经提供了基于注解的缓存支持，其原理还是基于aop的思想，降低了缓存代码对我们应用代码的侵入。">
+<meta name="keywords" content="spring-boot,cache,guava">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring-boot优雅的使用缓存">
+<meta property="og:url" content="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/index.html">
+<meta property="og:site_name" content="Chen RuiWen&#39;s Space">
+<meta property="og:description" content="前言如果说如何优化你的网站或者应用，大部分同学第一的反应可能就是缓存。缓存不是万能的，但是当用户和访问量加大的情况下，缓存是提高应用吞吐量非常有效的手段。 本文主要介绍如果通过spring-boot使用本地缓存，以guava cache为例。其实从spring3开始就已经提供了基于注解的缓存支持，其原理还是基于aop的思想，降低了缓存代码对我们应用代码的侵入。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ww1.sinaimg.cn/large/87faef88ly1ftj1n4e5e2j20iz075q2y.jpg">
+<meta property="og:image" content="https://ww1.sinaimg.cn/large/87faef88ly1ftinmijpmuj21cw0pkjzh.jpg">
+<meta property="og:updated_time" content="2018-07-23T08:50:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="spring-boot优雅的使用缓存">
+<meta name="twitter:description" content="前言如果说如何优化你的网站或者应用，大部分同学第一的反应可能就是缓存。缓存不是万能的，但是当用户和访问量加大的情况下，缓存是提高应用吞吐量非常有效的手段。 本文主要介绍如果通过spring-boot使用本地缓存，以guava cache为例。其实从spring3开始就已经提供了基于注解的缓存支持，其原理还是基于aop的思想，降低了缓存代码对我们应用代码的侵入。">
+<meta name="twitter:image" content="https://ww1.sinaimg.cn/large/87faef88ly1ftj1n4e5e2j20iz075q2y.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/"/>
+
+
+
+
+
+  <title>spring-boot优雅的使用缓存 | Chen RuiWen's Space</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/crrrrrw"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Chen RuiWen's Space</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is real, life is earnest</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-photos">
+          <a href="/photos/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-image"></i> <br />
+            
+            相册
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈瑞文">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/touxiang.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen RuiWen's Space">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">spring-boot优雅的使用缓存</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-22T22:45:10+08:00">
+                2018-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span id="busuanzi_container_page_pv">&nbsp;&nbsp;|&nbsp;&nbsp;阅读量 <span id="busuanzi_value_page_pv"></span> 次</span>
+          
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/spring-boot/" itemprop="url" rel="index">
+                    <span itemprop="name">spring-boot</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/spring-boot/spring-boot-use-cache-guava/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/spring-boot/spring-boot-use-cache-guava/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,522 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  11 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://ww1.sinaimg.cn/large/87faef88ly1ftj1n4e5e2j20iz075q2y.jpg" alt=""></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>如果说如何优化你的网站或者应用，大部分同学第一的反应可能就是<code>缓存</code>。缓存不是万能的，但是当用户和访问量加大的情况下，缓存是提高应用吞吐量非常有效的手段。</p>
+<p>本文主要介绍如果通过spring-boot使用本地缓存，以<code>guava cache</code>为例。其实从spring3开始就已经提供了基于注解的缓存支持，其原理还是基于<code>aop</code>的思想，降低了缓存代码对我们应用代码的侵入。</p>
+<a id="more"></a>
+<h2 id="spring-cache相关接口及注解"><a href="#spring-cache相关接口及注解" class="headerlink" title="spring cache相关接口及注解"></a>spring cache相关接口及注解</h2><p>从spring3开始，spring支持基于注解的缓存组件。其核心接口俩个，在<code>spring-context</code>包中:</p>
+<ul>
+<li>Cache</li>
+<li>CacheManager</li>
+</ul>
+<p>spring中实现优雅使用缓存的方式还是基于注解的方式，其中常用的一些注解也是在<code>spring-context</code>包中。</p>
+<p>接下来分别看下这些接口。</p>
+<h3 id="Cache-接口"><a href="#Cache-接口" class="headerlink" title="Cache 接口"></a>Cache 接口</h3><p><code>Cache</code>接口，提供操作缓存的定义(比如放入、读取、清理等。</p>
+<p>其中<code>Cache</code>接口Spring也提供了很多默认的实现，它们在<code>spring-context</code>包和<code>spring-context-support</code>包中:
+<img src="https://ww1.sinaimg.cn/large/87faef88ly1ftinmijpmuj21cw0pkjzh.jpg" alt=""></p>
+<p><code>Cache</code>接口:</p>
+<pre><code class="java">public interface Cache {
 
     // cacheName，缓存的名字，默认实现中一般是CacheManager创建Cache的bean时传入cacheName
     String getName();
@@ -50,7 +614,9 @@
         }
     }
 }
-</code></pre><h3 id="CacheManager-接口"><a href="#CacheManager-接口" class="headerlink" title="CacheManager 接口"></a>CacheManager 接口</h3><p>主要负责缓存<code>Cache</code>接口的管理，提供了根据<code>cacheName</code>获取缓存的接口以及获取所有<code>cacheName</code>的接口。</p><pre><code class="java">public interface CacheManager {
+</code></pre>
+<h3 id="CacheManager-接口"><a href="#CacheManager-接口" class="headerlink" title="CacheManager 接口"></a>CacheManager 接口</h3><p>主要负责缓存<code>Cache</code>接口的管理，提供了根据<code>cacheName</code>获取缓存的接口以及获取所有<code>cacheName</code>的接口。</p>
+<pre><code class="java">public interface CacheManager {
 
     // 通过cacheName创建Cache的实现bean，具体实现中需要存储已创建的Cache实现bean，避免重复创建，也避免内存缓存对象（如Caffeine）重新创建后原来缓存内容丢失的情况
     Cache getCache(String name);
@@ -58,7 +624,10 @@
     // 返回所有的cacheName
     Collection&lt;String&gt; getCacheNames();
 }
-</code></pre><h3 id="cache-相关注解"><a href="#cache-相关注解" class="headerlink" title="cache 相关注解"></a>cache 相关注解</h3><h4 id="EnableCaching"><a href="#EnableCaching" class="headerlink" title="@EnableCaching"></a>@EnableCaching</h4><p>启用Cache注解支持的总开关。</p><h4 id="CachePut"><a href="#CachePut" class="headerlink" title="@CachePut"></a>@CachePut</h4><p>应用到写数据的方法上，如新增/修改方法，调用方法时会自动把相应的数据放入缓存。</p><pre><code class="java">Target({ElementType.METHOD, ElementType.TYPE})
+</code></pre>
+<h3 id="cache-相关注解"><a href="#cache-相关注解" class="headerlink" title="cache 相关注解"></a>cache 相关注解</h3><h4 id="EnableCaching"><a href="#EnableCaching" class="headerlink" title="@EnableCaching"></a>@EnableCaching</h4><p>启用Cache注解支持的总开关。</p>
+<h4 id="CachePut"><a href="#CachePut" class="headerlink" title="@CachePut"></a>@CachePut</h4><p>应用到写数据的方法上，如新增/修改方法，调用方法时会自动把相应的数据放入缓存。</p>
+<pre><code class="java">Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
@@ -89,7 +658,10 @@ public @interface CachePut {
     // 满足条件时不更新缓存，支持SpEL表达式，只在调用方法后判断
     String unless() default &quot;&quot;;
 }
-</code></pre><h4 id="CacheEvict"><a href="#CacheEvict" class="headerlink" title="@CacheEvict"></a>@CacheEvict</h4><p>应用到移除数据的方法上，如删除方法，调用方法时会从缓存中移除相应的数据。</p><p>大部分定义可参考上面<code>@CachePut</code>注解，新增了2个属性:</p><pre><code class="java">@Target({ElementType.METHOD, ElementType.TYPE})
+</code></pre>
+<h4 id="CacheEvict"><a href="#CacheEvict" class="headerlink" title="@CacheEvict"></a>@CacheEvict</h4><p>应用到移除数据的方法上，如删除方法，调用方法时会从缓存中移除相应的数据。</p>
+<p>大部分定义可参考上面<code>@CachePut</code>注解，新增了2个属性:</p>
+<pre><code class="java">@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
@@ -103,7 +675,10 @@ public @interface CacheEvict {
     // 是否在调用方法之前清除缓存
     boolean beforeInvocation() default false;
 }
-</code></pre><h4 id="Cacheable"><a href="#Cacheable" class="headerlink" title="@Cacheable"></a>@Cacheable</h4><p>应用到读取数据的方法上，即可缓存的方法，如查找方法：先从缓存中读取，如果没有再调用方法获取数据，然后把数据添加到缓存中。</p><p>大部分定义可参考上面<code>@CachePut</code>注解，新增了1个属性:</p><pre><code class="java">@Target({ElementType.METHOD, ElementType.TYPE})
+</code></pre>
+<h4 id="Cacheable"><a href="#Cacheable" class="headerlink" title="@Cacheable"></a>@Cacheable</h4><p>应用到读取数据的方法上，即可缓存的方法，如查找方法：先从缓存中读取，如果没有再调用方法获取数据，然后把数据添加到缓存中。</p>
+<p>大部分定义可参考上面<code>@CachePut</code>注解，新增了1个属性:</p>
+<pre><code class="java">@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
@@ -113,7 +688,9 @@ public @interface Cacheable {
     // 回源到实际方法获取数据时，是否要保持同步，如果为false，调用的是Cache.get(key)方法；如果为true，调用的是Cache.get(key, Callable)方法
     boolean sync() default false;
 }
-</code></pre><h4 id="Caching"><a href="#Caching" class="headerlink" title="@Caching"></a>@Caching</h4><p>提供了注解的组合模式，可以在此注解中配置多个Cache注解。</p><pre><code class="java">@Target({ElementType.METHOD, ElementType.TYPE})
+</code></pre>
+<h4 id="Caching"><a href="#Caching" class="headerlink" title="@Caching"></a>@Caching</h4><p>提供了注解的组合模式，可以在此注解中配置多个Cache注解。</p>
+<pre><code class="java">@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
@@ -127,7 +704,24 @@ public @interface Caching {
     // @CacheEvict 数组，可以配置多个CacheEvict注解，实现同时删除多个缓存
     CacheEvict[] evict() default {};
 }
-</code></pre><h2 id="guava-cache"><a href="#guava-cache" class="headerlink" title="guava cache"></a>guava cache</h2><p><code>guava</code>是Google提供的开源的java核心工具类库。其中包含很多好用的工具类，我们这里主要使用<code>guava</code>中的<code>cache</code>包。</p><p><em>为什么要使用guava的cache而不是简单的使用ConcurrentMap呢？或者说这二者的区别在哪？</em></p><p>答：Guava Cache与ConcurrentMap很相似，它们之间的一个根本区别在于缓存可以回收存储的元素。</p><p>guava提供了不同方式的缓存回收策略：</p><ul><li>基于容量的回收</li><li>定时回收</li><li>基于引用的回收</li></ul><h2 id="在spring-boot中使用guava-cache"><a href="#在spring-boot中使用guava-cache" class="headerlink" title="在spring-boot中使用guava cache"></a>在spring-boot中使用guava cache</h2><p>三步完成在spring-boot中使用guava cache:</p><ul><li>maven依赖</li><li>配置缓存类型</li><li>代码中使用guava cache并单元测试</li></ul><h3 id="maven依赖"><a href="#maven依赖" class="headerlink" title="maven依赖"></a>maven依赖</h3><p>maven依赖特别少，由于<code>spring-boot-starter</code>默认并没有依赖上<code>spring-context-support</code>包，所以我们需要依赖上它。如下，引入<code>spring-boot-starter-cache</code>即可。以及引入本地缓存要用到的<code>guava</code>。</p><pre><code>&lt;!-- cache --&gt;
+</code></pre>
+<h2 id="guava-cache"><a href="#guava-cache" class="headerlink" title="guava cache"></a>guava cache</h2><p><code>guava</code>是Google提供的开源的java核心工具类库。其中包含很多好用的工具类，我们这里主要使用<code>guava</code>中的<code>cache</code>包。</p>
+<p><em>为什么要使用guava的cache而不是简单的使用ConcurrentMap呢？或者说这二者的区别在哪？</em></p>
+<p>答：Guava Cache与ConcurrentMap很相似，它们之间的一个根本区别在于缓存可以回收存储的元素。</p>
+<p>guava提供了不同方式的缓存回收策略：</p>
+<ul>
+<li>基于容量的回收</li>
+<li>定时回收</li>
+<li>基于引用的回收</li>
+</ul>
+<h2 id="在spring-boot中使用guava-cache"><a href="#在spring-boot中使用guava-cache" class="headerlink" title="在spring-boot中使用guava cache"></a>在spring-boot中使用guava cache</h2><p>三步完成在spring-boot中使用guava cache:</p>
+<ul>
+<li>maven依赖</li>
+<li>配置缓存类型</li>
+<li>代码中使用guava cache并单元测试</li>
+</ul>
+<h3 id="maven依赖"><a href="#maven依赖" class="headerlink" title="maven依赖"></a>maven依赖</h3><p>maven依赖特别少，由于<code>spring-boot-starter</code>默认并没有依赖上<code>spring-context-support</code>包，所以我们需要依赖上它。如下，引入<code>spring-boot-starter-cache</code>即可。以及引入本地缓存要用到的<code>guava</code>。</p>
+<pre><code>&lt;!-- cache --&gt;
 &lt;dependency&gt;
     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
     &lt;artifactId&gt;spring-boot-starter-cache&lt;/artifactId&gt;
@@ -138,10 +732,12 @@ public @interface Caching {
     &lt;artifactId&gt;guava&lt;/artifactId&gt;
     &lt;version&gt;23.0&lt;/version&gt;
 &lt;/dependency&gt;
-</code></pre><h3 id="配置缓存类型"><a href="#配置缓存类型" class="headerlink" title="配置缓存类型"></a>配置缓存类型</h3><p>由于我们使用guava作为缓存，只需要指明缓存类型为 guava即可。</p><pre><code>spring:
+</code></pre><h3 id="配置缓存类型"><a href="#配置缓存类型" class="headerlink" title="配置缓存类型"></a>配置缓存类型</h3><p>由于我们使用guava作为缓存，只需要指明缓存类型为 guava即可。</p>
+<pre><code>spring:
   cache:
     type: guava
-</code></pre><h3 id="使用guava-cache"><a href="#使用guava-cache" class="headerlink" title="使用guava cache"></a>使用guava cache</h3><p>一. 配置 CacheManager，并开启缓存功能。</p><pre><code class="java">@EnableCaching
+</code></pre><h3 id="使用guava-cache"><a href="#使用guava-cache" class="headerlink" title="使用guava cache"></a>使用guava cache</h3><p>一. 配置 CacheManager，并开启缓存功能。</p>
+<pre><code class="java">@EnableCaching
 @Configuration
 public class CacheConfig {
 
@@ -153,7 +749,10 @@ public class CacheConfig {
         return cacheManager;
     }
 }
-</code></pre><p>如上，我配置了缓存写入后保持10秒</p><p>二. 使用注解优雅给接口加上缓存。在访问接口上加上注解。</p><pre><code class="java">@Service
+</code></pre>
+<p>如上，我配置了缓存写入后保持10秒</p>
+<p>二. 使用注解优雅给接口加上缓存。在访问接口上加上注解。</p>
+<pre><code class="java">@Service
 @CacheConfig(cacheNames = &quot;product&quot;)
 public class ProductServiceImpl implements ProductService {
 
@@ -166,10 +765,14 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.selectByPrimaryKey(id);
     }
 }
-</code></pre><p>三. 测试本地缓存。<br>首先开启<code>mybatis</code>的sql输出打印，修改<code>application.yml</code>的配置，增加如下:</p><pre><code>mybatis:
+</code></pre>
+<p>三. 测试本地缓存。
+首先开启<code>mybatis</code>的sql输出打印，修改<code>application.yml</code>的配置，增加如下:</p>
+<pre><code>mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-</code></pre><p>测试本地缓存是否起效，以及缓存时间是否其效果。</p><pre><code class="java">@RunWith(SpringJUnit4ClassRunner.class)
+</code></pre><p>测试本地缓存是否起效，以及缓存时间是否其效果。</p>
+<pre><code class="java">@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = App.class)
 @Slf4j
 public class SbpProductServiceTest {
@@ -191,7 +794,9 @@ public class SbpProductServiceTest {
         log.info(&quot;time:{} , third get product:{}&quot;, System.currentTimeMillis(), product3);
     }
 }
-</code></pre><p>输出如下：</p><pre><code>==&gt;  Preparing: select id, code, type, full_name, alias_name, original_price, vip_price, storage, create_at, update_at from sbp_product where id = ? 
+</code></pre>
+<p>输出如下：</p>
+<pre><code>==&gt;  Preparing: select id, code, type, full_name, alias_name, original_price, vip_price, storage, create_at, update_at from sbp_product where id = ? 
 ==&gt; Parameters: 1(Long)
 &lt;==    Columns: id, code, type, full_name, alias_name, original_price, vip_price, storage, create_at, update_at
 &lt;==        Row: 1, BK100001, 1, java编程思想, thinking in java, 86.00, 75.00, 300, 1532260305712, 1532260305712
@@ -211,7 +816,593 @@ Closing non transactional SqlSession [org.apache.ibatis.session.defaults.Default
 2018-07-22 19:53:20.547 [main] INFO  com.crw.service.SbpProductServiceTest - time:1532260400547 , third get product:SbpProduct(id=1, code=BK100001, type=1, fullName=java编程思想, aliasName=thinking in java, originalPrice=86.00, vipPrice=75.00, storage=300, createAt=1532260305712, updateAt=1532260305712)
 2018-07-22 19:53:20.553 [Thread-4] INFO  org.springframework.web.context.support.GenericWebApplicationContext - Closing org.springframework.web.context.support.GenericWebApplicationContext@6853425f: startup date [Sun Jul 22 19:53:01 CST 2018]; root of context hierarchy
 
-</code></pre><p>可以看到结果:</p><ol><li>第一次调用打印了sql，此时还没有缓存。</li><li>第二次调用没打印sql，此时有本地缓存了。</li><li>第三次调用又打印sql，此时本地缓存失效。</li></ol><h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><p>再来回顾一下，本文介绍了：</p><ul><li>spring cache的使用，它是AOP理念的一个很好的应用</li><li>guava的使用。by the way,从Spring5开始变不再支持guava的实现了，从spring-boot 1.5.x版本你就可以看到<code>autoconfgure</code>包下的<code>GuavaCacheConfiguration</code>以及被注解为<code>@Deprecated</code>了。推荐更好的实现是<a href="https://github.com/ben-manes/caffeine" target="_blank" rel="noopener">caffeine</a>。</li><li>spring-boot使用哦cache非常方便，三步完成。</li></ul><p>本文参考了：</p><ul><li><a href="http://jinnianshilongnian.iteye.com/blog/2001040" target="_blank" rel="noopener">Spring Cache抽象详解</a></li></ul></div><div><div><div style="text-align:center;color:#ccc;font-size:14px">-------------本文结束,感谢您的阅读-------------</div></div></div><div><div style="padding:10px 0;margin:20px auto;width:90%;text-align:center"><div>贵在坚持，如果您觉得本文还不错，不妨打赏一下~</div> <button id="rewardButton" disable="enable" onclick='var qr=document.getElementById("QR");"none"===qr.style.display?qr.style.display="block":qr.style.display="none"'> <span>打赏</span></button><div id="QR" style="display:none"><div id="wechat" style="display:inline-block"> <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"><p>微信支付</p></div><div id="alipay" style="display:inline-block"> <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"><p>支付宝</p></div></div></div></div><div><ul class="post-copyright"><li class="post-copyright-author"> <strong>本文作者：</strong> 陈瑞文</li><li class="post-copyright-link"> <strong>本文链接：</strong> <a href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/" title="spring-boot优雅的使用缓存">https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/</a></li><li class="post-copyright-license"> <strong>版权声明：</strong> 欢迎转载~~本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li></ul></div><footer class="post-footer"><div class="post-tags"><a href="/tags/spring-boot/" rel="tag"><i class="fa fa-tag"></i> spring-boot</a><a href="/tags/cache/" rel="tag"><i class="fa fa-tag"></i> cache</a><a href="/tags/guava/" rel="tag"><i class="fa fa-tag"></i> guava</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/spring-boot/spring-boot-use-activemq/" rel="next" title="spring-boot集成ActiveMQ"><i class="fa fa-chevron-left"></i> spring-boot集成ActiveMQ</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"> <a href="/spring-boot/spring-boot-use-cache-redis/" rel="prev" title="spring-boot优雅使用redis集中式缓存">spring-boot优雅使用redis集中式缓存<i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-body"><div class="recommended_posts"><div class="note primary"><h3 class="recommended"> 相关文章：</h3><ul class="recommended-ul"><li class="popular-posts-item"><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-cache-redis/">spring-boot优雅使用redis集中式缓存</a></div></li><li class="popular-posts-item"><div class="popular-posts-item"><a href="/spring-boot/mybatis-plugins-pagehelper/">mybatis集成分页插件pageHelper</a></div></li><li class="popular-posts-item"><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-activemq/">spring-boot集成ActiveMQ</a></div></li><li class="popular-posts-item"><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-log4j2/">spring-boot集成Log4j2</a></div></li><li class="popular-posts-item"><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-rabbitmq/">spring-boot集成RabbitMQ</a></div></li><li class="popular-posts-item"><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-mybatis/">spring-boot集成mybatis</a></div></li></ul></div></div></div><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="gitment-container"></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span><span class="sidebar-toggle-line sidebar-toggle-line-middle"></span><span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div id="sidebar-dimmer"></div><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap"> 文章目录</li><li class="sidebar-nav-overview" data-target="site-overview-wrap"> 站点概览</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"> <img class="site-author-image" itemprop="image" src="/images/touxiang.jpeg" alt="陈瑞文"><p class="site-author-name" itemprop="name">陈瑞文</p><p class="site-description motion-element" itemprop="description">面向Google编程的java程序猿折腾指北</p></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"> <a href="/archives/"><span class="site-state-item-count">25</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"> <a href="/categories/index.html"><span class="site-state-item-count">10</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"> <a href="/tags/index.html"><span class="site-state-item-count">20</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="feed-link motion-element"><a href="/atom.xml" rel="alternate"><i class="fa fa-rss"></i> RSS</a></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/crrrrrw" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i> GitHub</a></span><span class="links-of-author-item"><a href="mailto:crw4085501@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i> E-Mail</a></span><span class="links-of-author-item"><a href="https://www.zhihu.com/people/chen-rui-wen-28/activities" target="_blank" title="知乎"><i class="iconfont icon-zhihu"></i> 知乎</a></span></div><div><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=18795423&auto=1&height=66"></iframe></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-cache相关接口及注解"><span class="nav-number">2.</span> <span class="nav-text">spring cache相关接口及注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Cache-接口"><span class="nav-number">2.1.</span> <span class="nav-text">Cache 接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CacheManager-接口"><span class="nav-number">2.2.</span> <span class="nav-text">CacheManager 接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cache-相关注解"><span class="nav-number">2.3.</span> <span class="nav-text">cache 相关注解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#EnableCaching"><span class="nav-number">2.3.1.</span> <span class="nav-text">@EnableCaching</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CachePut"><span class="nav-number">2.3.2.</span> <span class="nav-text">@CachePut</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CacheEvict"><span class="nav-number">2.3.3.</span> <span class="nav-text">@CacheEvict</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cacheable"><span class="nav-number">2.3.4.</span> <span class="nav-text">@Cacheable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Caching"><span class="nav-number">2.3.5.</span> <span class="nav-text">@Caching</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#guava-cache"><span class="nav-number">3.</span> <span class="nav-text">guava cache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在spring-boot中使用guava-cache"><span class="nav-number">4.</span> <span class="nav-text">在spring-boot中使用guava cache</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#maven依赖"><span class="nav-number">4.1.</span> <span class="nav-text">maven依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置缓存类型"><span class="nav-number">4.2.</span> <span class="nav-text">配置缓存类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用guava-cache"><span class="nav-number">4.3.</span> <span class="nav-text">使用guava cache</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结束语"><span class="nav-number">5.</span> <span class="nav-text">结束语</span></a></li></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="copyright">&copy; <span itemprop="copyrightYear">2018</span><span class="with-love"><i class="fa fa-user"></i></span> <span class="author" itemprop="copyrightHolder">陈瑞文</span></div><div class="theme-info"><span id="showDays"></span></div><br><div class="theme-info"><div class="powered-by"></div> <span class="post-count">本站累计共45.6k字</span></div> &nbsp;&nbsp;|&nbsp;&nbsp;本站总点击<span id="busuanzi_value_site_pv"></span> 次 &nbsp;&nbsp;|&nbsp;&nbsp;您是第<span id="busuanzi_value_site_uv"></span> 位访客<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><script>var seconds=1e3,minutes=60*seconds,hours=60*minutes,days=24*hours,years=365*days,birthDay=Date.UTC(2018,4,14,0,0,0);setInterval(function(){var e=new Date,s=e.getFullYear(),t=e.getMonth()+1,a=e.getDate(),o=e.getHours(),r=e.getMinutes(),n=e.getSeconds(),h=Date.UTC(s,t,a,o,r,n)-birthDay,u=Math.floor(h/years),d=Math.floor(h/days-365*u),y=Math.floor((h-(365*u+d)*days)/hours),i=Math.floor((h-(365*u+d)*days-y*hours)/minutes),l=Math.floor((h-(365*u+d)*days-y*hours-i*minutes)/seconds);document.getElementById("showDays").innerHTML="本站已运行 "+u+" 年 "+d+" 天 "+y+" 小时 "+i+" 分钟 "+l+" 秒"},1e3)</script><script>var _hmt=_hmt||[];!function(){var e=document.createElement("script");e.src="https://hm.baidu.com/hm.js?24046c6beb6cd2056bee02dc2a0168c9";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)}()</script></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span id="scrollpercent"><span>0</span>%</span></div></div><script type="text/javascript">"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script><script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script><script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script><script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script><link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css"><script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script><script type="text/javascript">function renderGitment(){new Gitmint({id:"1532270710000",owner:"crrrrrw",repo:"hexo_static_page",lang:navigator.language||navigator.systemLanguage||navigator.userLanguage,oauth:{client_secret:"bc55e698a64f91f9af7ad2e5d296f4cb244ad5cd",client_id:"80cec54113d1f1089a45"}}).render("gitment-container")}renderGitment()</script><script src="//unpkg.com/valine/dist/Valine.min.js"></script><script type="text/javascript">
+</code></pre><p>可以看到结果:</p>
+<ol>
+<li>第一次调用打印了sql，此时还没有缓存。</li>
+<li>第二次调用没打印sql，此时有本地缓存了。</li>
+<li>第三次调用又打印sql，此时本地缓存失效。</li>
+</ol>
+<h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><p>再来回顾一下，本文介绍了：</p>
+<ul>
+<li>spring cache的使用，它是AOP理念的一个很好的应用</li>
+<li>guava的使用。by the way,从Spring5开始变不再支持guava的实现了，从spring-boot 1.5.x版本你就可以看到<code>autoconfgure</code>包下的<code>GuavaCacheConfiguration</code>以及被注解为<code>@Deprecated</code>了。推荐更好的实现是<a href="https://github.com/ben-manes/caffeine" target="_blank" rel="noopener">caffeine</a>。</li>
+<li>spring-boot使用哦cache非常方便，三步完成。</li>
+</ul>
+<p>本文参考了：</p>
+<ul>
+<li><a href="http://jinnianshilongnian.iteye.com/blog/2001040" target="_blank" rel="noopener">Spring Cache抽象详解</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束,</i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+      
+    </div>
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>贵在坚持，如果您觉得本文还不错，不妨打赏一下~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    陈瑞文
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/" title="spring-boot优雅的使用缓存">https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    欢迎转载~~本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spring-boot/" rel="tag"><i class="fa fa-tag"></i>
+               spring-boot</a>
+          
+            <a href="/tags/cache/" rel="tag"><i class="fa fa-tag"></i>
+               cache</a>
+          
+            <a href="/tags/guava/" rel="tag"><i class="fa fa-tag"></i>
+               guava</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/spring-boot/spring-boot-use-activemq/" rel="next" title="spring-boot集成ActiveMQ">
+                <i class="fa fa-chevron-left"></i> spring-boot集成ActiveMQ
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/spring-boot/spring-boot-use-cache-redis/" rel="prev" title="spring-boot优雅使用redis集中式缓存">
+                spring-boot优雅使用redis集中式缓存 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  
+  	<div class="post-body"><div class="recommended_posts"><div class="note primary"><h3 class="recommended"> 相关文章：</h3><ul class="recommended-ul"><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-cache-redis/">spring-boot优雅使用redis集中式缓存</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/spring-boot/mybatis-plugins-pagehelper/">mybatis集成分页插件pageHelper</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-activemq/">spring-boot集成ActiveMQ</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-log4j2/">spring-boot集成Log4j2</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-rabbitmq/">spring-boot集成RabbitMQ</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-mybatis/">spring-boot集成mybatis</a></div></li></ul></div></div></div> 
+  
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/touxiang.jpeg"
+                alt="陈瑞文" />
+            
+              <p class="site-author-name" itemprop="name">陈瑞文</p>
+              <p class="site-description motion-element" itemprop="description">面向Google编程的java程序猿折腾指北</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/crrrrrw" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:crw4085501@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/chen-rui-wen-28/activities" target="_blank" title="知乎">
+                      
+                        <i class="iconfont icon-zhihu"></i>知乎</a>
+                  </span>
+                
+            </div>
+          
+
+          <!-- 添加音乐播放器 -->
+          
+            <div>
+              <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86
+                src="//music.163.com/outchain/player?type=2&id=18795423&auto=1&height=66">
+              </iframe>
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-cache相关接口及注解"><span class="nav-number">2.</span> <span class="nav-text">spring cache相关接口及注解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Cache-接口"><span class="nav-number">2.1.</span> <span class="nav-text">Cache 接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CacheManager-接口"><span class="nav-number">2.2.</span> <span class="nav-text">CacheManager 接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cache-相关注解"><span class="nav-number">2.3.</span> <span class="nav-text">cache 相关注解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#EnableCaching"><span class="nav-number">2.3.1.</span> <span class="nav-text">@EnableCaching</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CachePut"><span class="nav-number">2.3.2.</span> <span class="nav-text">@CachePut</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CacheEvict"><span class="nav-number">2.3.3.</span> <span class="nav-text">@CacheEvict</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cacheable"><span class="nav-number">2.3.4.</span> <span class="nav-text">@Cacheable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Caching"><span class="nav-number">2.3.5.</span> <span class="nav-text">@Caching</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#guava-cache"><span class="nav-number">3.</span> <span class="nav-text">guava cache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在spring-boot中使用guava-cache"><span class="nav-number">4.</span> <span class="nav-text">在spring-boot中使用guava cache</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#maven依赖"><span class="nav-number">4.1.</span> <span class="nav-text">maven依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置缓存类型"><span class="nav-number">4.2.</span> <span class="nav-text">配置缓存类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用guava-cache"><span class="nav-number">4.3.</span> <span class="nav-text">使用guava cache</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结束语"><span class="nav-number">5.</span> <span class="nav-text">结束语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈瑞文</span>
+
+  
+</div>
+
+
+
+
+
+
+<div class="theme-info">
+  <span id="showDays"></span>
+</div><br/>
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">本站累计共48.3k字</span>
+</div>
+
+&nbsp;&nbsp;|&nbsp;&nbsp;本站总点击 <span id="busuanzi_value_site_pv"></span> 次
+&nbsp;&nbsp;|&nbsp;&nbsp;您是第 <span id="busuanzi_value_site_uv"></span> 位访客
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+<script>
+  var seconds = 1000;
+  var minutes = seconds * 60;
+  var hours = minutes * 60;
+  var days = hours * 24;
+  var years = days * 365;
+  var birthDay = Date.UTC(2018,04,14,00,00,00); // 这里设置建站时间
+  setInterval(function() {
+    var today = new Date();
+    var todayYear = today.getFullYear();
+    var todayMonth = today.getMonth()+1;
+    var todayDate = today.getDate();
+    var todayHour = today.getHours();
+    var todayMinute = today.getMinutes();
+    var todaySecond = today.getSeconds();
+    var now = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+    var diff = now - birthDay;
+    var diffYears = Math.floor(diff/years);
+    var diffDays = Math.floor((diff/days)-diffYears*365);
+    var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+    var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+    var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+      document.getElementById('showDays').innerHTML="本站已运行 "+diffYears+" 年 "+diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
+  }, 1000);
+</script>
+
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?24046c6beb6cd2056bee02dc2a0168c9";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: '1532270710000', 
+            owner: 'crrrrrw',
+            repo: 'hexo_static_page',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'bc55e698a64f91f9af7ad2e5d296f4cb244ad5cd',
+            
+                client_id: '80cec54113d1f1089a45'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script type="text/javascript">
   new Valine({
       av: AV,
       el: '#comments' ,
@@ -223,7 +1414,12 @@ Closing non transactional SqlSession [org.apache.ibatis.session.defaults.Default
       path: , // 默认 window.location.pathname
       avatar: 'mm' // 默认 ''
   });
-</script><script type="text/javascript">
+</script>
+
+
+  
+
+  <script type="text/javascript">
     // Popup Window;
     var isfetched = false;
     var isXml = true;
@@ -538,4 +1734,60 @@ Closing non transactional SqlSession [org.apache.ibatis.session.defaults.Default
         onPopupClose();
       }
     });
-  </script><script>!function(){var t=document.createElement("script"),e=window.location.protocol.split(":")[0];t.src="https"===e?"https://zz.bdstatic.com/linksubmit/push.js":"http://push.zhanzhang.baidu.com/push.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}()</script></body></html><script type="text/javascript" src="/js/src/love.js"></script><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script><script type="text/javascript">$(function(){hljs.initHighlighting(),$("pre code").each(function(){$(this).text().split("\n").length;var n=$("<ul/>").addClass("pre-numbering");$(this).addClass("has-numbering").parent().append(n)})})</script>
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+<!-- highlight 高亮 start-->
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script type="text/javascript">
+  $(function() {
+    hljs.initHighlighting();
+    $('pre code').each(function() {
+      var lines = $(this).text().split('\n').length - 1;
+      var $numbering = $('<ul/>').addClass('pre-numbering');
+      $(this)
+        .addClass('has-numbering')
+        .parent()
+        .append($numbering);
+    });
+  });
+
+</script>
+<!-- highlight 高亮 end-->
