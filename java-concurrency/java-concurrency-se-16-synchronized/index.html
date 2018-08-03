@@ -188,15 +188,15 @@ blockquote:after {
 <meta property="og:site_name" content="Chen RuiWen&#39;s Space">
 <meta property="og:description" content="前言多线程并发，你最先想到的加锁使用方式是什么？我想几乎百分百会想到这个关键字:Synchronized。 关于Synchronized的底层原理，可能大部分java程序猿都没有太多的了解。本文将洞悉Synchronized那些小细节。 本文摘自 infoq 上阿里巴巴的技术专家方腾飞老师的文章。 原文地址：聊聊并发（二）Java SE1.6中的Synchronized">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1ftquomgo3sj20m80ciq4e.jpg">
+<meta property="og:image" content="https://ww1.sinaimg.cn/large/87faef88ly1ftquomgo3sj20m80ciq4e.jpg">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/87faef88ly1ftqrb6oxy3j20ol03w74r.jpg">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/87faef88ly1ftqrib054vj20o10qxjx1.jpg">
 <meta property="og:image" content="https://ws1.sinaimg.cn/large/87faef88ly1ftqroqob22j20o10ncgs6.jpg">
-<meta property="og:updated_time" content="2018-07-29T09:29:14.000Z">
+<meta property="og:updated_time" content="2018-07-29T09:38:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java SE1.6中的Synchronized">
 <meta name="twitter:description" content="前言多线程并发，你最先想到的加锁使用方式是什么？我想几乎百分百会想到这个关键字:Synchronized。 关于Synchronized的底层原理，可能大部分java程序猿都没有太多的了解。本文将洞悉Synchronized那些小细节。 本文摘自 infoq 上阿里巴巴的技术专家方腾飞老师的文章。 原文地址：聊聊并发（二）Java SE1.6中的Synchronized">
-<meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1ftquomgo3sj20m80ciq4e.jpg">
+<meta name="twitter:image" content="https://ww1.sinaimg.cn/large/87faef88ly1ftquomgo3sj20m80ciq4e.jpg">
 
 
 
@@ -549,7 +549,7 @@ blockquote:after {
       
 
       
-        <p><img src="http://ww1.sinaimg.cn/large/87faef88ly1ftquomgo3sj20m80ciq4e.jpg" alt=""></p>
+        <p><img src="https://ww1.sinaimg.cn/large/87faef88ly1ftquomgo3sj20m80ciq4e.jpg" alt=""></p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>多线程并发，你最先想到的加锁使用方式是什么？我想几乎百分百会想到这个关键字:<code>Synchronized</code>。</p>
 <p>关于<code>Synchronized</code>的底层原理，可能大部分java程序猿都没有太多的了解。本文将洞悉<code>Synchronized</code>那些小细节。</p>
 <p>本文摘自 <a href="https://www.infoq.com/" target="_blank" rel="noopener">infoq</a> 上阿里巴巴的技术专家<a href="https://www.infoq.com/cn/profile/%E6%96%B9%E8%85%BE%E9%A3%9E" target="_blank" rel="noopener">方腾飞</a>老师的文章。</p>
@@ -1020,6 +1020,12 @@ blockquote:after {
                         <i class="iconfont icon-zhihu"></i>知乎</a>
                   </span>
                 
+                  <span class="links-of-author-item">
+                    <a href="https://juejin.im/user/5b6273fce51d451905712673" target="_blank" title="掘金">
+                      
+                        <i class="iconfont icon-juejin"></i>掘金</a>
+                  </span>
+                
             </div>
           
 
@@ -1036,6 +1042,48 @@ blockquote:after {
           
 
           
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                推荐链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://ifeve.com/" title="并发编程网" target="_blank" rel="external nofollow" >并发编程网</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.importnew.com/" title="ImportNew" target="_blank" rel="external nofollow" >ImportNew</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.oschina.net/" title="开源中国" target="_blank" rel="external nofollow" >开源中国</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.spring4all.com/" title="spring4all" target="_blank" rel="external nofollow" >spring4all</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.infoq.com/cn/" title="InfoQ" target="_blank" rel="external nofollow" >InfoQ</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://stackoverflow.com/" title="stackoverflow" target="_blank" rel="external nofollow" >stackoverflow</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://linux.cn/" title="Linux中国" target="_blank" rel="external nofollow" >Linux中国</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://toutiao.io/" title="开发者头条" target="_blank" rel="external nofollow" >开发者头条</a>
+                  </li>
+                
+              </ul>
+            </div>
           
 
           
