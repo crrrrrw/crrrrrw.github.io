@@ -93,10 +93,6 @@ blockquote:after {
 
 
 
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
-
 
 
 
@@ -214,7 +210,7 @@ blockquote:after {
     scheme: 'Muse',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
-    fancybox: true,
+    fancybox: false,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     duoshuo: {
@@ -349,7 +345,7 @@ blockquote:after {
         <li class="menu-item menu-item-photos">
           <a href="/photos/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-image"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-camera"></i> <br />
             
             相册
           </a>
@@ -1235,7 +1231,7 @@ ServiceBean实现了pplicationListener<contextrefreshedevent>接口，实现方�
   </article>
 
   
-  	<div class="post-body"><div class="recommended_posts"><div class="note primary"><h3 class="recommended"> 相关文章：</h3><ul class="recommended-ul"><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/dubbo/dubbo-spi-java/">Dubbo扩展机制实现(一)之java SPI</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/java-concurrency/java-concurrency-se-16-synchronized/">Java SE1.6中的Synchronized</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/java/java8-in-action/">java8实战学习总结</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/java-concurrency/java-concurrency-base-threadsafe/">java并发修行之基础篇：线程安全</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/java/use-bean-validation-solve-params/">使用 Bean Validation 解决业务中参数校验</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/dubbo/dubbo-spi-extension-feature/">Dubbo扩展机制实现(三)之扩展点特性</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/dubbo/dubbo-spi-extensionloader/">Dubbo扩展机制实现(二)之浅析ExtensionLoader</a></div></li></ul></div></div></div> 
+  	<div class="post-body"><div class="recommended_posts"><div class="note primary"><h3 class="recommended"> 相关文章：</h3><ul class="recommended-ul"><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/dubbo/dubbo-spi-java/">Dubbo扩展机制实现(一)之java SPI</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/java-concurrency/java-concurrency-se-16-synchronized/">Java SE1.6中的Synchronized</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/java/java8-in-action/">java8实战学习总结</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/java-concurrency/java-concurrency-base-threadsafe/">java并发修行之基础篇：线程安全</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/java/use-bean-validation-solve-params/">使用 Bean Validation 解决业务中参数校验</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/dubbo/dubbo-spi-extensionloader/">Dubbo扩展机制实现(二)之浅析ExtensionLoader</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/dubbo/dubbo-spi-extension-feature/">Dubbo扩展机制实现(三)之扩展点特性</a></div></li></ul></div></div></div> 
   
 
 
@@ -1583,8 +1579,6 @@ ServiceBean实现了pplicationListener<contextrefreshedevent>接口，实现方�
 
 
 
-  
-
 
   
 
@@ -1625,11 +1619,6 @@ ServiceBean实现了pplicationListener<contextrefreshedevent>接口，实现方�
 
   
   
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-  
-  
     <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
   
 
@@ -1649,6 +1638,9 @@ ServiceBean实现了pplicationListener<contextrefreshedevent>接口，实现方�
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+<script src="/js/src/photoswipe.min.js?v=5.1.4"></script>
+<script src="/js/src/photoswipe-ui-default.min.js?v=5.1.4"></script>
 
 
 
@@ -2096,7 +2088,10 @@ ServiceBean实现了pplicationListener<contextrefreshedevent>接口，实现方�
 
   
 
-</body>
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"model":{"jsonPath":"/live2dw/assets/haru01.model.json"},"display":{"position":"left","width":80,"height":150},"mobile":{"show":true},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
 </html>
 <!-- 页面点击小红心 -->
 <script type="text/javascript" src="/js/src/love.js"></script>

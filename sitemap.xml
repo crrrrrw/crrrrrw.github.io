@@ -2,6 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.chenruiwen.cn/photos/data.json</loc>
+    
+    <lastmod>2018-08-04T14:54:52.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn/photos/index.html</loc>
+    
+    <lastmod>2018-08-04T14:16:24.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn/photos/test.html</loc>
+    
+    <lastmod>2018-08-04T13:25:07.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn/about/index.html</loc>
+    
+    <lastmod>2018-08-04T10:06:31.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.chenruiwen.cn/java-concurrency/java-concurrency-se-16-synchronized/</loc>
     
     <lastmod>2018-07-29T09:38:51.000Z</lastmod>
@@ -19,13 +47,6 @@
     <loc>https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/</loc>
     
     <lastmod>2018-07-23T08:50:04.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.chenruiwen.cn/photos/index.html</loc>
-    
-    <lastmod>2018-07-22T01:36:41.000Z</lastmod>
     
   </url>
   
@@ -194,13 +215,6 @@
     <loc>https://www.chenruiwen.cn/about/index_bak.html</loc>
     
     <lastmod>2018-07-14T01:47:19.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.chenruiwen.cn/about/index.html</loc>
-    
-    <lastmod>2018-06-23T02:52:39.000Z</lastmod>
     
   </url>
   
