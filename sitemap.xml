@@ -2,16 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://www.chenruiwen.cn/photos/data.json</loc>
+    <loc>https://www.chenruiwen.cn/about/index.html</loc>
     
-    <lastmod>2018-08-04T14:54:52.000Z</lastmod>
+    <lastmod>2018-08-05T13:50:44.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://www.chenruiwen.cn/photos/index.html</loc>
     
-    <lastmod>2018-08-04T14:16:24.000Z</lastmod>
+    <lastmod>2018-08-05T12:49:24.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn/redis/redis-hyperloglog/</loc>
+    
+    <lastmod>2018-08-05T07:17:32.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn/photos/data.json</loc>
+    
+    <lastmod>2018-08-05T03:21:22.000Z</lastmod>
     
   </url>
   
@@ -19,13 +33,6 @@
     <loc>https://www.chenruiwen.cn/photos/test.html</loc>
     
     <lastmod>2018-08-04T13:25:07.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.chenruiwen.cn/about/index.html</loc>
-    
-    <lastmod>2018-08-04T10:06:31.000Z</lastmod>
     
   </url>
   
@@ -208,13 +215,6 @@
     <loc>https://www.chenruiwen.cn/essay/first-blog/</loc>
     
     <lastmod>2018-07-21T12:15:11.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.chenruiwen.cn/about/index_bak.html</loc>
-    
-    <lastmod>2018-07-14T01:47:19.000Z</lastmod>
     
   </url>
   

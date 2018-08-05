@@ -2083,7 +2083,7 @@ hover {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #e7d90e;
+  background: #6bffbd;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3379,6 +3379,7 @@ img:hover {
 }
 .post-block.page {
   margin-top: 40px;
+  background: #fff;
 }
 .category-all-page {
   margin: -80px 50px 40px 50px;
