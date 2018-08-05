@@ -32,9 +32,9 @@
         <category>spring-boot</category>
       </categories>
       <tags>
-        <tag>redis</tag>
         <tag>spring-boot</tag>
         <tag>cache</tag>
+        <tag>redis</tag>
       </tags>
   </entry>
   <entry>

@@ -93,11 +93,11 @@
       <category term="spring-boot" scheme="https://www.chenruiwen.cn/categories/spring-boot/"/>
     
     
-      <category term="redis" scheme="https://www.chenruiwen.cn/tags/redis/"/>
-    
       <category term="spring-boot" scheme="https://www.chenruiwen.cn/tags/spring-boot/"/>
     
       <category term="cache" scheme="https://www.chenruiwen.cn/tags/cache/"/>
+    
+      <category term="redis" scheme="https://www.chenruiwen.cn/tags/redis/"/>
     
   </entry>
   
