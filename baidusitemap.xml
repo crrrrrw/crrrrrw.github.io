@@ -3,6 +3,25 @@
 
 
     
+  <url>
+    <loc>https://www.chenruiwen.cn/All/macos-fix-problem-about-pycurl-install/</loc>
+    <lastmod>2018-08-12T05:08:56.330Z</lastmod>
+    <data>
+        <display>
+        <title>MacOS解决pycurl安装的坑</title>
+        <pubTime>2018-08-11T02:20:07.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+        <tag>pycurl</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
     
     
   <url>
@@ -65,9 +84,9 @@
         
         <tag>spring-boot</tag>
          
-        <tag>cache</tag>
-         
         <tag>redis</tag>
+         
+        <tag>cache</tag>
          
          
            

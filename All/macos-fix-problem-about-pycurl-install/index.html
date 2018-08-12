@@ -162,7 +162,7 @@ blockquote:after {
 
 
 
-  <meta name="keywords" content="陈瑞文的空间站,技术博客,java,web开发" />
+  <meta name="keywords" content="python,pycurl," />
 
 
 
@@ -175,18 +175,18 @@ blockquote:after {
 
 
 
-<meta name="description" content="不定期更新博文，尽量每周至少一篇。 博文内容包括但不限于技术，美食，旅游，日记等。">
-<meta name="keywords" content="技术博客,Java,web开发,Linux,spring-boot,微服务">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于本站">
-<meta property="og:url" content="https://www.chenruiwen.cn/about/index.html">
+<meta name="description" content="前言记录macos安装pycurl过程中的爬坑过程。">
+<meta name="keywords" content="python,pycurl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MacOS解决pycurl安装的坑">
+<meta property="og:url" content="https://www.chenruiwen.cn/All/macos-fix-problem-about-pycurl-install/index.html">
 <meta property="og:site_name" content="Chen RuiWen&#39;s Space">
-<meta property="og:description" content="不定期更新博文，尽量每周至少一篇。 博文内容包括但不限于技术，美食，旅游，日记等。">
+<meta property="og:description" content="前言记录macos安装pycurl过程中的爬坑过程。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-05T13:50:44.000Z">
+<meta property="og:updated_time" content="2018-08-12T05:08:56.330Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于本站">
-<meta name="twitter:description" content="不定期更新博文，尽量每周至少一篇。 博文内容包括但不限于技术，美食，旅游，日记等。">
+<meta name="twitter:title" content="MacOS解决pycurl安装的坑">
+<meta name="twitter:description" content="前言记录macos安装pycurl过程中的爬坑过程。">
 
 
 
@@ -216,13 +216,13 @@ blockquote:after {
 
 
 
-  <link rel="canonical" href="https://www.chenruiwen.cn/about/"/>
+  <link rel="canonical" href="https://www.chenruiwen.cn/All/macos-fix-problem-about-pycurl-install/"/>
 
 
 
 
 
-  <title>关于本站 | Chen RuiWen's Space</title>
+  <title>MacOS解决pycurl安装的坑 | Chen RuiWen's Space</title>
   
 
 
@@ -393,35 +393,337 @@ blockquote:after {
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/All/macos-fix-problem-about-pycurl-install/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈瑞文">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/touxiang.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen RuiWen's Space">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">关于本站</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <p>不定期更新博文，尽量每周至少一篇。</p>
-<p>博文内容包括但不限于技术，美食，旅游，日记等。</p>
-
+          <h1 class="post-title" itemprop="name headline">MacOS解决pycurl安装的坑</h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-11T10:20:07+08:00">
+                2018-08-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span id="busuanzi_container_page_pv">&nbsp;&nbsp;|&nbsp;&nbsp;阅读量 <span id="busuanzi_value_page_pv"></span> 次</span>
+          
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/All/macos-fix-problem-about-pycurl-install/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/All/macos-fix-problem-about-pycurl-install/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  847 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>记录<code>macos</code>安装<code>pycurl</code>过程中的爬坑过程。</p>
+<a id="more"></a>
+<h2 id="爬坑过程记录"><a href="#爬坑过程记录" class="headerlink" title="爬坑过程记录"></a>爬坑过程记录</h2><p>本来目的是安装<code>pyspider</code>的, 安装<code>pyspider</code>必须依赖<code>pycurl</code>。</p>
+<p>本人环境：</p>
+<ul>
+<li>Python 3.6.4</li>
+<li>MacOS 10.12 Sierra</li>
+</ul>
+<h3 id="初次安装-pycurl"><a href="#初次安装-pycurl" class="headerlink" title="初次安装 pycurl"></a>初次安装 pycurl</h3><p>第一次安装pycurl。直接 <code>pip</code> 安装</p>
+<pre><code>pip install pycurl
+</code></pre><p>可是安装并不顺利。安装报错:</p>
+<pre><code>    ...
+
+  File &quot;/private/var/folders/nx/khfvbh1d6vg334173fsxzb9r0000gn/T/pip-install-y_b53n5l/pycurl/setup.py&quot;, line 316, in configure_unix
+    specify the SSL backend manually.&#39;&#39;&#39;)
+__main__.ConfigurationError: Curl is configured to use SSL, but we have not been able to determine which SSL backend it is using. Please see PycURL documentation for how to specify the SSL backend manually.
+
+----------------------------------------
+Command &quot;python setup.py egg_info&quot; failed with error code 1 in /private/var/folders/nx/khfvbh1d6vg334173fsxzb9r0000gn/T/pip-install-y_b53n5l/pycurl/
+
+</code></pre><p>可以看到报错应该是因为 使用ssl配置的原因。查看<a href="https://pycurl.io/docs/latest/install.html" target="_blank" rel="noopener">官方PycURL Installation¶</a>，可以不使用ssl安装。</p>
+<h3 id="第二次安装-pycurl"><a href="#第二次安装-pycurl" class="headerlink" title="第二次安装 pycurl"></a>第二次安装 pycurl</h3><p>第二次安装，配置不适用ssl安装。</p>
+<pre><code># upgrade pip if necessary
+pip install --upgrade pip
+
+# remove current pycurl
+pip uninstall pycurl
+
+# set PYCURL_SSL_LIBRARY
+export PYCURL_SSL_LIBRARY=nss
+
+# recompile and install pycurl
+pip install --compile pycurl
+</code></pre><p>可是还是报错:</p>
+<pre><code>...
+
+build/temp.macosx-10.12-x86_64-3.6/src/stringcompat.o build/temp.macosx-10.12-x86_64-3.6/src/threadsupport.o build/temp.macosx-10.12-x86_64-3.6/src/util.o -lssl3 -lcurl -o build/lib.macosx-10.12-x86_64-3.6/pycurl.cpython-36m-darwin.so
+    ld: library not found for -lssl3
+    clang: error: linker command failed with exit code 1 (use -v to see invocation)
+    error: command &#39;clang&#39; failed with exit status 1
+
+    ----------------------------------------
+Command &quot;/Users/chenruiwen/.pyenv/versions/3.6.4/bin/python3.6 -u -c &quot;import setuptools, tokenize;__file__=&#39;/private/var/folders/nx/khfvbh1d6vg334173fsxzb9r0000gn/T/pip-install-syesb72n/pycurl/setup.py&#39;;f=getattr(tokenize, &#39;open&#39;, open)(__file__);code=f.read().replace(&#39;\r\n&#39;, &#39;\n&#39;);f.close();exec(compile(code, __file__, &#39;exec&#39;))&quot; install --record /private/var/folders/nx/khfvbh1d6vg334173fsxzb9r0000gn/T/pip-record-ch2zxgp5/install-record.txt --single-version-externally-managed --compile&quot; failed with error code 1 in /private/var/folders/nx/khfvbh1d6vg334173fsxzb9r0000gn/T/pip-install-syesb72n/pycurl/
+</code></pre><p>二次吐血。</p>
+<h3 id="第三次安装pycurl"><a href="#第三次安装pycurl" class="headerlink" title="第三次安装pycurl"></a>第三次安装pycurl</h3><p>还是根据官网，<code>nss</code>不可以，配置成<code>openssl</code>试试吧。</p>
+<pre><code>pip uninstall pycurl
+export PYCURL_SSL_LIBRARY=openssl
+pip install --compile pycurl
+</code></pre><p>还是那个熟悉的味道:</p>
+<pre><code>...
+
+clang -Wno-unused-result -Wsign-compare -Wunreachable-code -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -I/usr/local/Cellar/openssl/1.0.2o_1/include -DPYCURL_VERSION=&quot;7.43.0.2&quot; -DHAVE_CURL_SSL=1 -DHAVE_CURL_OPENSSL=1 -DHAVE_CURL_SSL=1 -I/Users/chenruiwen/.pyenv/versions/3.6.4/include/python3.6m -c src/docstrings.c -o build/temp.macosx-10.12-x86_64-3.6/src/docstrings.o
+    In file included from src/docstrings.c:4:
+    src/pycurl.h:164:13: fatal error: &#39;openssl/ssl.h&#39; file not found
+    #   include &lt;openssl/ssl.h&gt;
+                ^~~~~~~~~~~~~~~
+    1 error generated.
+    error: command &#39;clang&#39; failed with exit status 1
+
+    ----------------------------------------
+Command &quot;/Users/chenruiwen/.pyenv/versions/3.6.4/bin/python3.6 -u -c &quot;import setuptools, tokenize;__file__=&#39;/private/var/folders/nx/khfvbh1d6vg334173fsxzb9r0000gn/T/pip-install-aavrg23s/pycurl/setup.py&#39;;f=getattr(tokenize, &#39;open&#39;, open)(__file__);code=f.read().replace(&#39;\r\n&#39;, &#39;\n&#39;);f.close();exec(compile(code, __file__, &#39;exec&#39;))&quot; install --record /private/var/folders/nx/khfvbh1d6vg334173fsxzb9r0000gn/T/pip-record-l0npewt_/install-record.txt --single-version-externally-managed --compile&quot; failed with error code 1 in /private/var/folders/nx/khfvbh1d6vg334173fsxzb9r0000gn/T/pip-install-aavrg23s/pycurl/
+
+</code></pre><p>三次吐血。可以看到引入 <code>openssl/ssl.h</code>失败了。继续google解决一下。</p>
+<h3 id="第四次安装pycurl"><a href="#第四次安装pycurl" class="headerlink" title="第四次安装pycurl"></a>第四次安装pycurl</h3><p>从 <code>stackoverflow</code> 搜到一个<a href="https://stackoverflow.com/questions/21096436/ssl-backend-error-when-using-openssl" target="_blank" rel="noopener">解决方案</a>,准备尝试一下。</p>
+<pre><code>pip uninstall pycurl
+export PYCURL_SSL_LIBRARY=openssl
+export LDFLAGS=-L/usr/local/opt/openssl/lib
+export CPPFLAGS=-I/usr/local/opt/openssl/include
+pip install pycurl --compile --no-cache-dir
+
+</code></pre><p>果然安装成功了！可喜可贺！可是我们用python导入pycurl试试：</p>
+<pre><code>&gt;&gt;&gt; import pycurl
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+ImportError: pycurl: libcurl link-time ssl backend (none/other) is different from compile-time ssl backend (openssl)
+</code></pre><p>四次吐血。 不过这次的问题应该是系统版本问题，刚刚 <code>stackoverflow</code>上的解决方案要求是系统<code>OSX 10.13</code>，于是乎备份系统，升级到<code>macOS 10.13 High Sierra</code>。
+大胆的童鞋可以不备份升级，比如我(:D)。</p>
+<p>升级完成后尝试一下导入pycurl:</p>
+<pre><code>&gt;&gt;&gt; import pycurl
+&gt;&gt;&gt;
+</code></pre><p>成功解决问题。吐血完毕。</p>
+
       
     </div>
     
     
     
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束,</i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+      
+    </div>
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>贵在坚持，如果您觉得本文还不错，不妨打赏一下~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    陈瑞文
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://www.chenruiwen.cn/All/macos-fix-problem-about-pycurl-install/" title="MacOS解决pycurl安装的坑">https://www.chenruiwen.cn/All/macos-fix-problem-about-pycurl-install/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    欢迎转载~~本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i>
+               python</a>
+          
+            <a href="/tags/pycurl/" rel="tag"><i class="fa fa-tag"></i>
+               pycurl</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/redis/redis-hyperloglog/" rel="next" title="redis“冷门”知识点：HyperLogLog">
+                <i class="fa fa-chevron-left"></i> redis“冷门”知识点：HyperLogLog
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  
+  	 
+  
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -463,8 +765,17 @@ blockquote:after {
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -614,6 +925,22 @@ blockquote:after {
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#爬坑过程记录"><span class="nav-number">2.</span> <span class="nav-text">爬坑过程记录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初次安装-pycurl"><span class="nav-number">2.1.</span> <span class="nav-text">初次安装 pycurl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二次安装-pycurl"><span class="nav-number">2.2.</span> <span class="nav-text">第二次安装 pycurl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三次安装pycurl"><span class="nav-number">2.3.</span> <span class="nav-text">第三次安装pycurl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四次安装pycurl"><span class="nav-number">2.4.</span> <span class="nav-text">第四次安装pycurl</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -851,7 +1178,7 @@ blockquote:after {
       <script type="text/javascript">
       function renderGitment(){
         var gitment = new Gitmint({
-            id: '1523801805000', 
+            id: '1533954007000', 
             owner: 'crrrrrw',
             repo: 'hexo_static_page',
             
