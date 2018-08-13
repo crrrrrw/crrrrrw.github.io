@@ -2,16 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://www.chenruiwen.cn/All/macos-fix-problem-about-pycurl-install/</loc>
+    <loc>https://www.chenruiwen.cn/essay/Goodbye-Azeroth/</loc>
     
-    <lastmod>2018-08-12T05:08:56.330Z</lastmod>
+    <lastmod>2018-08-13T15:19:33.583Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn/redis/redis-hyperloglog/</loc>
+    
+    <lastmod>2018-08-13T14:23:20.831Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://www.chenruiwen.cn/about/index.html</loc>
     
-    <lastmod>2018-08-05T13:50:44.000Z</lastmod>
+    <lastmod>2018-08-12T13:32:28.014Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn//404.html</loc>
+    
+    <lastmod>2018-08-12T12:52:17.055Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn/python/macos-fix-problem-about-pycurl-install/</loc>
+    
+    <lastmod>2018-08-12T06:40:23.740Z</lastmod>
     
   </url>
   
@@ -19,13 +40,6 @@
     <loc>https://www.chenruiwen.cn/photos/index.html</loc>
     
     <lastmod>2018-08-05T12:49:24.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.chenruiwen.cn/redis/redis-hyperloglog/</loc>
-    
-    <lastmod>2018-08-05T07:17:32.000Z</lastmod>
     
   </url>
   

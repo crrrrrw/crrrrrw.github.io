@@ -4,29 +4,28 @@
 
     
   <url>
-    <loc>https://www.chenruiwen.cn/All/macos-fix-problem-about-pycurl-install/</loc>
-    <lastmod>2018-08-12T05:08:56.330Z</lastmod>
+    <loc>https://www.chenruiwen.cn/essay/Goodbye-Azeroth/</loc>
+    <lastmod>2018-08-13T15:19:33.583Z</lastmod>
     <data>
         <display>
-        <title>MacOS解决pycurl安装的坑</title>
-        <pubTime>2018-08-11T02:20:07.000Z</pubTime>
+        <title>再见，艾泽拉斯</title>
+        <pubTime>2018-08-13T13:24:03.000Z</pubTime>
         
-        <tag>python</tag>
-         
-        <tag>pycurl</tag>
+        <tag>essay</tag>
          
          
            
+             
+              <breadCrumb title="essay" url="https://www.chenruiwen.cn/categories/essay/"/>
+          
         </display>
     </data>
     </url>
 
     
-    
-    
   <url>
     <loc>https://www.chenruiwen.cn/redis/redis-hyperloglog/</loc>
-    <lastmod>2018-08-05T07:17:32.000Z</lastmod>
+    <lastmod>2018-08-13T14:23:20.831Z</lastmod>
     <data>
         <display>
         <title>redis“冷门”知识点：HyperLogLog</title>
@@ -43,6 +42,31 @@
     </data>
     </url>
 
+    
+    
+    
+  <url>
+    <loc>https://www.chenruiwen.cn/python/macos-fix-problem-about-pycurl-install/</loc>
+    <lastmod>2018-08-12T06:40:23.740Z</lastmod>
+    <data>
+        <display>
+        <title>MacOS解决pycurl安装的坑</title>
+        <pubTime>2018-08-11T02:20:07.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+        <tag>pycurl</tag>
+         
+         
+           
+             
+              <breadCrumb title="python" url="https://www.chenruiwen.cn/categories/python/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
     
     
     
