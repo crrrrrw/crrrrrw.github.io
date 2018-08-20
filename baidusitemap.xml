@@ -4,6 +4,51 @@
 
     
   <url>
+    <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-atomic-and-locks/</loc>
+    <lastmod>2018-08-20T15:23:42.298Z</lastmod>
+    <data>
+        <display>
+        <title>浅析java并发包(一)：原子类和锁</title>
+        <pubTime>2018-08-20T15:16:24.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>java concurrency</tag>
+         
+         
+           
+             
+              <breadCrumb title="java-concurrency" url="https://www.chenruiwen.cn/categories/java-concurrency/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+  <url>
+    <loc>https://www.chenruiwen.cn/python/macos-fix-problem-about-pycurl-install/</loc>
+    <lastmod>2018-08-14T14:12:02.744Z</lastmod>
+    <data>
+        <display>
+        <title>MacOS解决pycurl安装的坑</title>
+        <pubTime>2018-08-11T02:20:07.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+        <tag>pycurl</tag>
+         
+         
+           
+             
+              <breadCrumb title="python" url="https://www.chenruiwen.cn/categories/python/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://www.chenruiwen.cn/essay/Goodbye-Azeroth/</loc>
     <lastmod>2018-08-13T15:19:33.583Z</lastmod>
     <data>
@@ -45,29 +90,6 @@
     
     
     
-  <url>
-    <loc>https://www.chenruiwen.cn/python/macos-fix-problem-about-pycurl-install/</loc>
-    <lastmod>2018-08-12T06:40:23.740Z</lastmod>
-    <data>
-        <display>
-        <title>MacOS解决pycurl安装的坑</title>
-        <pubTime>2018-08-11T02:20:07.000Z</pubTime>
-        
-        <tag>python</tag>
-         
-        <tag>pycurl</tag>
-         
-         
-           
-             
-              <breadCrumb title="python" url="https://www.chenruiwen.cn/categories/python/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-    
     
     
     
@@ -84,9 +106,9 @@
         
         <tag>java</tag>
          
-        <tag>转载摘抄</tag>
-         
         <tag>java concurrency</tag>
+         
+        <tag>转载摘抄</tag>
          
          
            
@@ -106,9 +128,9 @@
         <title>spring-boot优雅使用redis集中式缓存</title>
         <pubTime>2018-07-25T12:26:10.000Z</pubTime>
         
-        <tag>spring-boot</tag>
-         
         <tag>redis</tag>
+         
+        <tag>spring-boot</tag>
          
         <tag>cache</tag>
          
