@@ -3,9 +3,10 @@
 
 
     
+    
   <url>
     <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-atomic-and-locks/</loc>
-    <lastmod>2018-08-20T15:23:42.298Z</lastmod>
+    <lastmod>2018-08-21T13:14:37.736Z</lastmod>
     <data>
         <display>
         <title>浅析java并发包(一)：原子类和锁</title>
@@ -95,7 +96,6 @@
     
     
     
-    
   <url>
     <loc>https://www.chenruiwen.cn/java-concurrency/java-concurrency-se-16-synchronized/</loc>
     <lastmod>2018-07-29T09:38:51.000Z</lastmod>
@@ -106,9 +106,9 @@
         
         <tag>java</tag>
          
-        <tag>java concurrency</tag>
-         
         <tag>转载摘抄</tag>
+         
+        <tag>java concurrency</tag>
          
          
            
@@ -128,11 +128,11 @@
         <title>spring-boot优雅使用redis集中式缓存</title>
         <pubTime>2018-07-25T12:26:10.000Z</pubTime>
         
-        <tag>redis</tag>
-         
         <tag>spring-boot</tag>
          
         <tag>cache</tag>
+         
+        <tag>redis</tag>
          
          
            
@@ -542,9 +542,9 @@
         <title>ubuntu自定义安装Mysql全记录</title>
         <pubTime>2018-04-22T12:18:49.000Z</pubTime>
         
-        <tag>mysql</tag>
-         
         <tag>运维</tag>
+         
+        <tag>mysql</tag>
          
          
            
@@ -564,9 +564,9 @@
         <title>从一份配置清单详解Nginx服务器配置</title>
         <pubTime>2018-07-03T23:46:12.000Z</pubTime>
         
-        <tag>转载摘抄</tag>
-         
         <tag>nginx</tag>
+         
+        <tag>转载摘抄</tag>
          
          
            

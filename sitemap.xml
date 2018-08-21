@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.chenruiwen.cn/about/index.html</loc>
+    
+    <lastmod>2018-08-21T14:06:39.613Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-atomic-and-locks/</loc>
     
-    <lastmod>2018-08-20T15:23:42.298Z</lastmod>
+    <lastmod>2018-08-21T13:14:37.736Z</lastmod>
     
   </url>
   
@@ -33,13 +40,6 @@
     <loc>https://www.chenruiwen.cn/redis/redis-hyperloglog/</loc>
     
     <lastmod>2018-08-13T14:23:20.831Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.chenruiwen.cn/about/index.html</loc>
-    
-    <lastmod>2018-08-12T13:32:28.014Z</lastmod>
     
   </url>
   
