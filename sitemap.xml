@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.chenruiwen.cn/photos/data.json</loc>
+    
+    <lastmod>2018-08-26T13:59:46.825Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.chenruiwen.cn/about/index.html</loc>
     
     <lastmod>2018-08-21T14:06:39.613Z</lastmod>
@@ -47,13 +54,6 @@
     <loc>https://www.chenruiwen.cn//404.html</loc>
     
     <lastmod>2018-08-12T12:52:17.055Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.chenruiwen.cn/photos/data.json</loc>
-    
-    <lastmod>2018-08-05T03:21:22.000Z</lastmod>
     
   </url>
   
