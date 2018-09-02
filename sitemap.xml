@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-collections/</loc>
+    
+    <lastmod>2018-09-02T07:58:08.445Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.chenruiwen.cn/photos/data.json</loc>
     
     <lastmod>2018-08-26T13:59:46.825Z</lastmod>
