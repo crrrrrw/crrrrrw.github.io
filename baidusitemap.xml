@@ -5,10 +5,32 @@
     
   <url>
     <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-collections/</loc>
-    <lastmod>2018-09-02T07:58:08.445Z</lastmod>
+    <lastmod>2018-09-08T15:59:23.612Z</lastmod>
     <data>
         <display>
-        <title>浅析java并发包(二)：并发容器类.md</title>
+        <title>浅析java并发包(三)：阻塞队列(BlockingQueue)</title>
+        <pubTime>2018-09-08T08:16:24.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>java concurrency</tag>
+         
+         
+           
+             
+              <breadCrumb title="java-concurrency" url="https://www.chenruiwen.cn/categories/java-concurrency/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-collections/</loc>
+    <lastmod>2018-09-02T08:03:27.183Z</lastmod>
+    <data>
+        <display>
+        <title>浅析java并发包(二)：并发容器类</title>
         <pubTime>2018-09-02T08:16:24.000Z</pubTime>
         
         <tag>java</tag>
@@ -126,9 +148,9 @@
         <title>Java SE1.6中的Synchronized</title>
         <pubTime>2018-07-29T08:40:24.000Z</pubTime>
         
-        <tag>java</tag>
-         
         <tag>转载摘抄</tag>
+         
+        <tag>java</tag>
          
         <tag>java concurrency</tag>
          
@@ -152,9 +174,9 @@
         
         <tag>spring-boot</tag>
          
-        <tag>cache</tag>
-         
         <tag>redis</tag>
+         
+        <tag>cache</tag>
          
          
            
