@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-callable-future-futureTask/</loc>
+    
+    <lastmod>2018-09-17T14:21:37.472Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-latch-and-barrier/</loc>
     
-    <lastmod>2018-09-11T12:34:19.516Z</lastmod>
+    <lastmod>2018-09-17T13:34:00.207Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn/about/index.html</loc>
+    
+    <lastmod>2018-09-11T12:48:09.428Z</lastmod>
     
   </url>
   
@@ -26,13 +40,6 @@
     <loc>https://www.chenruiwen.cn/photos/data.json</loc>
     
     <lastmod>2018-08-26T13:59:46.825Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.chenruiwen.cn/about/index.html</loc>
-    
-    <lastmod>2018-08-21T14:06:39.613Z</lastmod>
     
   </url>
   

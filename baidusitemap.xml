@@ -4,12 +4,12 @@
 
     
   <url>
-    <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-latch-and-barrier/</loc>
-    <lastmod>2018-09-11T12:34:19.516Z</lastmod>
+    <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-callable-future-futureTask/</loc>
+    <lastmod>2018-09-17T14:21:37.472Z</lastmod>
     <data>
         <display>
-        <title>浅析java并发包(三)：闭锁与栅栏</title>
-        <pubTime>2018-09-08T15:16:24.000Z</pubTime>
+        <title>浅析java并发包(五)：Callable、Future和FutureTask</title>
+        <pubTime>2018-09-17T14:24:24.000Z</pubTime>
         
         <tag>java</tag>
          
@@ -24,6 +24,29 @@
     </data>
     </url>
 
+    
+  <url>
+    <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-latch-and-barrier/</loc>
+    <lastmod>2018-09-17T13:34:00.207Z</lastmod>
+    <data>
+        <display>
+        <title>浅析java并发包(四)：闭锁与栅栏</title>
+        <pubTime>2018-09-10T13:46:24.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>java concurrency</tag>
+         
+         
+           
+             
+              <breadCrumb title="java-concurrency" url="https://www.chenruiwen.cn/categories/java-concurrency/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
     
   <url>
     <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-BlockingQueue/</loc>
@@ -68,7 +91,6 @@
     </data>
     </url>
 
-    
     
     
   <url>
@@ -170,9 +192,9 @@
         <title>Java SE1.6中的Synchronized</title>
         <pubTime>2018-07-29T08:40:24.000Z</pubTime>
         
-        <tag>java</tag>
-         
         <tag>转载摘抄</tag>
+         
+        <tag>java</tag>
          
         <tag>java concurrency</tag>
          
