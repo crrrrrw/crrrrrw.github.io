@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[《大型网站技术架构》知识总结]]></title>
+    <url>%2Farchitecture%2Flarge-scale-websites-architecture-note%2F</url>
+    <content type="text"><![CDATA[前言又把《大型网站技术架构-核心原理与案例分析》看了一遍，之前走马观花看了一遍，没有体会到精髓。现在具备一定“中型”网站开发经验后再看之，又有些体会，故整理一下这本书的内容。 大型网站架构演化大型网站软件的特点 高并发、大流量 高可用 海量数据 用户分布广泛 安全环境恶劣 需求变更快，发布频繁 渐进式发展 大型网站架构演化发展历程 初始阶段的网站架构：all in one，一台服务器，部署了应用程序，数据库，文件，等所有资源。比如经典的LAMP架构。 应用和数据服务分离：应用程序，数据库，文件分别用了3台服务器部署。 使用缓存改善网站性能：本地缓存+分布式缓存。 使用应用服务器集群改善网站并发处理能力：通过负载均衡调度服务器来将访问请求分发到应用服务器集群中的任何一台机器。 数据库读写分离：数据库采用主从热备，写数据在主数据库中，主数据库通过主从复制机制将数据更新同步到从数据库。读数据从从库读取。 使用反向代理和 CDN 加速网站响应：这两者基本原理都是缓存。CDN 部署在网络提供商的机房，使用户可从离距离自己最近的提供商机房获取数据;反向代理部署在网站的中心机房，减轻后端负载压力，反向代理服务器命中的静态数据可直接返回。 使用分布式文件系统和分布式数据库系统：数据库拆分的最后手段，解决单表特别大的情况。 使用 NoSQL 和搜索引擎：对可伸缩的分布式有更好的支持。 业务拆分：将整个网站业务拆分成不同的应用，每个应用独立部署维护，应用之间通过超链接建立联系/消息队列进行数据分发/访问同一数据存储系统 分布式服务：公共业务提取出来独立部署 大型网站演化到这里，大多数技术问题都得以解决，如图： 大型网站架构演化的价值观 大型网站架构的核心价值是随网站所需灵活应对 驱动大型网站技术发展的主要力量是网站的业务发展 网站架构设计误区 一味追随大公司的解决方案 为了技术而技术 企图用技术解决所有问题 大型网站架构模式 分层:计算机世界无处不在，操作系统与硬件，网络七层，网站应用MVC分层。 分割：按业务分割 分布式： 分布式应用和服务 分布式静态资源 分布式数据和存储 分布式计算 集群 缓存： CDN 反向代理 本地缓存 分布式缓存 异步： 提供系统可用性 加快网站响应速度 消除高并发访问高峰 冗余：服务器冗余运行，数据库冗余备份（冷热备份） 自动化：自动化代码管理；自动化发布；自动化测试；自动化安全检测；自动化部署；自动化监控；自动化报警；自动化失效转移；自动化失效恢复；自动化降级；自动化分配资源。 安全：防止XSS攻击、sql注入。 大型网站核心架构要素 性能 浏览器端:浏览器缓存，页面压缩，合理布局页面，减少Cookie传输 CDN：静态内容分发到离用户最近的网络服务商机房。 应用服务器：缓存+异步。 代码层面：多线程+改善内存等手段优化。 数据库：索引，缓存，SQL优化等。 可用性：只要手段是冗余 应用服务器：负载均衡组成集群。 数据库：实时备份。 软件开发质量保证：预发布验证，自动化测试，自动化发布，灰度发布等。 伸缩性：主要标准是是否可以构成集群，是否容易不断地向服务器集群加服务器 应用服务器集群：负载均衡设备。 缓存服务器集群：改进缓存路由算法保证存储数据的可访问性。 数据库：路由分区等。 NoSQL数据库：先天良好支持。 扩展性：指业务上是否可以少有改动快速上线。主要手段是事件驱动架构和分布式服务。 事件驱动架构：通常用消息队列实现。 分布式服务：按业务和可复用性将服务分离。 安全性：标准是针对现存和潜在的各种攻击和窃密手段，是否有可靠的应对策略。 瞬时响应：网站的高性能架构网站性能测试 不同视角下网站的性能 用户视角网站性能：响应时间。 开发人员视角的网站性能：响应时间、并发量、吞吐量。 运维人员视角的网站性能：资源。 性能测试指标 响应时间：直观反映系统快慢。 并发数：反映系统负载特性。 吞吐量：反映系统整体处理能力。通过qps,tps,hps测量。 性能计数器：描述服务器或操作系统的数据指标。包括System Load、对象与线程数、内存使用、CPU使用、磁盘与网络I/O等指标。 性能测试方法 性能测试：验证系统在资源可接受范围内。 负载测试：测试安全临界值。 压力测试：测试系统最大压力承受能力。 稳定性测试：模拟生产环境。 性能测试报告 性能优化策略 性能分析：1.检测请求各环节日志，分析那个环节响应时间不合理。2.检查监控数据。 性能优化： Web前端性能优化 应用服务器性能优化 存储服务器性能优化 web前端性能优化 浏览器访问优化 减少http请求 使用浏览器缓存 启用压缩 css放在网页最上面 js最下面 减少cookie传输 CDN加速 反向代理：安全屏障；缓存静态和热点数据；负载均衡。 应用服务器性能优化优化的主要手段还是：缓存，异步，集群。 分布式缓存 缓存的基本原理 合理的使用缓存 频繁修改数据：读写比2：1以上缓存才有意义 没有热点的访问 数据不一致与脏读 缓存可用性 缓存预热 缓存穿透 分布式缓存架构 异步操作：削峰 使用集群 代码优化 多线程： 将对象设计为无状态对象 使用局部对象 并发访问资源加锁 资源复用：单例和对象池 数据结构 垃圾回收 存储性能优化 机械硬盘 vs. 固态硬盘 B+ 树 vs. LSM 树 RAID vs. HDFS PS未完待续…]]></content>
+      <categories>
+        <category>architecture</category>
+      </categories>
+      <tags>
+        <tag>architecture</tag>
+        <tag>read notes</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[浅析java并发包(五)：Callable、Future和FutureTask]]></title>
     <url>%2Fjava-concurrency%2Fjava-util-concurrent-callable-future-futureTask%2F</url>
     <content type="text"><![CDATA[前言创建一个线程，最熟悉的做法是集成Thread类或者实现Runnable接口重新run()。 但是这两种创建方式在一些场景比如想要获取线程的执行结果时却不那么好用。J.U.C满足了这种需求。 今天说一下不得不知的Callable、Future和FutureTask Callable比对Runnable接口与Callable接口： public interface Runnable { public abstract void run(); } public interface Callable&lt;V&gt; { V call() throws Exception; } 可以看到，Callable接口代表一种能返回结果并可能引发异常的任务。 实现者只要实现call()并返回任务结果即可。 Callable接口类似于Runnable，但是，Runnable不返回结果，也不能抛出被检查的异常。 一个好的事实是，无论是Callable还是Runnable，都可以很好的与Executor框架结合使用： &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task); &lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result); Future&lt;?&gt; submit(Runnable task); Futurefuture,单从语义上就知道代表未来，实际上也是如此。 先看接口定义： public interface Future&lt;V&gt; { boolean cancel(boolean mayInterruptIfRunning); boolean isCancelled(); boolean isDone(); V get() throws InterruptedException, ExecutionException; V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException; } Future提供了5个方法: cancel(boolean mayInterruptIfRunning):尝试取消执行此任务。 isCancelled():如果此任务在正常完成之前被取消，则返回 true 。 isDone():如果任务已完成返回 true。 get():一直阻塞直至获取执行结果。 get(long timeout, TimeUnit unit)：在指定时间内获取执行结果，获取不到抛出TimeoutException FutureTaskFutureTask实现了RunnableFuture接口，看下RunnableFuture接口： public interface RunnableFuture&lt;V&gt; extends Runnable, Future&lt;V&gt; { void run(); } 可以看到它即实现了Runnable接口，也实现了Future接口，因此FutureTask可以作为Runnable的实现， 也可以作为Future来获取Callable的返回。看其构造器便知如何选择： public FutureTask(Callable&lt;V&gt; callable) { } public FutureTask(Runnable runnable, V result) { } 推荐的使用方式开发中建议使用线程池+Callable返回Future的方式来获取异步结果,最好给予超时时间： ExecutorService es = Executors.newSingleThreadExecutor(); Future&lt;Integer&gt; future = es.submit(() -&gt; { try { System.out.println(&quot;开始执行计算任务...&quot;); Thread.sleep(5000L); } catch (InterruptedException e) { e.printStackTrace(); } return 100; }); es.shutdown(); // Integer integer = future.get(); // System.out.println(&quot;get() 获取异步任务结果:&quot; + integer); Integer integer; try { integer = future.get(2, TimeUnit.SECONDS); } catch (TimeoutException e) { System.out.println(&quot;调用超时，返回错误结果&quot;); integer = -1; } System.out.println(&quot;get(timeout) 获取异步任务结果:&quot; + integer); } 返回的结果值: 开始执行计算任务... 调用超时，返回错误结果 get(timeout) 获取异步任务结果:-1]]></content>
@@ -102,8 +114,8 @@
         <category>java-concurrency</category>
       </categories>
       <tags>
-        <tag>转载摘抄</tag>
         <tag>java</tag>
+        <tag>转载摘抄</tag>
         <tag>java concurrency</tag>
       </tags>
   </entry>

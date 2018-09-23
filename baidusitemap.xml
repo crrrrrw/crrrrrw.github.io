@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>https://www.chenruiwen.cn/architecture/large-scale-websites-architecture-note/</loc>
+    <lastmod>2018-09-23T15:04:44.352Z</lastmod>
+    <data>
+        <display>
+        <title>《大型网站技术架构》知识总结</title>
+        <pubTime>2018-09-23T15:10:24.000Z</pubTime>
+        
+        <tag>architecture</tag>
+         
+        <tag>read notes</tag>
+         
+         
+           
+             
+              <breadCrumb title="architecture" url="https://www.chenruiwen.cn/categories/architecture/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-callable-future-futureTask/</loc>
     <lastmod>2018-09-17T14:21:37.472Z</lastmod>
     <data>
@@ -192,9 +214,9 @@
         <title>Java SE1.6中的Synchronized</title>
         <pubTime>2018-07-29T08:40:24.000Z</pubTime>
         
-        <tag>转载摘抄</tag>
-         
         <tag>java</tag>
+         
+        <tag>转载摘抄</tag>
          
         <tag>java concurrency</tag>
          

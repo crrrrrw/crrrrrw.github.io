@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.chenruiwen.cn/architecture/large-scale-websites-architecture-note/</loc>
+    
+    <lastmod>2018-09-23T15:04:44.352Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-callable-future-futureTask/</loc>
     
     <lastmod>2018-09-17T14:21:37.472Z</lastmod>
