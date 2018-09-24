@@ -5,7 +5,7 @@
     
   <url>
     <loc>https://www.chenruiwen.cn/architecture/large-scale-websites-architecture-note/</loc>
-    <lastmod>2018-09-23T15:04:44.352Z</lastmod>
+    <lastmod>2018-09-24T13:04:33.531Z</lastmod>
     <data>
         <display>
         <title>《大型网站技术架构》知识总结</title>
@@ -214,9 +214,9 @@
         <title>Java SE1.6中的Synchronized</title>
         <pubTime>2018-07-29T08:40:24.000Z</pubTime>
         
-        <tag>java</tag>
-         
         <tag>转载摘抄</tag>
+         
+        <tag>java</tag>
          
         <tag>java concurrency</tag>
          
