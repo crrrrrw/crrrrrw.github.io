@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>https://www.chenruiwen.cn/travel/traveling-all-around-Bali/</loc>
+    <lastmod>2018-10-24T15:43:55.321Z</lastmod>
+    <data>
+        <display>
+        <title>巴厘岛旅行记</title>
+        <pubTime>2018-10-24T15:40:24.000Z</pubTime>
+        
+        <tag>travel</tag>
+         
+        <tag>Bali</tag>
+         
+         
+           
+             
+              <breadCrumb title="travel" url="https://www.chenruiwen.cn/categories/travel/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://www.chenruiwen.cn/architecture/large-scale-websites-architecture-note/</loc>
     <lastmod>2018-09-24T13:04:33.531Z</lastmod>
     <data>
@@ -214,9 +236,9 @@
         <title>Java SE1.6中的Synchronized</title>
         <pubTime>2018-07-29T08:40:24.000Z</pubTime>
         
-        <tag>转载摘抄</tag>
-         
         <tag>java</tag>
+         
+        <tag>转载摘抄</tag>
          
         <tag>java concurrency</tag>
          
