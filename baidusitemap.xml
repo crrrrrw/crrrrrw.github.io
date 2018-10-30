@@ -4,8 +4,30 @@
 
     
   <url>
+    <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-ThreadPoolExecutor/</loc>
+    <lastmod>2018-10-30T13:30:59.972Z</lastmod>
+    <data>
+        <display>
+        <title>浅析java并发包(六)：线程池那些事儿</title>
+        <pubTime>2018-10-28T10:23:51.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>java concurrency</tag>
+         
+         
+           
+             
+              <breadCrumb title="java-concurrency" url="https://www.chenruiwen.cn/categories/java-concurrency/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://www.chenruiwen.cn/travel/traveling-all-around-Bali/</loc>
-    <lastmod>2018-10-24T15:43:55.321Z</lastmod>
+    <lastmod>2018-10-28T12:23:43.463Z</lastmod>
     <data>
         <display>
         <title>巴厘岛旅行记</title>
