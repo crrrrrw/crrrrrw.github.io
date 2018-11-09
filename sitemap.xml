@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.chenruiwen.cn/redis/JedisPool-optimize-record/</loc>
+    
+    <lastmod>2018-11-09T15:48:46.869Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-service-export-process/</loc>
+    
+    <lastmod>2018-10-31T14:18:38.453Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-ThreadPoolExecutor/</loc>
     
     <lastmod>2018-10-30T13:30:59.972Z</lastmod>
@@ -138,13 +152,6 @@
     <loc>https://www.chenruiwen.cn/java/java8-in-action/</loc>
     
     <lastmod>2018-07-22T00:59:51.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.chenruiwen.cn/dubbo/dubbo-service-export-process/</loc>
-    
-    <lastmod>2018-07-22T00:58:57.000Z</lastmod>
     
   </url>
   
