@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.chenruiwen.cn/Linux/Linux-performance-analysis-util/</loc>
+    
+    <lastmod>2018-11-14T13:27:05.711Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.chenruiwen.cn/redis/JedisPool-optimize-record/</loc>
     
     <lastmod>2018-11-09T15:48:46.869Z</lastmod>

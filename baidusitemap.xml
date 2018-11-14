@@ -4,6 +4,30 @@
 
     
   <url>
+    <loc>https://www.chenruiwen.cn/Linux/Linux-performance-analysis-util/</loc>
+    <lastmod>2018-11-14T13:27:05.711Z</lastmod>
+    <data>
+        <display>
+        <title>Linux常用性能分析工具</title>
+        <pubTime>2018-11-14T13:19:22.000Z</pubTime>
+        
+        <tag>architecture</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>performance analysis</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="https://www.chenruiwen.cn/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://www.chenruiwen.cn/redis/JedisPool-optimize-record/</loc>
     <lastmod>2018-11-09T15:48:46.869Z</lastmod>
     <data>
