@@ -14,6 +14,17 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[小Tips，加速github访问速度]]></title>
+    <url>%2Ftips%2Flittle-tips-optimize-github-access%2F</url>
+    <content type="text"><![CDATA[前言访问github的速度真的太慢了。(尤其微软收购之后。:D)。 尤其在git clone等操作上确实影响心情: Receiving objects: 8% (497/5635), 2.89 MiB | 15.00 KiB/s 然而解决的方法非常简单。 解决方案慢的原因在哪？其实并不是因为 http://github.com 的这个域名被限制了。而是 http://github.global.ssl.fastly.Net 这个域名被限制了。 解决方法在于修改hosts文件，增加如下: 151.101.72.249 global-ssl.fastly.Net 192.30.253.112 github.com 成功解决问题，测速如下: Receiving objects: 100% (5635/5635), 46.94 MiB | 2.27 MiB/s, done. 总结国内的编程环境的阻碍还是不少啊~~]]></content>
+      <categories>
+        <category>tips</category>
+      </categories>
+      <tags>
+        <tag>tips</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[记一次jedis连接异常引发的血案]]></title>
     <url>%2Fredis%2FJedisPool-optimize-record%2F</url>
     <content type="text"><![CDATA[前言每年双十一，各个互联网企业都会搞一些活动来促销自己公司产品，然而今年对于互联网金融领域的企业来说，可能并不好过，本以为今年公司不搞活动了，然而11月7号被告知11月9号上午发售一批双十一产品搞活动，这对于我们技术人员来说即兴奋又担忧，兴奋的是遇到这种类似秒杀场景的机会不多，担忧的是害怕网站会挂掉，而且留给我们的时间只有两天。 去年花了一段时间优化了我们网站，从架构层面到代码层面，也做了充分的全链路压测，花费了不少心思。(然而去年，并没有搞活动。)总之，我们还是对我们的代码有信心。 虽说如此，我们还是做了2天的全链路压测，压测数据单机qps大概能达到400+，能撑住五分钟左右然后系统性能下降，但是一分钟后qps又能上来，系统并没有挂掉，说明我们的系统还可以，又增加了自信。 今天上午9点早早到达公司，打开各种监控和日志，实施观察以便处理意外情况。果不其然，产品销售很快，门槛低的产品基本一分钟内卖完，90%的产品八分钟内卖完。我们的系统抗住压力。 app端请求数: app端购买请求数： 问题然而还是出现了一些问题。 运维的同学反馈，基于redis统计并发在线人数有些不正常，有一个突然间的峰值： 老大反馈了一些问题： 总之问题是： 登录后，PC端在产品可购买的瞬间大量用户登出系统了。 购买后反馈结果慢。(这个问题老问题了，原因是对接杭州那边系统反应慢。) 排查问题我们主要是排查为什么大量用户登出？ 开始以为是cookie被删除的原因，但是大量用户登出还是有些不正常，我们的服务监控也没有报警，一度觉得很诧异，总之还是先查日志吧，万一日志确实没有报警呢？ 还真是。Dubbo报错：调用用户服务线程池满了，达到上限200，之后的请求全部拒绝了: 到底什么导致了Dubbo线程池满了？接着看日志找到了具体的报错信息: Caused by: java.util.NoSuchElementException: Timeout waiting for idle object at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:449) at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:363) at redis.clients.util.Pool.getResource(Pool.java:49) ... 16 more Exception in thread &quot;pool-4-thread-4074&quot; org.springframework.data.redis.RedisConnectionFailureException: Cannot get Jedis connection; nested exception is redis.clients.jedis.exceptions.JedisException: Could not get a resource from the pool at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.fetchJedisConnector(JedisConnectionFactory.java:198) at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.getConnection(JedisConnectionFactory.java:345) at org.springframework.data.redis.core.RedisConnectionUtils.doGetConnection(RedisConnectionUtils.java:129) at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:92) at org.springframework.data.redis.core.RedisConnectionUtils.getConnection(RedisConnectionUtils.java:79) at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:191) at org.springframework.data.redis.core.RedisTemplate.execute(RedisTemplate.java:166) at org.springframework.data.redis.core.AbstractOperations.execute(AbstractOperations.java:88) at org.springframework.data.redis.core.DefaultValueOperations.set(DefaultValueOperations.java:169) at com.gemantic.wealth.test.controller.RedisController$1.run(RedisController.java:40) at com.gemantic.wealth.test.controller.MyRunnable.run(RedisController.java:84) at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142) at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617) at java.lang.Thread.run(Thread.java:745) Caused by: redis.clients.jedis.exceptions.JedisException: Could not get a resource from the pool at redis.clients.util.Pool.getResource(Pool.java:51) at redis.clients.jedis.JedisPool.getResource(JedisPool.java:99) at redis.clients.jedis.JedisPool.getResource(JedisPool.java:12) at org.springframework.data.redis.connection.jedis.JedisConnectionFactory.fetchJedisConnector(JedisConnectionFactory.java:191) ... 13 more Caused by: java.util.NoSuchElementException: Timeout waiting for idle object at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:449) at org.apache.commons.pool2.impl.GenericObjectPool.borrowObject(GenericObjectPool.java:363) at redis.clients.util.Pool.getResource(Pool.java:49) ... 16 more 那么问题就比较明朗了： jedis获取资源时等待超时，连接不上报错。 看了下生产的redis配置： spring.redis: database: 1 host: redis port: 6379 password: pool: max-wait: 3000 max-idle: 20 问题可能是出在这里，大胆猜测一下：由于没有配置jedisPool的maxTotal，默认连接数为8，当并发数上来时，大量请求过来导致大部分的连接不上redis而直接抛异常了。 Google了一下，也有我们这种情况的先例，但还是先测试一下： 200个并发请求往redis中插入数据，jedis配置与生产一致的情况，发现稳定浮现错误信息。 对比测试，修改测试用例的jedis配置，大致，最大连接数改为100后测试，发现报错少了90%。那么应该就是这个问题了。 解决生产问题，修改redis配置: spring.redis: database: 1 host: redis port: 6379 password: pool: max-wait: 500 max-idle: 50 max-active: 50 解释一下: max-wait: 对应连接池连接等待时间，原先是3000毫秒，有些长了，连接不上应该尽早报错不要占用资源。 max-active：对应JedisPoolConfig的maxTotal，最大连接数，主要改的就是这个。 max-idle：最大空闲连接数，保持与maxTotal一致，避免连接池伸缩带来的性能干扰。 以上设置参考了JedisPool资源池优化。 最后附一下JedisPoolConfig关键配置，也是参考以上博客哈： 参数名 含义 默认值 使用建议 maxTotal 资源池中最大连接数 8 不能太大，连接太多占用客户端和服务器的资源，建议50 maxIdle 资源池允许最大空闲的连接数 8 与maxTotal一致 minIdle 资源池确保最少空闲的连接数 0 根据业务，可设置少量 blockWhenExhausted 当资源池用尽后，调用者是否要等待。只有当为true时，下面的maxWaitMillis才会生效 true 建议默认值 maxWaitMillis 当资源池连接用尽后，调用者的最大等待时间(单位为毫秒) -1 : 表示永不超时 不建议默认值，我们是500 testOnBorrow 向资源池借用连接时是否做连接有效性检测(ping)，无效连接会被移除 false 业务量很大时候建议设置为false(多一次ping的开销)。 testOnReturn 向资源池归还连接时是否做连接有效性检测(ping)，无效连接会被移除 false 业务量很大时候建议设置为false(多一次ping的开销)。 jmxEnabled 是否开启jmx监控，可用于监控 true 建议开启，但应用本身也要开启 testWhileIdle 是否开启空闲资源监测 false true timeBetweenEvictionRunsMillis 空闲资源的检测周期(单位为毫秒) -1：不检测 建议设置，周期自行选择，也可以默认也可以使用下面JedisPoolConfig中的配置 minEvictableIdleTimeMillis 资源池中资源最小空闲时间(单位为毫秒)，达到此值后空闲资源将被移除 10006030 = 30 min 可根据自身业务决定，大部分默认值即可，也可以考虑使用下面JeidsPoolConfig中的配置 numTestsPerEvictionRun 做空闲资源检测时，每次的采样数 3 可根据自身应用连接数进行微调,如果设置为-1，就是对所有连接做空闲监测 结束语这次的问题属于客户端设置参数的问题，还是要检查一下各个服务的配置为好。 解决了这个问题，根据监控发现还有更多可优化的地方，其次，我们的这次监控没有加上Jedis的异常报错，监控还有待提高，不过我们以及在测试环境上接上了点评的CAT,非常好用，踩完坑后准备接到生产。 最后感慨一下解决问题真的很有快感。更感谢帮助我解决问题的这些参考的博文: Jedis常见异常汇总 JedisPool资源池优化]]></content>
@@ -177,8 +188,8 @@
       </categories>
       <tags>
         <tag>spring-boot</tag>
-        <tag>cache</tag>
         <tag>redis</tag>
+        <tag>cache</tag>
       </tags>
   </entry>
   <entry>
@@ -414,6 +425,7 @@
       </categories>
       <tags>
         <tag>tool</tag>
+        <tag>tips</tag>
       </tags>
   </entry>
   <entry>

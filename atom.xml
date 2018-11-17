@@ -43,6 +43,31 @@
   </entry>
   
   <entry>
+    <title>小Tips，加速github访问速度</title>
+    <link href="https://www.chenruiwen.cn/tips/little-tips-optimize-github-access/"/>
+    <id>https://www.chenruiwen.cn/tips/little-tips-optimize-github-access/</id>
+    <published>2018-11-14T09:33:22.000Z</published>
+    <updated>2018-11-17T09:34:33.222Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>访问<a href="https://github.com/" target="_blank" rel="noopener">github</a>的速度真的太慢了。(尤其微软收购之后。:D)。尤其在<code>git clone</code>等操作上确实影响心情:</p><pre><code>Receiving objects:   8% (497/5635), 2.89 MiB | 15.00 KiB/s</code></pre><p>然而解决的方法非常简单。</p><h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>慢的原因在哪？其实并不是因为 <code>http://github.com</code> 的这个域名被限制了。而是 <code>http://github.global.ssl.fastly.Net</code> 这个域名被限制了。</p><p>解决方法在于修改<code>hosts</code>文件，增加如下:</p><pre><code>151.101.72.249 global-ssl.fastly.Net192.30.253.112 github.com</code></pre><p>成功解决问题，测速如下:</p><pre><code>Receiving objects: 100% (5635/5635), 46.94 MiB | 2.27 MiB/s, done.</code></pre><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>国内的编程环境的阻碍还是不少啊~~</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;访问&lt;a href=&quot;https://github.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;github&lt;
+      
+    
+    </summary>
+    
+      <category term="tips" scheme="https://www.chenruiwen.cn/categories/tips/"/>
+    
+    
+      <category term="tips" scheme="https://www.chenruiwen.cn/tags/tips/"/>
+    
+  </entry>
+  
+  <entry>
     <title>记一次jedis连接异常引发的血案</title>
     <link href="https://www.chenruiwen.cn/redis/JedisPool-optimize-record/"/>
     <id>https://www.chenruiwen.cn/redis/JedisPool-optimize-record/</id>
@@ -390,9 +415,9 @@ jdk1.5之后，&lt;code&gt;j.u.c&lt;/code&gt;中有了基于&lt;code&gt;CAS&lt;/
     
       <category term="spring-boot" scheme="https://www.chenruiwen.cn/tags/spring-boot/"/>
     
-      <category term="cache" scheme="https://www.chenruiwen.cn/tags/cache/"/>
-    
       <category term="redis" scheme="https://www.chenruiwen.cn/tags/redis/"/>
+    
+      <category term="cache" scheme="https://www.chenruiwen.cn/tags/cache/"/>
     
   </entry>
   
@@ -497,32 +522,6 @@ jdk1.5之后，&lt;code&gt;j.u.c&lt;/code&gt;中有了基于&lt;code&gt;CAS&lt;/
       <category term="spring-boot" scheme="https://www.chenruiwen.cn/tags/spring-boot/"/>
     
       <category term="mybatis" scheme="https://www.chenruiwen.cn/tags/mybatis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>spring-boot集成Log4j2</title>
-    <link href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-log4j2/"/>
-    <id>https://www.chenruiwen.cn/spring-boot/spring-boot-use-log4j2/</id>
-    <published>2018-07-13T02:10:10.000Z</published>
-    <updated>2018-07-21T12:30:12.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在企业级项目里，日志框架种类杂乱不一，尤其是接手一些有些年头的老项目时，各种各样的日志框架依赖和使用让人看的头大。</p><p>如何解决各种各样日志框架的大一统呢？神器<code>Slf4j</code>。</p><p>spring-boot如何利用<code>Slf4j</code>集成其他日志框架？本文将以<code>Log4j2</code>为例。</p><a id="more"></a><h2 id="Slf4j简单介绍"><a href="#Slf4j简单介绍" class="headerlink" title="Slf4j简单介绍"></a>Slf4j简单介绍</h2><p>去<a href="https://www.slf4j.org/" target="_blank" rel="noopener">Slf4j官网</a>瞧一瞧:</p><blockquote><p>The Simple Logging Facade for Java (SLF4J) serves as a simple facade or abstraction for various logging frameworks (e.g. java.util.logging, logback, log4j) allowing the end user to plug in the desired logging framework at deployment time.</p></blockquote><p>Slf4j:Simple Logging Facade for Java.<br>它并不是一个类似java.util.logging, logback, log4j等的日志框架实现，而是作为一个门面服务于这些各种日志框架。如同字面含义，类似外观设计模式，提供了一组简单统一的API接口，隐藏了各种日志不一致的复杂性。</p><h2 id="日志框架选型"><a href="#日志框架选型" class="headerlink" title="日志框架选型"></a>日志框架选型</h2><p>几种日志框架简单对比:</p><ul><li><code>log4j</code>:元老级日志框架。它定义的Logger、Appender、Level等概念如今已经被广泛使用，里程碑式的日志框架</li><li><code>java.util.logging</code>:简称<code>j.u.l</code>。java1.4版本引入，功能不如<code>log4j</code>，性能和可用性有限。</li><li><code>logback</code>：<code>log4j</code>升级版。它比<code>log4j</code>增加了不少功能，比如：原生实现了<code>Slf4J</code>,支持XML、Groovy方式配置等，主要是性能比<code>log4j</code>提升不少。</li><li><code>log4j2</code>:同样是<code>log4j</code>升级版。也比<code>log4j</code>添加不少功能，比如多线程下的异步日志等。性能也提升不少。</li></ul><p>至于<code>logback</code>和<code>log4j2</code>性能比对，可以参考网上博文：</p><ul><li><a href="https://blog.csdn.net/yjh1271845364/article/details/70888262" target="_blank" rel="noopener">logback log4j log4j2 性能实测</a></li><li><a href="https://www.jianshu.com/p/570b406bddcd" target="_blank" rel="noopener">看log4j2如何秒杀一切日志组件</a></li></ul><p>根据官方推荐是<code>Slf4j</code>+<code>logback</code>，此处我使用<code>Slf4j2</code>+<code>log4j2</code>来集成日志框架。</p><h2 id="集成Log4j2"><a href="#集成Log4j2" class="headerlink" title="集成Log4j2"></a>集成Log4j2</h2><p>三步完成Log4j2的集成:</p><ol><li>maven依赖</li><li>配置日志文件</li><li>测试日志</li></ol><h3 id="maven依赖"><a href="#maven依赖" class="headerlink" title="maven依赖"></a>maven依赖</h3><p>pom.xml：</p><pre><code>&lt;!-- 需要排除logback --&gt;&lt;dependency&gt;    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;    &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;    &lt;exclusions&gt;        &lt;exclusion&gt;            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;            &lt;artifactId&gt;spring-boot-starter-logging&lt;/artifactId&gt;        &lt;/exclusion&gt;    &lt;/exclusions&gt;&lt;/dependency&gt;&lt;!-- log4j2 --&gt;&lt;dependency&gt;    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;    &lt;artifactId&gt;spring-boot-starter-log4j2&lt;/artifactId&gt;&lt;/dependency&gt;</code></pre><h3 id="配置日志文件"><a href="#配置日志文件" class="headerlink" title="配置日志文件"></a>配置日志文件</h3><p>classpath下添加<code>log4j2.xml</code>:</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;configuration status=&quot;OFF&quot;&gt;    &lt;properties&gt;        &lt;property name=&quot;LOG_HOME&quot;&gt;../logs/&lt;/property&gt;        &lt;property name=&quot;STDOUT_FILE_NAME&quot;&gt;stdout&lt;/property&gt;    &lt;/properties&gt;    &lt;appenders&gt;        &lt;Console name=&quot;Console&quot; target=&quot;SYSTEM_OUT&quot;&gt;            &lt;PatternLayout pattern=&quot;%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n&quot;/&gt;        &lt;/Console&gt;        &lt;RollingRandomAccessFile name=&quot;stdout-log&quot;                                 fileName=&quot;${LOG_HOME}/${STDOUT_FILE_NAME}.log&quot;                                 filePattern=&quot;${LOG_HOME}/$${date:yyyy-MM}/${STDOUT_FILE_NAME}-%d{yyyy-MM-dd}-%i.log.gz&quot;&gt;            &lt;PatternLayout                    pattern=&quot;%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%file:%line] - %msg%n&quot;/&gt;            &lt;Policies&gt;                &lt;TimeBasedTriggeringPolicy/&gt;                &lt;SizeBasedTriggeringPolicy size=&quot;100 MB&quot;/&gt;            &lt;/Policies&gt;            &lt;DefaultRolloverStrategy max=&quot;20&quot;/&gt;        &lt;/RollingRandomAccessFile&gt;    &lt;/appenders&gt;    &lt;loggers&gt;        &lt;root level=&quot;error&quot;&gt;            &lt;AppenderRef ref=&quot;stdout-log&quot;/&gt;            &lt;AppenderRef ref=&quot;Console&quot;/&gt;        &lt;/root&gt;        &lt;logger name=&quot;com.crw&quot; level=&quot;info&quot; additivity=&quot;false&quot;&gt;            &lt;AppenderRef ref=&quot;stdout-log&quot;/&gt;            &lt;AppenderRef ref=&quot;Console&quot;/&gt;        &lt;/logger&gt;    &lt;/loggers&gt;&lt;/configuration&gt;</code></pre><p>修改应用日志文件路径，<code>application.yml</code>:</p><pre><code>logging.config: classpath:log4j2.xml</code></pre><h3 id="测试日志"><a href="#测试日志" class="headerlink" title="测试日志"></a>测试日志</h3><p>增加一个EchoController:</p><pre><code class="java">@RestController@Slf4jpublic class EchoController {    @GetMapping(&quot;/echo/hello&quot;)    public String echo(String msg) {        log.debug(&quot;DEBUG ----&gt; echo:{}&quot;, msg);        log.info(&quot;INFO  ----&gt; echo:{}&quot;, msg);        log.warn(&quot;WARN  ----&gt; echo:{}&quot;, msg);        log.error(&quot;ERROR  ----&gt; echo:{}&quot;, msg);        return &quot;hello, &quot; + msg;    }}</code></pre><p>调用接口地址：</p><pre><code>curl http://127.0.0.1:8080/echo/hello?msg=world  </code></pre><p>页面输出：</p><pre><code>hello, world</code></pre><p>stdout.log文件输出：</p><pre><code>2018-07-12 22:56:04.023 INFO [http-nio-8080-exec-3][EchoController.java:17] - INFO  ----&gt; echo:world2018-07-12 22:56:04.024 WARN [http-nio-8080-exec-3][EchoController.java:18] - WARN  ----&gt; echo:world2018-07-12 22:56:04.024 ERROR [http-nio-8080-exec-3][EchoController.java:19] - ERROR  ----&gt; echo:world</code></pre><p>debug级别的日志并未输出和打印在控制台，info级别以上日志打印并输出控制台。可见日志测试成功。</p><h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><p>本文简单介绍了日志框架的种类已经统一日志API框架<code>Slf4j</code>,除此之外，apache下也有与<code>Slf4j</code>同一职能的框架<code>commons-logging</code>。之后可自行研究一下。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;在企业级项目里，日志框架种类杂乱不一，尤其是接手一些有些年头的老项目时，各种各样的日志框架依赖和使用让人看的头大。&lt;/p&gt;
-&lt;p&gt;如何解决各种各样日志框架的大一统呢？神器&lt;code&gt;Slf4j&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;spring-boot如何利用&lt;code&gt;Slf4j&lt;/code&gt;集成其他日志框架？本文将以&lt;code&gt;Log4j2&lt;/code&gt;为例。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="spring-boot" scheme="https://www.chenruiwen.cn/categories/spring-boot/"/>
-    
-    
-      <category term="spring-boot" scheme="https://www.chenruiwen.cn/tags/spring-boot/"/>
-    
-      <category term="log4j" scheme="https://www.chenruiwen.cn/tags/log4j/"/>
     
   </entry>
   

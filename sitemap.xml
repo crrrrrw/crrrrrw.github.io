@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.chenruiwen.cn/tips/little-tips-optimize-github-access/</loc>
+    
+    <lastmod>2018-11-17T09:34:33.222Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn/tips/package-weibo-drawing-plugin/</loc>
+    
+    <lastmod>2018-11-17T09:24:49.039Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.chenruiwen.cn/Linux/Linux-performance-analysis-util/</loc>
     
     <lastmod>2018-11-14T13:27:05.711Z</lastmod>
@@ -292,13 +306,6 @@
     <loc>https://www.chenruiwen.cn/blog/hexo-and-nginx-build-site/</loc>
     
     <lastmod>2018-07-21T12:24:42.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.chenruiwen.cn/tips/package-weibo-drawing-plugin/</loc>
-    
-    <lastmod>2018-07-21T12:23:44.000Z</lastmod>
     
   </url>
   
