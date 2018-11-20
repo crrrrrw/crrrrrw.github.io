@@ -3,13 +3,14 @@
 
 
     
+    
   <url>
     <loc>https://www.chenruiwen.cn/tips/little-tips-optimize-github-access/</loc>
-    <lastmod>2018-11-17T09:34:33.222Z</lastmod>
+    <lastmod>2018-11-17T09:43:06.837Z</lastmod>
     <data>
         <display>
         <title>小Tips，加速github访问速度</title>
-        <pubTime>2018-11-14T09:33:22.000Z</pubTime>
+        <pubTime>2018-11-17T09:33:22.000Z</pubTime>
         
         <tag>tips</tag>
          
@@ -223,7 +224,6 @@
     </url>
 
     
-    
   <url>
     <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-BlockingQueue/</loc>
     <lastmod>2018-09-08T16:04:47.785Z</lastmod>
@@ -394,9 +394,9 @@
         
         <tag>spring-boot</tag>
          
-        <tag>redis</tag>
-         
         <tag>cache</tag>
+         
+        <tag>redis</tag>
          
          
            

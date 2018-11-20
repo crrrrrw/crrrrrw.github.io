@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.chenruiwen.cn/about/index.html</loc>
+    
+    <lastmod>2018-11-20T14:22:11.286Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.chenruiwen.cn/tips/little-tips-optimize-github-access/</loc>
     
-    <lastmod>2018-11-17T09:34:33.222Z</lastmod>
+    <lastmod>2018-11-17T09:43:06.837Z</lastmod>
     
   </url>
   
@@ -68,13 +75,6 @@
     <loc>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-latch-and-barrier/</loc>
     
     <lastmod>2018-09-17T13:34:00.207Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.chenruiwen.cn/about/index.html</loc>
-    
-    <lastmod>2018-09-11T12:48:09.428Z</lastmod>
     
   </url>
   

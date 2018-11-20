@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.chenruiwen.cn/"/>
-  <updated>2018-11-14T13:27:05.711Z</updated>
+  <updated>2018-11-17T09:43:06.837Z</updated>
   <id>https://www.chenruiwen.cn/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>小Tips，加速github访问速度</title>
+    <link href="https://www.chenruiwen.cn/tips/little-tips-optimize-github-access/"/>
+    <id>https://www.chenruiwen.cn/tips/little-tips-optimize-github-access/</id>
+    <published>2018-11-17T09:33:22.000Z</published>
+    <updated>2018-11-17T09:43:06.837Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>访问<a href="https://github.com/" target="_blank" rel="noopener">github</a>的速度真的太慢了。(尤其微软收购之后。:D)。尤其在<code>git clone</code>等操作上确实影响心情:</p><pre><code>Receiving objects:   8% (497/5635), 2.89 MiB | 15.00 KiB/s</code></pre><p>然而解决的方法非常简单。<a id="more"></a></p><h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>慢的原因在哪？其实并不是因为 <code>http://github.com</code> 的这个域名被限制了。而是 <code>http://github.global.ssl.fastly.Net</code> 这个域名被限制了。</p><p>解决方法在于修改<code>hosts</code>文件，增加如下:</p><pre><code>151.101.72.249 global-ssl.fastly.Net192.30.253.112 github.com</code></pre><p>成功解决问题，测速如下:</p><pre><code>Receiving objects: 100% (5635/5635), 46.94 MiB | 2.27 MiB/s, done.</code></pre><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>国内的编程环境的阻碍还是不少啊~~</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;访问&lt;a href=&quot;https://github.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;github&lt;/a&gt;的速度真的太慢了。(尤其微软收购之后。:D)。
+尤其在&lt;code&gt;git clone&lt;/code&gt;等操作上确实影响心情:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Receiving objects:   8% (497/5635), 2.89 MiB | 15.00 KiB/s
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;然而解决的方法非常简单。
+    
+    </summary>
+    
+      <category term="tips" scheme="https://www.chenruiwen.cn/categories/tips/"/>
+    
+    
+      <category term="tips" scheme="https://www.chenruiwen.cn/tags/tips/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux常用性能分析工具</title>
@@ -39,31 +64,6 @@
       <category term="Linux" scheme="https://www.chenruiwen.cn/tags/Linux/"/>
     
       <category term="performance analysis" scheme="https://www.chenruiwen.cn/tags/performance-analysis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>小Tips，加速github访问速度</title>
-    <link href="https://www.chenruiwen.cn/tips/little-tips-optimize-github-access/"/>
-    <id>https://www.chenruiwen.cn/tips/little-tips-optimize-github-access/</id>
-    <published>2018-11-14T09:33:22.000Z</published>
-    <updated>2018-11-17T09:34:33.222Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>访问<a href="https://github.com/" target="_blank" rel="noopener">github</a>的速度真的太慢了。(尤其微软收购之后。:D)。尤其在<code>git clone</code>等操作上确实影响心情:</p><pre><code>Receiving objects:   8% (497/5635), 2.89 MiB | 15.00 KiB/s</code></pre><p>然而解决的方法非常简单。</p><h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>慢的原因在哪？其实并不是因为 <code>http://github.com</code> 的这个域名被限制了。而是 <code>http://github.global.ssl.fastly.Net</code> 这个域名被限制了。</p><p>解决方法在于修改<code>hosts</code>文件，增加如下:</p><pre><code>151.101.72.249 global-ssl.fastly.Net192.30.253.112 github.com</code></pre><p>成功解决问题，测速如下:</p><pre><code>Receiving objects: 100% (5635/5635), 46.94 MiB | 2.27 MiB/s, done.</code></pre><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>国内的编程环境的阻碍还是不少啊~~</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;访问&lt;a href=&quot;https://github.com/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;github&lt;
-      
-    
-    </summary>
-    
-      <category term="tips" scheme="https://www.chenruiwen.cn/categories/tips/"/>
-    
-    
-      <category term="tips" scheme="https://www.chenruiwen.cn/tags/tips/"/>
     
   </entry>
   
@@ -415,9 +415,9 @@ jdk1.5之后，&lt;code&gt;j.u.c&lt;/code&gt;中有了基于&lt;code&gt;CAS&lt;/
     
       <category term="spring-boot" scheme="https://www.chenruiwen.cn/tags/spring-boot/"/>
     
-      <category term="redis" scheme="https://www.chenruiwen.cn/tags/redis/"/>
-    
       <category term="cache" scheme="https://www.chenruiwen.cn/tags/cache/"/>
+    
+      <category term="redis" scheme="https://www.chenruiwen.cn/tags/redis/"/>
     
   </entry>
   
