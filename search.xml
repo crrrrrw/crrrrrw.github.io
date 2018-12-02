@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[我的反思录]]></title>
+    <url>%2Fessay%2Fmy-rethink-on-2018%2F</url>
+    <content type="text"><![CDATA[前言眼瞅着2018要过去了，这一年是有不少收获，但是感觉和自己的计划还有一些差距，简而言之就是没有达到自己的目标。 这是一件糟糕的事情，加上已经很久没有写博客了，真的感觉状态不太对，总结一下吧。 回忆问题出在哪有哪些问题呢？ 地铁上耗费的时间太长。 突然的加班导致加班前的正常学习状态被打破。也就是说学习不连贯。 加班耗费了太多精力，回家就想躺下睡大觉。 焦虑于未完成的事情。 分析问题看似问题简单，根本原因是时间，然后又巧妙的甩锅给加班。然而真的是这样的吗？ 我看来，根本原因可能是拖延症，或者说是自己的懒。 解决问题的方法基本就是如何解决掉自己懒的特性。 地铁上的时间可以用来看一下书籍。 加班问题，其实也没有加班到特别晚过，至少还能留有1小时的时间。 加班耗费精力的问题，主要还是要集中解决一下效率问题，效率高了就节约加班时间甚至于不用加班。如何提高效率，在日常工作中尽量多的积累工具经验，写优秀简洁的代码，自然而然效率就高了。 解决了上面的问题也就不焦虑了。 给自己个小目标我的目标最终是要写出高质量简洁高效的代码来提高自己的生产效率，根治加班问题。 那么，如何一步一步完成这个目标呢？ 答案即是 RTFSC：Read The Fucking Source Code。 每天坚持看源码，之前dubbo的源码分析还没有写完，我承认是自己懒了，虽然网上也大把的分析dubbo源码的， 但是应该有输入也有输出才是正确的学习姿势，应该持之以恒。 总结学习之路漫长，走的不快，但是尽量走的远一些，坚持二字确实难但也是一条最正确的路。]]></content>
+      <categories>
+        <category>essay</category>
+      </categories>
+      <tags>
+        <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[小Tips，加速github访问速度]]></title>
     <url>%2Ftips%2Flittle-tips-optimize-github-access%2F</url>
     <content type="text"><![CDATA[前言访问github的速度真的太慢了。(尤其微软收购之后。:D)。 尤其在git clone等操作上确实影响心情: Receiving objects: 8% (497/5635), 2.89 MiB | 15.00 KiB/s 然而解决的方法非常简单。 解决方案慢的原因在哪？其实并不是因为 http://github.com 的这个域名被限制了。而是 http://github.global.ssl.fastly.Net 这个域名被限制了。 解决方法在于修改hosts文件，增加如下: 151.101.72.249 global-ssl.fastly.Net 192.30.253.112 github.com 成功解决问题，测速如下: Receiving objects: 100% (5635/5635), 46.94 MiB | 2.27 MiB/s, done. 总结国内的编程环境的阻碍还是不少啊~~]]></content>
