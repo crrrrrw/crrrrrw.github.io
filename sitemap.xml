@@ -2,6 +2,41 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-ReferenceConfig/</loc>
+    
+    <lastmod>2018-12-04T15:42:52.711Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-service-export-process/</loc>
+    
+    <lastmod>2018-12-04T15:42:27.211Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-spi-java/</loc>
+    
+    <lastmod>2018-12-04T15:42:27.208Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-spi-extension-feature/</loc>
+    
+    <lastmod>2018-12-04T15:42:27.204Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-spi-extensionloader/</loc>
+    
+    <lastmod>2018-12-04T15:42:27.197Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.chenruiwen.cn/essay/my-rethink-on-2018/</loc>
     
     <lastmod>2018-12-02T12:38:42.581Z</lastmod>
@@ -40,13 +75,6 @@
     <loc>https://www.chenruiwen.cn/redis/JedisPool-optimize-record/</loc>
     
     <lastmod>2018-11-09T15:48:46.869Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.chenruiwen.cn/dubbo/dubbo-service-export-process/</loc>
-    
-    <lastmod>2018-10-31T14:18:38.453Z</lastmod>
     
   </url>
   
@@ -180,27 +208,6 @@
     <loc>https://www.chenruiwen.cn/java/java8-in-action/</loc>
     
     <lastmod>2018-07-22T00:59:51.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.chenruiwen.cn/dubbo/dubbo-spi-extensionloader/</loc>
-    
-    <lastmod>2018-07-22T00:57:46.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.chenruiwen.cn/dubbo/dubbo-spi-extension-feature/</loc>
-    
-    <lastmod>2018-07-22T00:57:07.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.chenruiwen.cn/dubbo/dubbo-spi-java/</loc>
-    
-    <lastmod>2018-07-22T00:56:21.000Z</lastmod>
     
   </url>
   

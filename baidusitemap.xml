@@ -4,6 +4,120 @@
 
     
   <url>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-ReferenceConfig/</loc>
+    <lastmod>2018-12-04T15:42:52.711Z</lastmod>
+    <data>
+        <display>
+        <title>Dubbo服务引用之ReferenceConfig</title>
+        <pubTime>2018-12-04T15:50:03.000Z</pubTime>
+        
+        <tag>dubbo</tag>
+         
+        <tag>RTFSC</tag>
+         
+         
+           
+             
+              <breadCrumb title="dubbo" url="https://www.chenruiwen.cn/categories/dubbo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-service-export-process/</loc>
+    <lastmod>2018-12-04T15:42:27.211Z</lastmod>
+    <data>
+        <display>
+        <title>Dubbo暴露服务过程</title>
+        <pubTime>2018-05-20T07:11:24.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>dubbo</tag>
+         
+        <tag>RTFSC</tag>
+         
+         
+           
+             
+              <breadCrumb title="dubbo" url="https://www.chenruiwen.cn/categories/dubbo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-spi-java/</loc>
+    <lastmod>2018-12-04T15:42:27.208Z</lastmod>
+    <data>
+        <display>
+        <title>Dubbo扩展机制实现(一)之java SPI</title>
+        <pubTime>2018-06-04T13:31:24.000Z</pubTime>
+        
+        <tag>java</tag>
+         
+        <tag>dubbo</tag>
+         
+        <tag>RTFSC</tag>
+         
+         
+           
+             
+              <breadCrumb title="dubbo" url="https://www.chenruiwen.cn/categories/dubbo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-spi-extension-feature/</loc>
+    <lastmod>2018-12-04T15:42:27.204Z</lastmod>
+    <data>
+        <display>
+        <title>Dubbo扩展机制实现(三)之扩展点特性</title>
+        <pubTime>2018-06-25T14:22:22.000Z</pubTime>
+        
+        <tag>dubbo</tag>
+         
+        <tag>RTFSC</tag>
+         
+         
+           
+             
+              <breadCrumb title="dubbo" url="https://www.chenruiwen.cn/categories/dubbo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-spi-extensionloader/</loc>
+    <lastmod>2018-12-04T15:42:27.197Z</lastmod>
+    <data>
+        <display>
+        <title>Dubbo扩展机制实现(二)之浅析ExtensionLoader</title>
+        <pubTime>2018-06-11T14:47:08.000Z</pubTime>
+        
+        <tag>dubbo</tag>
+         
+        <tag>RTFSC</tag>
+         
+         
+           
+             
+              <breadCrumb title="dubbo" url="https://www.chenruiwen.cn/categories/dubbo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://www.chenruiwen.cn/essay/my-rethink-on-2018/</loc>
     <lastmod>2018-12-02T12:38:42.581Z</lastmod>
     <data>
@@ -106,28 +220,6 @@
            
              
               <breadCrumb title="redis" url="https://www.chenruiwen.cn/categories/redis/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://www.chenruiwen.cn/dubbo/dubbo-service-export-process/</loc>
-    <lastmod>2018-10-31T14:18:38.453Z</lastmod>
-    <data>
-        <display>
-        <title>Dubbo暴露服务过程</title>
-        <pubTime>2018-05-20T07:11:24.000Z</pubTime>
-        
-        <tag>java</tag>
-         
-        <tag>dubbo</tag>
-         
-         
-           
-             
-              <breadCrumb title="dubbo" url="https://www.chenruiwen.cn/categories/dubbo/"/>
           
         </display>
     </data>
@@ -468,68 +560,6 @@
            
              
               <breadCrumb title="java" url="https://www.chenruiwen.cn/categories/java/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://www.chenruiwen.cn/dubbo/dubbo-spi-extensionloader/</loc>
-    <lastmod>2018-07-22T00:57:46.000Z</lastmod>
-    <data>
-        <display>
-        <title>Dubbo扩展机制实现(二)之浅析ExtensionLoader</title>
-        <pubTime>2018-06-11T14:47:08.000Z</pubTime>
-        
-        <tag>dubbo</tag>
-         
-         
-           
-             
-              <breadCrumb title="dubbo" url="https://www.chenruiwen.cn/categories/dubbo/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://www.chenruiwen.cn/dubbo/dubbo-spi-extension-feature/</loc>
-    <lastmod>2018-07-22T00:57:07.000Z</lastmod>
-    <data>
-        <display>
-        <title>Dubbo扩展机制实现(三)之扩展点特性</title>
-        <pubTime>2018-06-25T14:22:22.000Z</pubTime>
-        
-        <tag>dubbo</tag>
-         
-         
-           
-             
-              <breadCrumb title="dubbo" url="https://www.chenruiwen.cn/categories/dubbo/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://www.chenruiwen.cn/dubbo/dubbo-spi-java/</loc>
-    <lastmod>2018-07-22T00:56:21.000Z</lastmod>
-    <data>
-        <display>
-        <title>Dubbo扩展机制实现(一)之java SPI</title>
-        <pubTime>2018-06-04T13:31:24.000Z</pubTime>
-        
-        <tag>java</tag>
-         
-        <tag>dubbo</tag>
-         
-         
-           
-             
-              <breadCrumb title="dubbo" url="https://www.chenruiwen.cn/categories/dubbo/"/>
           
         </display>
     </data>
