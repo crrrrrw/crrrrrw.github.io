@@ -4,11 +4,35 @@
 
     
   <url>
-    <loc>https://www.chenruiwen.cn/dubbo/dubbo-cluster-LoadBalance-one/</loc>
-    <lastmod>2018-12-09T10:32:30.835Z</lastmod>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-cluster-LoadBalance-LeastActiveLoadBalance/</loc>
+    <lastmod>2018-12-10T14:15:06.026Z</lastmod>
     <data>
         <display>
-        <title>8.Dubbo路由层之LoadBalance随机与轮询</title>
+        <title>Dubbo路由层之LeastActiveLoadBalance</title>
+        <pubTime>2018-12-10T14:13:13.000Z</pubTime>
+        
+        <tag>dubbo</tag>
+         
+        <tag>RTFSC</tag>
+         
+        <tag>LoadBalance</tag>
+         
+         
+           
+             
+              <breadCrumb title="dubbo" url="https://www.chenruiwen.cn/categories/dubbo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-cluster-LoadBalance-one/</loc>
+    <lastmod>2018-12-10T14:09:01.606Z</lastmod>
+    <data>
+        <display>
+        <title>Dubbo路由层之LoadBalance随机与轮询</title>
         <pubTime>2018-12-09T10:31:33.000Z</pubTime>
         
         <tag>dubbo</tag>
