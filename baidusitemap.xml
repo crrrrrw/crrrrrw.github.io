@@ -4,6 +4,30 @@
 
     
   <url>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-cluster-LoadBalance-ConsistentHashLoadBalance/</loc>
+    <lastmod>2018-12-18T13:56:01.316Z</lastmod>
+    <data>
+        <display>
+        <title>Dubbo路由层之ConsistentHashLoadBalance</title>
+        <pubTime>2018-12-18T13:50:13.000Z</pubTime>
+        
+        <tag>dubbo</tag>
+         
+        <tag>RTFSC</tag>
+         
+        <tag>LoadBalance</tag>
+         
+         
+           
+             
+              <breadCrumb title="dubbo" url="https://www.chenruiwen.cn/categories/dubbo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://www.chenruiwen.cn/dubbo/dubbo-cluster-LoadBalance-LeastActiveLoadBalance/</loc>
     <lastmod>2018-12-10T14:15:06.026Z</lastmod>
     <data>

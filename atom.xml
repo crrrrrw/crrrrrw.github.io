@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.chenruiwen.cn/"/>
-  <updated>2018-12-10T14:15:06.026Z</updated>
+  <updated>2018-12-18T13:56:01.316Z</updated>
   <id>https://www.chenruiwen.cn/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Dubbo路由层之ConsistentHashLoadBalance</title>
+    <link href="https://www.chenruiwen.cn/dubbo/dubbo-cluster-LoadBalance-ConsistentHashLoadBalance/"/>
+    <id>https://www.chenruiwen.cn/dubbo/dubbo-cluster-LoadBalance-ConsistentHashLoadBalance/</id>
+    <published>2018-12-18T13:50:13.000Z</published>
+    <updated>2018-12-18T13:56:01.316Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前文回顾，之前介绍了：</p><ul><li><a href="https://www.chenruiwen.cn/dubbo/dubbo-cluster-LoadBalance-one/">RandomLoadBalance和RoundRobinLoadBalance</a></li><li><a href="https://www.chenruiwen.cn/dubbo/dubbo-cluster-LoadBalance-LeastActiveLoadBalance/">LeastActiveLoadBalance</a></li></ul><p>今天分析一下最后一个负载均衡器<code>ConsistentHashLoadBalance</code>.<a id="more"></a></p><h3 id="ConsistentHashLoadBalance"><a href="#ConsistentHashLoadBalance" class="headerlink" title="ConsistentHashLoadBalance"></a>ConsistentHashLoadBalance</h3><p>一致性Hash负载均衡器. 看一下官方的介绍：</p><blockquote><ul><li>一致性 Hash，相同参数的请求总是发到同一提供者。</li><li>当某一台提供者挂时，原本发往该提供者的请求，基于虚拟节点，平摊到其它提供者，不会引起剧烈变动。</li><li>算法参见：<a href="http://en.wikipedia.org/wiki/Consistent_hashing" target="_blank" rel="noopener">http://en.wikipedia.org/wiki/Consistent_hashing</a></li><li>缺省只对第一个参数 Hash，如果要修改，请配置 &lt;dubbo:parameter key=”hash.arguments” value=”0,1” /&gt;</li><li>缺省用 160 份虚拟节点，如果要修改，请配置 &lt;dubbo:parameter key=”hash.nodes” value=”320” /&gt;</li></ul></blockquote><h3 id="一致性hash原理"><a href="#一致性hash原理" class="headerlink" title="一致性hash原理"></a>一致性hash原理</h3><p>在理解一致性hash原理之前，先看一看传统的hash算法。</p><h4 id="hash算法"><a href="#hash算法" class="headerlink" title="hash算法"></a>hash算法</h4><p>hash算法最初的目的是来解决缓存问题。举个例子，分布式场景，假设有3台redis服务器做缓存，我们如何合理分配这3台redis的资源呢？</p><p>答案很简单，使用hash算法。<code>hash(userId) % 3</code>来获取到路由的服务器即可。如图：<img src="https://ws1.sinaimg.cn/large/87faef88ly1fya2fh4iiyj212o0tijtq.jpg" alt=""></p><p>但是以上算法看似能解决问题，但是如果其中一台redis挂掉了，或者需要动态增加一台redis服务器，那么原先的hash算法就不适用了！</p><p>既然hash算法是无法解决上述问题，那么如何解决呢？一致性hash算法即可。</p><h4 id="一致性hash算法"><a href="#一致性hash算法" class="headerlink" title="一致性hash算法"></a>一致性hash算法</h4><p>基本原理：$$\begin{gather}a + b\end{gather}$$</p><p>\(a + b\)</p><p>将哈希空间 [0, 2^n-1] 看成一个哈希环，每个服务器节点都配置到哈希环上。每个数据对象通过哈希取模得到哈希值之后，存放到哈希环中顺时针方向第一个大于等于该哈希值的节点上。</p><p>初始话一个 0 ~ 2^32 -1 的hash环：<img src="https://ws1.sinaimg.cn/large/87faef88ly1fya3f2bn6qj20qi0oq3z5.jpg" alt=""></p><p>假设初始化有3个节点，根据ip进行hash分配到不同的位置如下：<img src="https://ws1.sinaimg.cn/large/87faef88ly1fya3k3876cj20no0lst9i.jpg" alt=""></p><p>hash到服务器算法：将数据<code>key</code>使用相同的函数Hash计算出哈希值，并确定此数据在环上的位置，从此位置沿环顺时针“行走”，第一台遇到的服务器就是其应该定位到的服务器。</p><p>假设有数据data1,data2,data3，那么如下数据将会分别落在NodeC,NodeA,NodeB上:<img src="https://ws1.sinaimg.cn/large/87faef88ly1fya3uq6yp4j20s40nyq48.jpg" alt=""></p><p>如果此时动态增加一个节点NodeD,那么如下所示，只会影响到data3数据的，其他数据并未影响：<img src="https://ws1.sinaimg.cn/large/87faef88ly1fya41dgy80j20qm0qawg4.jpg" alt=""></p><p>这样就是一致性hash算法，只影响一小部分数据。</p><p>依然有一个问题，即如果节点数量太小，将会由于数据节点分布不均匀导致数据倾斜问题。如下图所示：落在节点NodeA上的数据远大于NodeB上的数据。<img src="https://ws1.sinaimg.cn/large/87faef88ly1fya466egk5j20o80lqt9g.jpg" alt=""></p><p>如何解决这个问题呢，将<code>引入虚拟节点机制</code>：通过增加虚拟节点，然后将虚拟节点映射到真实节点上。虚拟节点的数量比真实节点来得多，那么虚拟节点在哈希环上分布的均匀性就会比原来的真实节点好，从而使得数据分布也更加均匀。</p><p>如下所示：NodeA,NodeB各虚拟出 n 个节点均匀分布在hash环上，这样通过虚拟节点到实际节点的映射来解决数据倾斜问题。<img src="https://ws1.sinaimg.cn/large/87faef88ly1fya4atw7d4j20po0m4q4a.jpg" alt=""></p><h3 id="再看源码"><a href="#再看源码" class="headerlink" title="再看源码"></a>再看源码</h3><p>涉及到的配置：</p><blockquote><ul><li>缺省只对第一个参数 Hash，如果要修改，请配置 &lt;dubbo:parameter key=”hash.arguments” value=”0,1” /&gt;</li><li>缺省用 160 份虚拟节点，如果要修改，请配置 &lt;dubbo:parameter key=”hash.nodes” value=”320” /&gt;</li></ul></blockquote><p>先看<code>doSelect</code>方法：</p><pre><code class="java">@Overrideprotected &lt;T&gt; Invoker&lt;T&gt; doSelect(List&lt;Invoker&lt;T&gt;&gt; invokers, URL url, Invocation invocation) {    String key = invokers.get(0).getUrl().getServiceKey() + &quot;.&quot; + invocation.getMethodName(); // 获取方法调用名    int identityHashCode = System.identityHashCode(invokers); // 生成调用列表hashcode    ConsistentHashSelector&lt;T&gt; selector = (ConsistentHashSelector&lt;T&gt;) selectors.get(key); // 从缓存中获取此方法的一致性哈希选择器    if (selector == null || selector.identityHashCode != identityHashCode) {        // 缓存 key -&gt; selector        selectors.put(key, new ConsistentHashSelector&lt;T&gt;(invokers, invocation.getMethodName(), identityHashCode));        selector = (ConsistentHashSelector&lt;T&gt;) selectors.get(key);    }    return selector.select(invocation); // 选择节点实现由内部类selector完成}</code></pre><p>可以得出结论，核心负载均衡操作都交给了其静态内部类<code>ConsistentHashSelector</code>选择器.</p><p>内部选择器的成员与构造器：</p><pre><code class="java">private static final class ConsistentHashSelector&lt;T&gt; {    private final TreeMap&lt;Long, Invoker&lt;T&gt;&gt; virtualInvokers; // 虚拟节点    private final int replicaNumber; // 副本数    private final int identityHashCode; // hashcode    private final int[] argumentIndex; // 参数索引数组    ConsistentHashSelector(List&lt;Invoker&lt;T&gt;&gt; invokers, String methodName, int identityHashCode) {        // 1.初始化属性        this.virtualInvokers = new TreeMap&lt;Long, Invoker&lt;T&gt;&gt;(); // 虚拟节点用TreeMap结构        this.identityHashCode = identityHashCode; // hashcode取调用列表hashcode        URL url = invokers.get(0).getUrl();        this.replicaNumber = url.getMethodParameter(methodName, &quot;hash.nodes&quot;, 160); // 获取 url 上 hash.nodes属性，默认160        String[] index = Constants.COMMA_SPLIT_PATTERN.split(url.getMethodParameter(methodName, &quot;hash.arguments&quot;, &quot;0&quot;)); // 获取 url 上 hash.arguments属性，默认&quot;0&quot;        // 获取 hash.arguments 数组        argumentIndex = new int[index.length];        for (int i = 0; i &lt; index.length; i++) {            argumentIndex[i] = Integer.parseInt(index[i]);        }        // 2.开始创建虚拟结点        // 对每个invoker生成replicaNumber个虚拟结点，并存放于TreeMap中        for (Invoker&lt;T&gt; invoker : invokers) {            String address = invoker.getUrl().getAddress();            for (int i = 0; i &lt; replicaNumber / 4; i++) {                byte[] digest = md5(address + i);                for (int h = 0; h &lt; 4; h++) {                    long m = hash(digest, h);                    virtualInvokers.put(m, invoker);                }            }        }    }}</code></pre><p>可见，在构造器内主要是</p><ul><li>初始化属性</li><li>创建虚拟节点(也算是初始化属性的一部分)</li></ul><p>核心方法，<code>ConsistentHashSelector</code>的<code>select</code>方法:</p><pre><code class="java">public Invoker&lt;T&gt; select(Invocation invocation) {    String key = toKey(invocation.getArguments()); // 根据调用参数获取 key    byte[] digest = md5(key); // 生成消息摘要    // 将消息摘要转换为hashCode，这里仅取0-31位来生成HashCode    // 调用sekectForKey方法选择结点。    return selectForKey(hash(digest, 0));}</code></pre><p>此方法具体可以拆分为</p><ul><li>md5() 生成消息摘要</li><li>hash() 获取hash值</li><li>selectForKey() 根据hash值寻址</li></ul><p>md5和hash方法就不说了，hash方法的位操作先不深究，主要的方法还是<code>ConsistentHashSelector</code>的<code>selectForKey</code>方法:</p><pre><code class="java">private Invoker&lt;T&gt; selectForKey(long hash) {    // 1.找到一个该hash值得尾节点，然后获取其上一个节点    Map.Entry&lt;Long, Invoker&lt;T&gt;&gt; entry = virtualInvokers.tailMap(hash, true).firstEntry();    // 2.如果该节点不存在，即表示落在环上最后一个和第一个之间的位置，那么直接返回最小值(第一个点)，这样就形成了逻辑环    if (entry == null) {        entry = virtualInvokers.firstEntry();    }    return entry.getValue();}</code></pre><p>这里解释下，如图所示，</p><ul><li>如果hash值落在了<code>【2】</code>的位置，那么就直接返回<code>NodeA#1</code>即可。</li><li>如果hash值落在<code>【1】</code>的位置，由于<code>【1】</code>后面已经没有虚拟节点，因此返回<code>TreeMap</code>的最小值，即首节点<code>NodeB#3</code>，这样就形成了一个逻辑环。<img src="https://ws1.sinaimg.cn/large/87faef88ly1fyb8awlu1uj20ty0oa75s.jpg" alt=""></li></ul><h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><p>参考:</p><ul><li><a href="https://blog.csdn.net/cywosp/article/details/23397179" target="_blank" rel="noopener">五分钟理解一致性哈希算法(consistent hashing)</a></li></ul><p>这样<code>LoadBalance</code>基本完成，最后再回到最初的起点<code>Cluster</code>接口。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;前文回顾，之前介绍了：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.chenruiwen.cn/dubbo/dubbo-cluster-LoadBalance-one/&quot;&gt;RandomLoadBalance和RoundRobinLoadBalance&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.chenruiwen.cn/dubbo/dubbo-cluster-LoadBalance-LeastActiveLoadBalance/&quot;&gt;LeastActiveLoadBalance&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;今天分析一下最后一个负载均衡器&lt;code&gt;ConsistentHashLoadBalance&lt;/code&gt;.
+    
+    </summary>
+    
+      <category term="dubbo" scheme="https://www.chenruiwen.cn/categories/dubbo/"/>
+    
+    
+      <category term="dubbo" scheme="https://www.chenruiwen.cn/tags/dubbo/"/>
+    
+      <category term="RTFSC" scheme="https://www.chenruiwen.cn/tags/RTFSC/"/>
+    
+      <category term="LoadBalance" scheme="https://www.chenruiwen.cn/tags/LoadBalance/"/>
+    
+  </entry>
   
   <entry>
     <title>Dubbo路由层之LeastActiveLoadBalance</title>
@@ -484,30 +515,6 @@ jdk1.5之后，&lt;code&gt;j.u.c&lt;/code&gt;中有了基于&lt;code&gt;CAS&lt;/
       <category term="python" scheme="https://www.chenruiwen.cn/tags/python/"/>
     
       <category term="pycurl" scheme="https://www.chenruiwen.cn/tags/pycurl/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>redis“冷门”知识点：HyperLogLog</title>
-    <link href="https://www.chenruiwen.cn/redis/redis-hyperloglog/"/>
-    <id>https://www.chenruiwen.cn/redis/redis-hyperloglog/</id>
-    <published>2018-08-05T07:08:24.000Z</published>
-    <updated>2018-08-13T14:23:20.831Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前几天，我司大牛分享redis知识点，讲到redis数据结构的时候，抛出一个问题：如果要统计网站uv，你准备怎么实现？</p><p>和大多数普通开发人员一样，想到的第一个想法是存到set集合里。可是这样真的好吗？</p><p>后来找到了更好的方式，redis“冷门”数据结构:<code>HyperLogLog</code>。（说是“冷门”，可能只是我不知道罢了:D）</p><a id="more"></a><h2 id="问题回顾"><a href="#问题回顾" class="headerlink" title="问题回顾"></a>问题回顾</h2><blockquote><p>你准备如何实现统计大型网站的网页UV数据？</p></blockquote><p>uv数据不像pv数据，pv可能只需要在redis中使用一个计数器，每次访问<code>incrby</code>一次即可。uv数据需要根据用户id来标识唯一来统计，集合中的数据需要去重，那么<code>set</code>是一个最容易想到的数据结构。现在的问题是，大型网站，可能这是一个爆款商品的秒杀页面，用户访问量非常大，假如有上千万的uv估计，那么占用的空间就非常大，而我仅仅只是想要一个<code>set</code>的<code>size</code>，岂不是杀鸡用了宰牛刀了？而且，uv数据一定要精确吗？uv数据存在一些误差可不可以？有没有更好的解决方案？</p><p>uv数据当然可以存在误差，更好的解决方案当然有。那就是redis的<code>HyperLogLog</code>。</p><h2 id="HyperLogLog"><a href="#HyperLogLog" class="headerlink" title="HyperLogLog"></a>HyperLogLog</h2><p>本文主角<code>HyperLogLog</code>，redis的一种数据结构，可能不被大多数人知道，但却是非常有用的数据。</p><h3 id="HyperLogLog是什么"><a href="#HyperLogLog是什么" class="headerlink" title="HyperLogLog是什么"></a>HyperLogLog是什么</h3><p>Redis 在 <code>2.8.9</code> 版本添加了HyperLogLog结构。</p><p>Redis HyperLogLog 是用来做基数统计的算法，HyperLogLog的优点是，在输入元素的数量或者体积非常非常大时，计算基数所需的空间总是固定 的、并且是很小的。</p><p>但是，因为HyperLogLog只会根据输入元素来计算基数，而不会储存输入元素本身，所以HyperLogLog 不能像集合那样，返回输入的各个元素。</p><p>可见，专业的人做专业的事，HyperLogLog在做基数统计方面是一流的。</p><h3 id="HyperLogLog怎么玩"><a href="#HyperLogLog怎么玩" class="headerlink" title="HyperLogLog怎么玩"></a>HyperLogLog怎么玩</h3><h4 id="HyperLogLog的三个指令"><a href="#HyperLogLog的三个指令" class="headerlink" title="HyperLogLog的三个指令:"></a><code>HyperLogLog</code>的三个指令:</h4><table><thead><tr><th>命令</th><th>描述</th></tr></thead><tbody><tr><td>PFADD key element [element …]</td><td>添加指定元素到 HyperLogLog 中。</td></tr><tr><td>PFCOUNT key [key …]</td><td>返回给定 HyperLogLog 的基数估算值。</td></tr><tr><td>PFMERGE destkey sourcekey [sourcekey …]</td><td>将多个 HyperLogLog 合并为一个 HyperLogLog</td></tr></tbody></table><h4 id="小试牛刀"><a href="#小试牛刀" class="headerlink" title="小试牛刀"></a>小试牛刀</h4><p>以计算uv为例，假如统计网站首页uv人数，路径<code>/index</code>，我们使用<code>pfadd</code>增加计数，<code>pfcount</code>统计人数。使用方式类似于<code>set</code>集合的<code>sadd</code>和<code>scard</code>。</p><pre><code>127.0.0.1:6379[1]&gt; pfadd /index user_1(integer) 1127.0.0.1:6379[1]&gt; pfadd /index user_2(integer) 1127.0.0.1:6379[1]&gt; pfcount /index(integer) 2127.0.0.1:6379[1]&gt; pfadd /index user_3(integer) 1127.0.0.1:6379[1]&gt; pfcount /index(integer) 3127.0.0.1:6379[1]&gt; pfadd /index user_4(integer) 1127.0.0.1:6379[1]&gt; pfcount /index(integer) 4127.0.0.1:6379[1]&gt; pfadd /index user_1(integer) 0127.0.0.1:6379[1]&gt; pfcount /index(integer) 4127.0.0.1:6379[1]&gt; pfadd /index user_5 user_6 user_7(integer) 1127.0.0.1:6379[1]&gt; pfcount /index(integer) 7</code></pre><p>目前看数值都是正确的，我们用程序加大user数据看看精确度怎么样。</p><p>此处用Python实现吧，你懂的，毕竟人生苦短。</p><pre><code># coding: utf-8import redisdef start_test():    r = redis.Redis(host=&#39;localhost&#39;, port=6379, decode_responses=True)    client = redis.StrictRedis()    for i in range(100000):        client.pfadd(&quot;/index&quot;, &quot;user%d&quot; % i)    print(&quot;用户真实人数:&quot;, 100000, &quot;,统计uv数:&quot; , client.pfcount(&quot;/index&quot;))if __name__ == &#39;__main__&#39;:    start_test();</code></pre><p>输出结果:</p><pre><code>用户真实人数: 100000 ,统计uv数: 99723</code></pre><p>可见正确率有<code>99.723%</code>，误差可以接受的范围</p><h3 id="HyperLogLog的底层原理"><a href="#HyperLogLog的底层原理" class="headerlink" title="HyperLogLog的底层原理"></a>HyperLogLog的底层原理</h3><p>建议阅读文章：<a href="https://blog.csdn.net/firenet1/article/details/77247649" target="_blank" rel="noopener">神奇的HyperLogLog算法</a></p><p>其底层的实现原理还是比较复杂，感兴趣的童鞋可以多多了解。</p><h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>在统计不是很要求精确的统计计数时，可以考虑使用redis的<code>HyperLogLog</code>数据结构。它的占用内存非常小，每个 HyperLogLog 键只需要花费 12 KB 内存，就可以计算接近 2^64 个不同元素的基数。当数值非常大时，它的优势就越发明显。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;前几天，我司大牛分享redis知识点，讲到redis数据结构的时候，抛出一个问题：如果要统计网站uv，你准备怎么实现？&lt;/p&gt;
-&lt;p&gt;和大多数普通开发人员一样，想到的第一个想法是存到set集合里。可是这样真的好吗？&lt;/p&gt;
-&lt;p&gt;后来找到了更好的方式，redis“冷门”数据结构:&lt;code&gt;HyperLogLog&lt;/code&gt;。（说是“冷门”，可能只是我不知道罢了:D）&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="redis" scheme="https://www.chenruiwen.cn/categories/redis/"/>
-    
-    
-      <category term="redis" scheme="https://www.chenruiwen.cn/tags/redis/"/>
     
   </entry>
   

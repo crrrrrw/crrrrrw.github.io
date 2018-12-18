@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.chenruiwen.cn/dubbo/dubbo-cluster-LoadBalance-ConsistentHashLoadBalance/</loc>
+    
+    <lastmod>2018-12-18T13:56:01.316Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.chenruiwen.cn/dubbo/dubbo-cluster-LoadBalance-LeastActiveLoadBalance/</loc>
     
     <lastmod>2018-12-10T14:15:06.026Z</lastmod>
