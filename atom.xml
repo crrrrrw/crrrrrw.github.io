@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.chenruiwen.cn/"/>
-  <updated>2018-12-23T15:07:18.375Z</updated>
+  <updated>2018-12-31T14:08:12.256Z</updated>
   <id>https://www.chenruiwen.cn/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>再见2018，你好2019</title>
+    <link href="https://www.chenruiwen.cn/essay/year-end-summary-2018/"/>
+    <id>https://www.chenruiwen.cn/essay/year-end-summary-2018/</id>
+    <published>2018-12-31T13:58:13.000Z</published>
+    <updated>2018-12-31T14:08:12.256Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>今天是2018年的最后一天，是时候需要做一个年终总结了。总体来看今年做了很多，也有很多计划没有完成很遗憾，从各个方面总结吧，为了2019过的更有意义一些。</p><a id="more"></a><h2 id="我的2018"><a href="#我的2018" class="headerlink" title="我的2018"></a>我的2018</h2><p>2018年，这是一个波荡起伏的一年(可能更多的是“伏”:))，简单的整理如下，我的2018事件：</p><ul><li>结婚（最大的一件事了）</li><li>工作业务改动(公司新产品从0到1完成了多个项目)</li><li>技术升级(服务化的报警、监控、分布式配置等技术调研与升级，与公司一起成长)</li></ul><h3 id="结婚"><a href="#结婚" class="headerlink" title="结婚"></a>结婚</h3><p>结婚是今年最大的一件事，从年初就开始准备了，也就是去年的元旦，去我媳妇儿老家提了婚，经过媳妇儿爷爷掐指一算，定在10.3号，嗯，玄学就是让人很忙碌。于是乎开启今年的结婚筹备工作了。</p><ul><li>一月：预约婚纱摄影</li><li>二月：定婚庆公司，定酒店</li><li>三月：婚博会上买了三金和钻戒</li><li>四月：双发父母第一次见面</li><li>五月：双发父母第二次见面</li><li>六月：回家试婚纱，试装等</li><li>七月至九月：N次沟通婚庆公司(婚庆公司有些服务不到位，店大欺客，体验不好)，九月底约见了司仪，准备婚礼紧张的准备。</li><li>十月：结婚，度蜜月，完成了人生上的一件大事。</li></ul><p>关于结婚，一个字：累。不过还是最终很有感触，也是建立了自己的家庭，从职责上来看，更要担起一个男人的责任。</p><h3 id="工作"><a href="#工作" class="headerlink" title="工作"></a>工作</h3><p>作为一名在互联网金融行业工作的员工，可以说今年公司的业务上也是“坎坎坷坷”。众说周知，今年的p2p暴雷事件也是轰动全国，感觉从那开始便是国家经济下行开始，公司各种裁员，员工各种失业，人民群众各种消费降级…2018年也是会载入史册的一年…</p><p>扯的有点远，虽说是互金行业，但是我们公司并不是p2p公司，我们公司只是做互联网金融服务，所以影响不是很大…在领导的英明指挥下，我们公司也是在主业务稳定的情况下发展了并产出了to B端的企业服务产品以及to C端的电商产品。</p><p>从技术人员的角度上看，今年更是参与从0到1快速迭代开发新产品，更加深刻理解了敏捷开发的流程与实践。除此之外作为一个以java为主开发语言的后端从业人员，在dubbo服务化的基础上，调研并集成了主流的调用链监控框架(美团点评的<code>cat</code>)，分布式配置中心(携程的<code>Apollo</code>)，流量监控框架(阿里的<code>sentinel</code>)，更深刻的理解了分布式服务化以及微服务的设计思想，这些使得我们的系统更加的高性能，系统问题处理更加快速(甚至都能抢答了)，这是最有成就感的事情。</p><h3 id="技术"><a href="#技术" class="headerlink" title="技术"></a>技术</h3><p>技术是一个以技术为核心的开发人员最重要的一项技能，我这里的技术专指开发技术。</p><p>工作中学习到的：</p><ul><li>限流神器：<code>Sentinel</code></li><li>链路跟踪与性能监控：<code>cat</code></li><li>分布式配置中心：<code>Apollo</code></li><li>分布式调度任务：<code>elastic job</code></li><li><code>python</code></li><li>java性能测试：<code>JMH</code></li></ul><p>自己研究:</p><ul><li>spring cloud全家桶</li><li>netty</li><li>dubbo源码分析</li></ul><p>阅读，今年买了不少书，但是大部分没看完，不过看一些还是有一些收获：</p><ul><li>浪潮之巅：目前看了第三版上册的一部分，吴军博士的书都有的一看。</li><li>大型网站技术架构：架构入门，够绝大部分中小型公司的架构设计了</li><li>java并发编程实战：经典中的经典，必读</li><li>thinking in java: 圣经。</li><li>微服务设计：未看完，偏方法论，对微服务架构这里有不错的启发</li><li>财富自由之路：李笑来今年也是颇受争议，书籍有些鸡汤的味道，也能让自己审视总结过去一些“不正确”的学习方法，从而改善之。（未看完）</li><li>数据结构与算法分析：短板之一，大学的时候学习不认真，现在只能补了。（未看完）</li></ul><h2 id="展望2019"><a href="#展望2019" class="headerlink" title="展望2019"></a>展望2019</h2><p>2019，应该也是对我来说不平凡的一年。我对2019的计划也是有的。</p><p>2019备考2020考研！目标北邮！</p><p>也是出于个人发展与对知识的渴望，确实对机器学习有些兴趣，因为好奇，所以想去了解。这意味着需要重新拾起一些知识：</p><ul><li>英语：计划背单词和做阅读</li><li>数学：硬东西，大部分时间将交给数学了</li><li>专业课：不解释，经次于数学</li><li>政治：最后背</li></ul><p>考研是个漫长的备考过程，终于也是避免不了体验考研的感觉了，希望自己通过坚持能考上。(学习时间真的没有在学校的时候多呀，可能博客会更新的慢了)</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;今天是2018年的最后一天，是时候需要做一个年终总结了。总体来看今年做了很多，也有很多计划没有完成很遗憾，从各个方面总结吧，为了2019过的更有意义一些。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="essay" scheme="https://www.chenruiwen.cn/categories/essay/"/>
+    
+    
+      <category term="essay" scheme="https://www.chenruiwen.cn/tags/essay/"/>
+    
+  </entry>
   
   <entry>
     <title>Dubbo路由层之Cluster</title>
@@ -496,28 +518,6 @@ jdk1.5之后，&lt;code&gt;j.u.c&lt;/code&gt;中有了基于&lt;code&gt;CAS&lt;/
       <category term="java" scheme="https://www.chenruiwen.cn/tags/java/"/>
     
       <category term="java concurrency" scheme="https://www.chenruiwen.cn/tags/java-concurrency/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>再见，艾泽拉斯</title>
-    <link href="https://www.chenruiwen.cn/essay/Goodbye-Azeroth/"/>
-    <id>https://www.chenruiwen.cn/essay/Goodbye-Azeroth/</id>
-    <published>2018-08-13T13:24:03.000Z</published>
-    <updated>2018-08-13T15:19:33.583Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="再见"><a href="#再见" class="headerlink" title="再见"></a>再见</h2><p>终于，这一刻还是来了。2018年8月13日开始，彻底AFK了。虽然玩的菜，但好歹是玩的最久的游戏，就此告别，很开心有生之年去过艾泽拉斯。</p><a id="more"></a><h2 id="AFK的原因"><a href="#AFK的原因" class="headerlink" title="AFK的原因"></a>AFK的原因</h2><p>直接原因，是月卡的推出的这两年。官方公告：</p><blockquote><p>《魔兽世界》已于2016年8月4日从分钟付费模式转为包月畅玩模式。此后的两年内，账号里仍有剩余分钟时间的玩家可以选择继续消耗分钟进行游戏，也可通过游戏内的兑换功能，按以下比例将分钟换为包月模式下的天数：</p><p>150分钟=1天；不足150分钟的部分按150分钟计算</p><p>自2018年8月4日起，玩家将无法使用分钟时间继续登录游戏。我们将通过专题网站为这部分玩家提供如下的兑换选项：</p><p>150分钟=1天；不足150分钟的部分按150分钟计算</p><p>或以90分钟=1点的比例退还暴雪游戏点数至游戏账号关联的暴雪游戏通行证，小数部分向上取整，如7.1点计为8点。</p><p>注：账号冻结期间不能参与兑换；而通过战友招募等途径获取的免费时间将无法转为暴雪游戏点数，仅可换成包月天数。</p></blockquote><p>2016年的8月4日之前得到了官方公告，2016年8月4日后将不再支持点卡。于是乎大批休闲玩家(没时间一直玩)的玩家大批量囤游戏时间。没错，包括我，我囤了十张点卡。时间过得真的飞快，得到官方公告后才发现自那以后居然已经过了两年时间了…这两年的时间总共的游戏时间还不到24小时。</p><p>根本原因，则是时间。</p><p>今天，又重新把时间兑换成了战网点数。感觉青春突然又走了一些。</p><p><img src="https://ws1.sinaimg.cn/large/87faef88ly1fu8exz3bf7j21ui1407fa.jpg" alt=""><img src="https://ws1.sinaimg.cn/large/87faef88ly1fu8eybjlzej21uo13qk29.jpg" alt=""><img src="https://ws1.sinaimg.cn/large/87faef88ly1fu8eyi1f1qj21ug13sgw6.jpg" alt=""></p><h2 id="初识艾泽拉斯"><a href="#初识艾泽拉斯" class="headerlink" title="初识艾泽拉斯"></a>初识艾泽拉斯</h2><p>那是2008年的夏天，那年初中刚毕业，和磊少顺子去常州找好哥们猴子玩。猴子算是我对电脑的”启蒙老师”，他教会了我电脑是如何用来玩游戏的。。。猴子初中的时候离开了我们。。。不是永久的那种，跟他父母移居到常州去了，每年还是能回蚌埠来玩几天的。</p><p>在常州度过了难忘的几天，我们宅在家里玩游戏，第一次接触魔兽是那时候看猴子和他朋友打22竞技场，他们是战德组合，猴子就是德，所以就打德。炫酷的界面，复杂的技能栏，各种监控插件，最重要的是种族好多啊，牛头人真的很可爱，仅次于兽人妹纸。</p><p>后来上了高一后，上网吧成了周末的必备活动，好孩子表示周一到周五不能上网吧，原因是没时间。</p><p>那时候的周末总是那么美好，周六上午包个早机，中午回家吃饭后上一会儿网接着去打球，简单而充实的快乐。高一那年，认识了鸣鸣，一个活逗比。那会儿开号也是要花一张大卡的，我俩分表练了侏儒盗贼和侏儒法师。为什么玩侏儒，可能是比较符合我们猥琐的气质吧。</p><p>那会儿印象最深的是艾尔文森林的鱼人族们，嗯，让我们跑尸的那群哇啦啦们。</p><p>然后是杀霍格，第一个小BOSS，年轻的我以为同级的怪都能打过，没想到是还得靠磊少的大号SS带了把。吐槽一下磊少的术士， ID:囡囡不坏。嗯，非常接地气。</p><p>第一个FB，西部荒野的地下矿井。还是靠磊少的SS。套用磊少一句话：火石法杖，极品。</p><p>后来记得很清楚，17级的时候，号被盗了。那时候的盗号还是非常疯狂的，用密保吧太费事，不用密保稳被盗，没想到的是我的不到20级的号都能被盗。于是乎，我的第一个侏儒贼算是折戟了。</p><h2 id="再识艾泽拉斯"><a href="#再识艾泽拉斯" class="headerlink" title="再识艾泽拉斯"></a>再识艾泽拉斯</h2><p>很长一段时间没有玩了，后来猴子给了个号，44级人类盗贼，又让我重新回到艾泽拉斯。不得不说，人类盗贼潜行的样子真的很猥琐。</p><p>第一次荣誉击杀，是在塔纳瑞斯，野外遇到一个部落的猎人，第一反应，潜行。嗯，盗贼就得有盗贼的样子。悄悄潜过去，偷袭，背刺，肾击。总之就是一顿技能上去追着干。职业优势了也是，拿下艾泽拉斯一血。</p><p>【得睡觉了，未完待续…】</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;再见&quot;&gt;&lt;a href=&quot;#再见&quot; class=&quot;headerlink&quot; title=&quot;再见&quot;&gt;&lt;/a&gt;再见&lt;/h2&gt;&lt;p&gt;终于，这一刻还是来了。2018年8月13日开始，彻底AFK了。虽然玩的菜，但好歹是玩的最久的游戏，就此告别，很开心有生之年去过艾泽拉斯。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="essay" scheme="https://www.chenruiwen.cn/categories/essay/"/>
-    
-    
-      <category term="essay" scheme="https://www.chenruiwen.cn/tags/essay/"/>
     
   </entry>
   
