@@ -4,8 +4,36 @@
 
     
   <url>
+    <loc>https://www.chenruiwen.cn/event-driven/event-driven-design-and-demo/</loc>
+    <lastmod>2019-02-23T05:59:17.261Z</lastmod>
+    <data>
+        <display>
+        <title>事件驱动SpringEvent与EventBus</title>
+        <pubTime>2019-02-23T06:13:13.000Z</pubTime>
+        
+        <tag>event driven</tag>
+         
+        <tag>Spring</tag>
+         
+        <tag>Guava</tag>
+         
+        <tag>SpringEvent</tag>
+         
+        <tag>EventBus</tag>
+         
+         
+           
+             
+              <breadCrumb title="event driven" url="https://www.chenruiwen.cn/categories/event-driven/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://www.chenruiwen.cn/essay/year-end-summary-2018/</loc>
-    <lastmod>2018-12-31T14:08:12.256Z</lastmod>
+    <lastmod>2018-12-31T14:32:27.995Z</lastmod>
     <data>
         <display>
         <title>再见2018，你好2019</title>
@@ -666,9 +694,9 @@
         
         <tag>spring-boot</tag>
          
-        <tag>redis</tag>
-         
         <tag>cache</tag>
+         
+        <tag>redis</tag>
          
          
            

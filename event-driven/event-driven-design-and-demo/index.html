@@ -1,0 +1,642 @@
+<!DOCTYPE html><html class="theme-next muse use-motion" lang="zh-Hans"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css"><style>blockquote{color:#888;background-color:#eae6f3;border-left:1rem solid #5236a0;padding:0 1.5rem;position:relative;font-family:Roboto,sans-serif}blockquote:after,blockquote:before{color:#392570;font-size:2.5rem;position:absolute;line-height:2.5rem}blockquote:before{content:"\201C";left:-1rem;top:0}blockquote:after{content:"\201D";right:0;bottom:-1rem}</style><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script><link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"><style>.pace .pace-progress{background:#1e92fb;height:3px}.pace .pace-progress-inner{box-shadow:0 0 10px #1e92fb,0 0 5px #1e92fb}.pace .pace-activity{border-top-color:#1e92fb;border-left-color:#1e92fb}</style><meta name="theme-color" content="#222"><script src="/lib/pace/pace.min.js?v=1.0.2"></script><link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"><link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-gui.ico?v=5.1.4"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-32x32-gui.ico?v=5.1.4"><link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222"><meta name="keywords" content="event driven,Spring,Guava,SpringEvent,EventBus,"><link rel="alternate" href="/atom.xml" title="Chen RuiWen's Space" type="application/atom+xml"><meta name="description" content="前言最近公司内部准备搞消息驱动，即在订单系统上使用消息/事件驱动的设计，这里研究了一下进程内的 事件驱动设计，主要分析了业内常用的Spring Event和EventBus，本篇博文目的如下：  熟悉事件驱动的设计思想 会在项目中使用事件驱动(spring event和 eventbus) spring event和 eventbus 的异同点"><meta name="keywords" content="event driven,Spring,Guava,SpringEvent,EventBus"><meta property="og:type" content="article"><meta property="og:title" content="事件驱动SpringEvent与EventBus"><meta property="og:url" content="https://www.chenruiwen.cn/event-driven/event-driven-design-and-demo/index.html"><meta property="og:site_name" content="Chen RuiWen&#39;s Space"><meta property="og:description" content="前言最近公司内部准备搞消息驱动，即在订单系统上使用消息/事件驱动的设计，这里研究了一下进程内的 事件驱动设计，主要分析了业内常用的Spring Event和EventBus，本篇博文目的如下：  熟悉事件驱动的设计思想 会在项目中使用事件驱动(spring event和 eventbus) spring event和 eventbus 的异同点"><meta property="og:locale" content="zh-Hans"><meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1g0eyfgwartj20sm05wt98.jpg"><meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1g0f66qorovj20tw075dgg.jpg"><meta property="og:updated_time" content="2019-02-23T05:59:17.261Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="事件驱动SpringEvent与EventBus"><meta name="twitter:description" content="前言最近公司内部准备搞消息驱动，即在订单系统上使用消息/事件驱动的设计，这里研究了一下进程内的 事件驱动设计，主要分析了业内常用的Spring Event和EventBus，本篇博文目的如下：  熟悉事件驱动的设计思想 会在项目中使用事件驱动(spring event和 eventbus) spring event和 eventbus 的异同点"><meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1g0eyfgwartj20sm05wt98.jpg"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Muse",version:"5.1.4",sidebar:{position:"left",display:"post",offset:12,b2t:!1,scrollpercent:!0,onmobile:!0},fancybox:!1,tabs:!0,motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"0",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://www.chenruiwen.cn/event-driven/event-driven-design-and-demo/"><title>事件驱动SpringEvent与EventBus | Chen RuiWen's Space</title></head><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div> <a href="https://github.com/crrrrrw"><img style="position:absolute;top:0;right:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">Chen RuiWen's Space</span><span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle">Life is real, life is earnest</p></div><div class="site-nav-toggle"> <button><span class="btn-bar"></span><span class="btn-bar"></span><span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br> 首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i><br> 关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br> 标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br> 分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br> 归档</a></li><li class="menu-item menu-item-photos"><a href="/photos/" rel="section"><i class="menu-item-icon fa fa-fw fa-camera"></i><br> 相册</a></li><li class="menu-item menu-item-search"><a href="javascript:;" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br> 搜索</a></li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i></span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"> <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/event-driven/event-driven-design-and-demo/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="陈瑞文"><meta itemprop="description" content=""><meta itemprop="image" content="/images/touxiang.jpeg"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Chen RuiWen's Space"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">事件驱动SpringEvent与EventBus</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span> <span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-23T14:13:13+08:00">2019-02-23</time></span> <span id="busuanzi_container_page_pv">&nbsp;&nbsp;|&nbsp;&nbsp;阅读量<span id="busuanzi_value_page_pv"></span> 次</span> <span class="post-category"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span> <span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/event-driven/" itemprop="url" rel="index"><span itemprop="name">event driven</span></a></span></span> <span class="post-comments-count"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-comment-o"></i></span><a href="/event-driven/event-driven-design-and-demo/#comments" itemprop="discussionUrl"><span class="post-comments-count gitment-comments-count" data-xid="/event-driven/event-driven-design-and-demo/" itemprop="commentsCount"></span></a></span><div class="post-wordcount"><span class="post-meta-item-icon"><i class="fa fa-file-word-o"></i></span> <span class="post-meta-item-text">字数统计&#58;</span> <span title="字数统计">4,005 字</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-clock-o"></i></span> <span class="post-meta-item-text">阅读时长 &asymp;</span> <span title="阅读时长">18 分钟</span></div></div></header><div class="post-body" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近公司内部准备搞消息驱动，即在订单系统上使用消息/事件驱动的设计，这里研究了一下进程内的 事件驱动设计，主要分析了业内常用的<code>Spring Event</code>和<code>EventBus</code>，本篇博文目的如下：</p><ul><li>熟悉事件驱动的设计思想</li><li>会在项目中使用事件驱动(spring event和 eventbus)</li><li>spring event和 eventbus 的异同点</li></ul><a id="more"></a><h2 id="QucikStart"><a href="#QucikStart" class="headerlink" title="QucikStart"></a>QucikStart</h2><h3 id="Spring-Event"><a href="#Spring-Event" class="headerlink" title="Spring Event"></a>Spring Event</h3><p><a href="https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/core.html#context-functionality-events" target="_blank" rel="noopener">spring event官方文档索引</a></p><p>三要素：</p><ul><li><code>Event</code>(事件)</li><li><code>Publisher</code>(发布者)</li><li><code>Listener</code>(监听者)</li></ul><h4 id="举例场景"><a href="#举例场景" class="headerlink" title="举例场景"></a>举例场景</h4><p>用户下订单，推送发短信通知，发微信通知。</p><h4 id="创建一个-Event"><a href="#创建一个-Event" class="headerlink" title="创建一个 Event"></a>创建一个 <code>Event</code></h4><p>直接继承<code>ApplicationEvent</code>即可。</p><p>示例代码:</p><pre><code class="java">public class CreateOrderEvent extends ApplicationEvent {
+
+    public CreateOrderEvent(Object source) {
+        super(source);
+    }
+
+    public Order getOrder() {
+        return (Order) this.source;
+    }
+}
+</code></pre><p>补充：这里事件也可以不继承<code>ApplicationEvent</code>，因为发布接口有提供<code>void publishEvent(Object event);</code></p><h4 id="创建一个-Publisher"><a href="#创建一个-Publisher" class="headerlink" title="创建一个 Publisher"></a>创建一个 <code>Publisher</code></h4><p>使用<code>ApplicationEventPublisher</code>发布即可。</p><p>示例代码:</p><pre><code class="java">@Slf4j
+@Component
+public class EventPublisher {
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
+    public void publishCreateOrderEvent(CreateOrderEvent createOrderEvent) {
+        log.info(&quot;发布了一个[订单创建]事件：{}&quot;, createOrderEvent);
+        applicationEventPublisher.publishEvent(createOrderEvent);
+    }
+}
+</code></pre><h4 id="监听事件"><a href="#监听事件" class="headerlink" title="监听事件"></a>监听事件</h4><p>监听者的创建可以使用两种方式：</p><ul><li>实现<code>ApplicationListener</code>接口</li><li>基于注解式的监听(推荐，要求 Spring 4.2 + )</li></ul><p>使用实现<code>ApplicationListener</code>接口的方式示例：</p><pre><code class="java">@Slf4j
+@Component
+public class DuanXinNoticeListener implements ApplicationListener&lt;CreateOrderEvent&gt; {
+    @Override
+    public void onApplicationEvent(CreateOrderEvent event) {
+        log.info(&quot;实现接口方式：收到[创建订单]事件。[短信通知]：亲爱的{}，您的订单[{}]已被创建&quot;, event.getOrder().getUserName(), event.getOrder().getOrderName());
+    }
+}
+</code></pre><p>这种方式不太优雅，每次都要实现一次接口不太爽。那么推荐使用使用注解式监听器。</p><p>注解式监听只需要在监听方法逻辑上使用注解<code>@EventListener</code>即可，而且注解支持spel表达式。</p><p>注解式示例：</p><pre><code class="java">@Slf4j
+@Component
+public class CreateOrderListener {
+
+    @EventListener(condition = &quot;#createOrderEvent.order.status == 1&quot;)
+    public void processCreateOrderEvent(CreateOrderEvent createOrderEvent) {
+        log.info(&quot;注解式 spring event 收到消息，订单名称:{} ; 订单状态为：{} ; 开始处理相应的事件。&quot;, createOrderEvent.getOrder().getOrderName(), createOrderEvent.getOrder().getStatus());
+    }
+
+    @EventListener(condition = &quot;#createOrderEvent.order.status == 2&quot;)
+    public void processCreateOrderEvent2(CreateOrderEvent createOrderEvent) {
+        log.info(&quot;注解式 spring event 收到消息，订单名称:{} ; 订单状态为：{} ; 开始处理相应的事件。&quot;, createOrderEvent.getOrder().getOrderName(), createOrderEvent.getOrder().getStatus());
+    }
+}
+</code></pre><h4 id="使用事件发布"><a href="#使用事件发布" class="headerlink" title="使用事件发布"></a>使用事件发布</h4><p>事件在控制器里使用：</p><pre><code class="java">@Slf4j
+@RestController
+@RequestMapping(&quot;/event&quot;)
+public class EventDemoController {
+
+    @Autowired
+    private EventPublisher createOrderEventPublisher;
+
+    @PostMapping(&quot;/spring/createOrder&quot;)
+    public String createOrder(Order order) {
+        createOrderEventPublisher.publishCreateOrderEvent(new CreateOrderEvent(order));
+        return &quot;ok&quot;;
+    }
+
+}
+</code></pre><h4 id="测试创建订单事件"><a href="#测试创建订单事件" class="headerlink" title="测试创建订单事件"></a>测试创建订单事件</h4><p>发送请求：</p><pre><code>curl -X POST \
+  http://localhost:9090/event/spring/createOrder \
+  -H &#39;cache-control: no-cache&#39; \
+  -H &#39;content-type: application/x-www-form-urlencoded&#39; \
+  -H &#39;postman-token: a632443a-b7b2-40df-6bc3-3881babd15e3&#39; \
+  -d &#39;id=1&amp;orderName=53%E5%BA%A62018%E9%A3%9E%E5%A4%A9%E8%8C%85%E5%8F%B0&amp;status=1&amp;userName=%E5%BC%A0%E4%B8%89&#39;
+</code></pre><p>可以看到控制台打印：</p><pre><code>2019-02-21 10:53:20.750  INFO 24168 --- [nio-9090-exec-3] c.gemantic.wealth.spring.EventPublisher  : 发布了一个[订单创建]事件：CreateOrderEvent(order=Order(id=1, orderName=53度2018飞天茅台, status=1, userName=张三))
+2019-02-21 10:53:20.750  INFO 24168 --- [nio-9090-exec-3] c.g.wealth.spring.CreateOrderListener    : 注解式 spring event 收到消息，订单名称:53度2018飞天茅台 ; 订单状态为：1 ; 开始处理相应的事件。
+2019-02-21 10:53:20.750  INFO 24168 --- [nio-9090-exec-3] c.g.wealth.spring.DuanXinNoticeListener  : 实现接口方式：收到[创建订单]事件。[短信通知]：亲爱的张三，您的订单[53度2018飞天茅台]已被创建
+2019-02-21 10:53:20.750  INFO 24168 --- [nio-9090-exec-3] c.g.wealth.spring.WeiXinNoticeListener   : 实现接口方式：收到[创建订单]事件。[微信通知]：亲爱的张三，您的订单[53度2018飞天茅台]已被创建
+</code></pre><p>事件已被执行，把<code>status</code>改为2：</p><pre><code>2019-02-21 10:55:51.951  INFO 24168 --- [nio-9090-exec-5] c.gemantic.wealth.spring.EventPublisher  : 发布了一个[订单创建]事件：CreateOrderEvent(order=Order(id=1, orderName=53度2018飞天茅台, status=2, userName=张三))
+2019-02-21 10:55:51.951  INFO 24168 --- [nio-9090-exec-5] c.g.wealth.spring.CreateOrderListener    : 注解式 spring event 收到消息，订单名称:53度2018飞天茅台 ; 订单状态为：2 ; 开始处理相应的事件。
+2019-02-21 10:55:51.951  INFO 24168 --- [nio-9090-exec-5] c.g.wealth.spring.DuanXinNoticeListener  : 实现接口方式：收到[创建订单]事件。[短信通知]：亲爱的张三，您的订单[53度2018飞天茅台]已被创建
+2019-02-21 10:55:51.951  INFO 24168 --- [nio-9090-exec-5] c.g.wealth.spring.WeiXinNoticeListener   : 实现接口方式：收到[创建订单]事件。[微信通知]：亲爱的张三，您的订单[53度2018飞天茅台]已被创建
+</code></pre><p>可见可以很方便的根据条件执行监听。</p><h4 id="补充1-使用异步事件处理"><a href="#补充1-使用异步事件处理" class="headerlink" title="补充1: 使用异步事件处理"></a>补充1: 使用异步事件处理</h4><p>可以在监听方法上使用注解<code>@Async</code>，前提是需要spring应用启动异步功能：<code>@EnableAsync</code></p><h4 id="补充2-TransactionalEventListener实现事务监控"><a href="#补充2-TransactionalEventListener实现事务监控" class="headerlink" title="补充2: TransactionalEventListener实现事务监控"></a>补充2: TransactionalEventListener实现事务监控</h4><p>我们知道，比如如上“发送短信”，“发送微信”等通知是需要在“订单入库”的基础上才能执行，也就是说“订单入库”完成，才能处理执行相应的监听器的逻辑。</p><p>使用<code>@TransactionalEventListener</code>即可完成如上控制，可参考： <a href="https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/data-access.html#transaction-event" target="_blank" rel="noopener">spring官方文档 Transaction-bound Events</a></p><p>注意一点，官方文档中有提出：</p><blockquote><p>If no transaction is running, the listener is not invoked at all, since we cannot honor the required semantics. You can, however, override that behavior by setting the fallbackExecution attribute of the annotation to true.</p></blockquote><p>也就是说，实现事务控制必须<code>开启事务</code>并且处于一个事务中，<strong>否者该监听器不会被调用</strong>。(不过可以设置<code>fallbackExecution=true</code>)</p><p>前提条件：</p><ul><li>开启事务管理：<code>@EnableTransactionManagement</code></li><li>配置事务管理器: <code>PlatformTransactionManager</code>(这一步<code>@EnableTransactionManagement</code>已默认实现，如须按需配置可手动配置)</li><li>使用<code>@Transactional</code>处理一个事务</li></ul><p>示例代码如下（前提已开启事务）：</p><p>订单服务-“订单入库”：</p><pre><code class="java">@Slf4j
+@Service
+public class OrderService {
+
+    @Autowired
+    private EventPublisher createOrderEventPublisher;
+
+    /**
+     * 插入订单表操作
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void insert(Order order) {
+        log.info(&quot;[订单入库] start&quot;);
+
+        createOrderEventPublisher.publishCreateOrderEvent(new CreateOrderEvent(order));
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        log.info(&quot;[订单入库] end&quot;);
+    }
+
+}
+</code></pre><p>两个新的监听器，一个不是事务的，一个是事务的做对比：</p><pre><code class="java">@EventListener(condition = &quot;#createOrderEvent.order.status == 3&quot;)
+public void processCreateOrderEvent3(CreateOrderEvent createOrderEvent) {
+    log.info(&quot;[EventListener] 注解式 spring event 收到消息，订单名称:{} ; 订单状态为：{} ; 开始处理相应的事件。&quot;, createOrderEvent.getOrder().getOrderName(), createOrderEvent.getOrder().getStatus());
+}
+
+@TransactionalEventListener(condition = &quot;#createOrderEvent.order.status == 3&quot;, phase = TransactionPhase.AFTER_COMMIT)
+public void processCreateOrderEvent4(CreateOrderEvent createOrderEvent) {
+    log.info(&quot;[TransactionalEventListener] 注解式 spring event 收到消息，订单名称:{} ; 订单状态为：{} ; 开始处理相应的事件。&quot;, createOrderEvent.getOrder().getOrderName(), createOrderEvent.getOrder().getStatus());
+}
+</code></pre><p>控制器里的事务调用请求处理：</p><pre><code class="java">@PostMapping(&quot;/spring/createOrder_transaction&quot;)
+public String createOrder_transaction(Order order) {
+    orderService.insert(order);
+    return &quot;ok&quot;;
+}
+</code></pre><p>开启服务发请求测试:</p><pre><code>curl -X POST \
+  http://localhost:9090/event/spring/createOrder_transaction \
+  -H &#39;cache-control: no-cache&#39; \
+  -H &#39;content-type: application/x-www-form-urlencoded&#39; \
+  -H &#39;postman-token: 1e9d2357-ba51-6aa6-156b-6fe2559cdb06&#39; \
+  -d &#39;id=1&amp;orderName=53%E5%BA%A62018%E9%A3%9E%E5%A4%A9%E8%8C%85%E5%8F%B0&amp;status=3&amp;userName=%E5%BC%A0%E4%B8%89&#39;
+</code></pre><p>结果如下：</p><pre><code>2019-02-21 14:07:31.467  INFO 24496 --- [nio-9090-exec-1] c.gemantic.wealth.service.OrderService   : [订单入库] start
+2019-02-21 14:07:31.468  INFO 24496 --- [nio-9090-exec-1] c.gemantic.wealth.spring.EventPublisher  : 发布了一个[订单创建]事件：CreateOrderEvent(order=Order(id=1, orderName=53度2018飞天茅台, status=3, userName=张三))
+2019-02-21 14:07:31.482  INFO 24496 --- [nio-9090-exec-1] c.g.wealth.spring.CreateOrderListener    : [EventListener] 注解式 spring event 收到消息，订单名称:53度2018飞天茅台 ; 订单状态为：3 ; 开始处理相应的事件。
+2019-02-21 14:07:31.483  INFO 24496 --- [nio-9090-exec-1] c.g.wealth.spring.DuanXinNoticeListener  : 实现接口方式：收到[创建订单]事件。[短信通知]：亲爱的张三，您的订单[53度2018飞天茅台]已被创建
+2019-02-21 14:07:31.483  INFO 24496 --- [nio-9090-exec-1] c.g.wealth.spring.WeiXinNoticeListener   : 实现接口方式：收到[创建订单]事件。[微信通知]：亲爱的张三，您的订单[53度2018飞天茅台]已被创建
+2019-02-21 14:07:36.483  INFO 24496 --- [nio-9090-exec-1] c.gemantic.wealth.service.OrderService   : [订单入库] end
+2019-02-21 14:07:36.484  INFO 24496 --- [nio-9090-exec-1] c.g.wealth.spring.CreateOrderListener    : [TransactionalEventListener] 注解式 spring event 收到消息，订单名称:53度2018飞天茅台 ; 订单状态为：3 ; 开始处理相应的事件。
+</code></pre><p>请求大约5秒后返回，可以看到控制台，<code>EventListener</code>是直接处理的，<code>TransactionalEventListener</code>是在订单<code>insert</code>方法调用后再处理。这是因为<code>TransactionalEventListener</code>默认的处理是事务<code>commit</code>之后处理的，这里可以改注解的<code>phase</code>属性。参考枚举类：<code>TransactionPhase</code>。</p><pre><code class="java">public enum TransactionPhase {
+    BEFORE_COMMIT,
+    AFTER_COMMIT,
+    AFTER_ROLLBACK,
+    AFTER_COMPLETION
+}
+</code></pre><h4 id="补充3-事件的父类监听"><a href="#补充3-事件的父类监听" class="headerlink" title="补充3: 事件的父类监听"></a>补充3: 事件的父类监听</h4><p>如果事件继承了某一父类，此父类也有监听，则每次发布事件，父类子类的监听器都会执行。</p><h3 id="Guava-EventBus"><a href="#Guava-EventBus" class="headerlink" title="Guava EventBus"></a>Guava EventBus</h3><p>Google的进程内的发布订阅模式的实现，轻量级消息系统。 可参考：</p><ul><li><a href="https://github.com/google/guava/wiki/EventBusExplained" target="_blank" rel="noopener">github上一分钟概览</a></li></ul><p>那么场景依然是订单与通知场景，下面示例代码为集成在spring中的示例。</p><h4 id="依赖guava包"><a href="#依赖guava包" class="headerlink" title="依赖guava包"></a>依赖guava包</h4><p>maven引入：</p><pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;com.google.guava&lt;/groupId&gt;
+    &lt;artifactId&gt;guava&lt;/artifactId&gt;
+    &lt;version&gt;22.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><h4 id="创建一个-Event-1"><a href="#创建一个-Event-1" class="headerlink" title="创建一个 Event"></a>创建一个 <code>Event</code></h4><p>普通类即可以。</p><pre><code class="java">@Data
+@AllArgsConstructor
+public class CreateOrderEvent {
+    private Order order;
+}
+</code></pre><h4 id="创建一个-Publisher-1"><a href="#创建一个-Publisher-1" class="headerlink" title="创建一个 Publisher"></a>创建一个 <code>Publisher</code></h4><p>发布者即 <code>EventBus</code>类，因为<code>EventBus</code>不是单例的，我们使用中又想用单例，创建一个事件管理器类。</p><pre><code class="java">/**
+ * 事件管理器：统一管理所有事件
+ */
+public class EventBusManager {
+
+    /**
+     * 创建订单
+     */
+    public final static EventBus CREATE_ORDER = new EventBus();
+}
+</code></pre><h4 id="监听事件-1"><a href="#监听事件-1" class="headerlink" title="监听事件"></a>监听事件</h4><p>可以优雅的使用<code>@Subscribe</code>表示监听某一事件，这个注解没有其他属性。</p><p>除此之外，监听器需要手动注册到<code>EventBus</code>中类如:<code>EventBus.register(listener)</code>。</p><p>方便起见，我们可以在<code>spring</code>容器初始化时注册监听器，并抽象之。</p><pre><code class="java">/**
+ * 抽象的监听器
+ */
+public abstract class AbstractBusListener {
+
+    /**
+     * 统一在spring启动时注册事件
+     */
+    @PostConstruct
+    public void init() {
+        registerEventBus();
+    }
+
+    private void registerEventBus() {
+        getEventBus().register(this);
+    }
+
+    protected abstract EventBus getEventBus();
+}
+
+@Slf4j
+@Component
+public class CreateOrderBusListener extends AbstractBusListener {
+
+    /**
+     * 订单创建事件：短信通知
+     */
+    @Subscribe
+    public void onCreateOrderEvent2DuanxinNotice(CreateOrderEvent event) {
+        log.info(&quot;收到[创建订单]事件。[短信通知]：亲爱的{}，您的订单[{}]已被创建&quot;, event.getOrder().getUserName(), event.getOrder().getOrderName());
+    }
+
+    /**
+     * 订单创建事件：微信通知
+     */
+    @Subscribe
+    public void onCreateOrderEvent2WeixinNotice(CreateOrderEvent event) {
+        log.info(&quot;收到[创建订单]事件。[微信通知]：亲爱的{}，您的订单[{}]已被创建&quot;, event.getOrder().getUserName(), event.getOrder().getOrderName());
+    }
+
+    /**
+     * 注册的为订单创建事件
+     */
+    @Override
+    protected EventBus getEventBus() {
+        return EventBusManager.CREATE_ORDER;
+    }
+}
+</code></pre><h4 id="发布事件"><a href="#发布事件" class="headerlink" title="发布事件"></a>发布事件</h4><p>发布事件也是通过<code>EventBus</code>发布，通过其<code>post(event)</code>方法发布。</p><p>示例：</p><pre><code class="java">@PostMapping(&quot;/eventbus/createOrder&quot;)
+public String createOrderByEventBus(Order order) {
+    EventBusManager.CREATE_ORDER.post(new com.gemantic.wealth.eventbus.CreateOrderEvent(order));
+    return &quot;ok&quot;;
+}
+</code></pre><h4 id="测试创建订单事件-1"><a href="#测试创建订单事件-1" class="headerlink" title="测试创建订单事件"></a>测试创建订单事件</h4><p>发送请求：</p><pre><code>curl -X POST \
+  http://localhost:9090/event/eventbus/createOrder \
+  -H &#39;cache-control: no-cache&#39; \
+  -H &#39;content-type: application/x-www-form-urlencoded&#39; \
+  -H &#39;postman-token: 6b5255d5-2b1d-e9c1-7ef3-a5678f7a73ad&#39; \
+  -d &#39;id=1&amp;orderName=53%E5%BA%A62018%E9%A3%9E%E5%A4%A9%E8%8C%85%E5%8F%B0&amp;status=1&amp;userName=%E5%BC%A0%E4%B8%89&#39;
+</code></pre><p>看控制台打印：</p><pre><code>2019-02-21 17:34:04.276  INFO 24556 --- [nio-9090-exec-1] c.g.w.eventbus.CreateOrderBusListener    : 收到[创建订单]事件。[微信通知]：亲爱的张三，您的订单[53度2018飞天茅台]已被创建
+2019-02-21 17:34:04.276  INFO 24556 --- [nio-9090-exec-1] c.g.w.eventbus.CreateOrderBusListener    : 收到[创建订单]事件。[短信通知]：亲爱的张三，您的订单[53度2018飞天茅台]已被创建
+</code></pre><h4 id="补充1：使用异步事件处理"><a href="#补充1：使用异步事件处理" class="headerlink" title="补充1：使用异步事件处理"></a>补充1：使用异步事件处理</h4><p><code>EventBus</code>实现上改为<code>AsyncEventBus</code>即可，构造器内需要再配一个线程池。举例:</p><pre><code class="java">public final static EventBus CREATE_ORDER = new AsyncEventBus(Executors.newFixedThreadPool(5));
+</code></pre><h4 id="补充2：DeadEvent"><a href="#补充2：DeadEvent" class="headerlink" title="补充2：DeadEvent"></a>补充2：DeadEvent</h4><p>介绍：</p><blockquote><p>Wraps an event that was posted, but which had no subscribers and thus could not be delivered. Registering a DeadEvent subscriber is useful for debugging or logging, as it can detect misconfigurations in a system’s event distribution.</p></blockquote><p><img src="http://ww1.sinaimg.cn/large/87faef88ly1g0eyfgwartj20sm05wt98.jpg" alt=""> 所有没被监听的事件都会被包装成一个<code>DeadEvent</code>。这种情况，只需要提供一个监听<code>DeadEvent</code>事件的监听器即可统一处理</p><h4 id="补充3-事件的父类监听-1"><a href="#补充3-事件的父类监听-1" class="headerlink" title="补充3: 事件的父类监听"></a>补充3: 事件的父类监听</h4><p>如果事件继承了某一父类，此父类也有监听，则每次发布事件，父类子类的监听器都会执行。</p><h4 id="补充4-AllowConcurrentEvents"><a href="#补充4-AllowConcurrentEvents" class="headerlink" title="补充4: @AllowConcurrentEvents"></a>补充4: @AllowConcurrentEvents</h4><p>描述：</p><blockquote><p>Marks an event subscriber method as being thread-safe. This annotation indicates that EventBus may invoke the event subscriber simultaneously from multiple threads. This does not mark the method, and so should be used in combination with Subscribe.</p></blockquote><p>创建监听器时会根据此注解判断创建普通监听者还是同步的监听者：</p><pre><code class="java">class Subscriber {
+
+  /**
+   * Creates a {@code Subscriber} for {@code method} on {@code listener}.
+   */
+  static Subscriber create(EventBus bus, Object listener, Method method) {
+    return isDeclaredThreadSafe(method)
+        ? new Subscriber(bus, listener, method)
+        : new SynchronizedSubscriber(bus, listener, method);
+  }
+
+  private static boolean isDeclaredThreadSafe(Method method) {
+    return method.getAnnotation(AllowConcurrentEvents.class) != null;
+  }
+
+  ...
+}
+
+
+</code></pre><p>同步的监听者则会加锁同步调用订阅方法:</p><pre><code class="java">  @VisibleForTesting
+  static final class SynchronizedSubscriber extends Subscriber {
+
+    private SynchronizedSubscriber(EventBus bus, Object target, Method method) {
+      super(bus, target, method);
+    }
+
+    @Override
+    void invokeSubscriberMethod(Object event) throws InvocationTargetException {
+      synchronized (this) {
+        super.invokeSubscriberMethod(event);
+      }
+    }
+  }
+</code></pre><p>加锁会有一定的开销，所以如果是同步的<code>EventBus</code>监听者或者是你确认线程安全的<code>AsyncEventBus</code>监听者，最好标注注解<code>@AllowConcurrentEvents</code></p><h2 id="事件处理异常"><a href="#事件处理异常" class="headerlink" title="事件处理异常"></a>事件处理异常</h2><table><thead><tr><th>–</th><th>Spring Event</th><th>Guava EventBus</th></tr></thead><tbody><tr><td>同步</td><td>会对其他监听器有影响</td><td>不影响其他监听器的处理</td></tr><tr><td>异步</td><td>不影响其他监听器的处理</td><td>不影响其他监听器的处理</td></tr></tbody></table><p>针对同步的情况单独说下。</p><h3 id="EventBus"><a href="#EventBus" class="headerlink" title="EventBus"></a>EventBus</h3><p>事件处理逻辑，无论同步异步都是用线程执行，区别在于同步的情况使用的是同一个线程执行。</p><pre><code class="java">final void dispatchEvent(final Object event) {
+        this.executor.execute(new Runnable() {
+            public void run() {
+                try {
+                    Subscriber.this.invokeSubscriberMethod(event);
+                } catch (InvocationTargetException var2) {
+                    Subscriber.this.bus.handleSubscriberException(var2.getCause(), Subscriber.this.context(event));
+                }
+
+            }
+        });
+    }
+</code></pre><p>this.executor是：</p><pre><code class="java">public static Executor directExecutor() {
+    return MoreExecutors.DirectExecutor.INSTANCE;
+}
+</code></pre><p>可以看到<code>EventBus</code>把异常都统一catch了，异常不上抛，别的监听器依然正常处理。</p><h3 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h3><p>Spring调用的时候的异常都是往外抛的：</p><pre><code class="java">protected Object doInvoke(Object... args) {
+    Object bean = getTargetBean();
+    ReflectionUtils.makeAccessible(this.bridgedMethod);
+    try {
+        return this.bridgedMethod.invoke(bean, args);
+    }
+    catch (IllegalArgumentException ex) {
+        assertTargetBean(this.bridgedMethod, bean, args);
+        throw new IllegalStateException(getInvocationErrorMessage(bean, ex.getMessage(), args), ex);
+    }
+    catch (IllegalAccessException ex) {
+        throw new IllegalStateException(getInvocationErrorMessage(bean, ex.getMessage(), args), ex);
+    }
+    catch (InvocationTargetException ex) {
+        // Throw underlying exception
+        Throwable targetException = ex.getTargetException();
+        if (targetException instanceof RuntimeException) {
+            throw (RuntimeException) targetException;
+        }
+        else {
+            String msg = getInvocationErrorMessage(bean, &quot;Failed to invoke event listener method&quot;, args);
+            throw new UndeclaredThrowableException(targetException, msg);
+        }
+    }
+}
+</code></pre><h3 id="分别适合的场景"><a href="#分别适合的场景" class="headerlink" title="分别适合的场景"></a>分别适合的场景</h3><p>异步情况下，都是多线程处理，无差异。</p><p>同步情况下，同一线程处理，由于Spring会抛出异常，适合事件有依赖的情况，而EventBus适合事件互不依赖的场景。</p><p>举个栗子：</p><ul><li>下订单场景一。订单已经创建，那么会发送短信通知，微信通知，此二者之间无依赖，适合EventBus.</li><li>下订单场景二。如果创建订单也作为事件，那么微信短信通知需依赖订单事件已完成，如果创建订单异常失败则不需要发送通知，适合Spring Event</li></ul><h2 id="异步实现的区别"><a href="#异步实现的区别" class="headerlink" title="异步实现的区别"></a>异步实现的区别</h2><h3 id="EventBus的异步实现"><a href="#EventBus的异步实现" class="headerlink" title="EventBus的异步实现"></a>EventBus的异步实现</h3><p>EventBus的异步实现是依赖于线程池的，在创建的时候确定，实际上是在监听器调用方法的时候采用的异步，同一个<code>EventBus</code>都是同一种处理方式(同步or异步)。 <img src="http://ww1.sinaimg.cn/large/87faef88ly1g0f66qorovj20tw075dgg.jpg" alt=""></p><h3 id="Spring的异步实现"><a href="#Spring的异步实现" class="headerlink" title="Spring的异步实现"></a>Spring的异步实现</h3><p>Spring是通过拦截器的机制，被<code>@Async</code>的方法都会被<code>AsyncExecutionInterceptor</code>拦截，然后采用多线程的方式调用：</p><pre><code class="java">public Object invoke(final MethodInvocation invocation) throws Throwable {
+    Class&lt;?&gt; targetClass = invocation.getThis() != null ? AopUtils.getTargetClass(invocation.getThis()) : null;
+    Method specificMethod = ClassUtils.getMostSpecificMethod(invocation.getMethod(), targetClass);
+    final Method userDeclaredMethod = BridgeMethodResolver.findBridgedMethod(specificMethod);
+    AsyncTaskExecutor executor = this.determineAsyncExecutor(userDeclaredMethod);
+    if (executor == null) {
+        throw new IllegalStateException(&quot;No executor specified and no default executor set on AsyncExecutionInterceptor either&quot;);
+    } else {
+        Callable&lt;Object&gt; task = new Callable&lt;Object&gt;() {
+            public Object call() throws Exception {
+                try {
+                    Object result = invocation.proceed();
+                    if (result instanceof Future) {
+                        return ((Future)result).get();
+                    }
+                } catch (ExecutionException var2) {
+                    AsyncExecutionInterceptor.this.handleError(var2.getCause(), userDeclaredMethod, invocation.getArguments());
+                } catch (Throwable var3) {
+                    AsyncExecutionInterceptor.this.handleError(var3, userDeclaredMethod, invocation.getArguments());
+                }
+
+                return null;
+            }
+        };
+        // 异步调用
+        return this.doSubmit(task, executor, invocation.getMethod().getReturnType());
+    }
+}
+</code></pre><h3 id="异步方式小结"><a href="#异步方式小结" class="headerlink" title="异步方式小结"></a>异步方式小结</h3><p>综上，还是<code>Spring Event</code>更加灵活多变，适用场景更多。</p><h2 id="Spring-Event与-Guava-EventBus的比较"><a href="#Spring-Event与-Guava-EventBus的比较" class="headerlink" title="Spring Event与 Guava EventBus的比较"></a>Spring Event与 Guava EventBus的比较</h2><table><thead><tr><th>–</th><th>Spring Event</th><th>Guava EventBus</th></tr></thead><tbody><tr><td>Event</td><td>任意对象</td><td>任意对象</td></tr><tr><td>Publisher</td><td>EventBus</td><td>ApplicationEventPublisher</td></tr><tr><td>Subscriber</td><td>@EventListener</td><td>@Subscribe</td></tr><tr><td>发布方法</td><td>ApplicationEventPublisher#publishEvent</td><td>EventBus#post</td></tr><tr><td>注册方法</td><td>spring自动注册</td><td>手动注册：EventBus#register</td></tr><tr><td>是否支持异步</td><td>支持。@Async</td><td>支持。AsyncEventBus</td></tr><tr><td>是否支持事务</td><td>支持。@TransactionalEventListener</td><td>不支持。</td></tr><tr><td>是否支持条件过滤</td><td>支持。</td><td>不支持。</td></tr><tr><td>是否支持DeadEvent</td><td>不支持。</td><td>支持。</td></tr><tr><td>是否支持事件继承</td><td>支持。</td><td>支持。</td></tr><tr><td>同步时是否支持排序</td><td>支持。</td><td>不支持。</td></tr><tr><td>事件异常处理</td><td>异常上抛</td><td>捕获异常并不上抛</td></tr><tr><td>复杂度</td><td>复杂</td><td>轻量</td></tr></tbody></table><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>Spring Event</code>与<code>Guava EventBus</code>在设计上略有不同，可根据业务场景按需使用， 总的来说<code>Guava EventBus</code>比较轻量一些，适合大多数业务场景，而<code>Spring Event</code> 稍微重了，但也开箱可用，与Spring天然一体，多了很多花哨的功能也适合更多的复杂场景。</p></div><div><div><div style="text-align:center;color:#ccc;font-size:14px">-------------本文结束,感谢您的阅读-------------</div></div></div><div><div style="padding:10px 0;margin:20px auto;width:90%;text-align:center"><div>贵在坚持，如果您觉得本文还不错，不妨打赏一下~</div> <button id="rewardButton" disable="enable" onclick='var qr=document.getElementById("QR");"none"===qr.style.display?qr.style.display="block":qr.style.display="none"'> <span>打赏</span></button><div id="QR" style="display:none"><div id="wechat" style="display:inline-block"> <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"><p>微信支付</p></div><div id="alipay" style="display:inline-block"> <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"><p>支付宝</p></div></div></div></div><div><ul class="post-copyright"><li class="post-copyright-author"> <strong>本文作者：</strong> 陈瑞文</li><li class="post-copyright-link"> <strong>本文链接：</strong> <a href="https://www.chenruiwen.cn/event-driven/event-driven-design-and-demo/" title="事件驱动SpringEvent与EventBus">https://www.chenruiwen.cn/event-driven/event-driven-design-and-demo/</a></li><li class="post-copyright-license"> <strong>版权声明：</strong> 欢迎转载~~本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li></ul></div><footer class="post-footer"><div class="post-tags"><a href="/tags/event-driven/" rel="tag"><i class="fa fa-tag"></i> event driven</a><a href="/tags/Spring/" rel="tag"><i class="fa fa-tag"></i> Spring</a><a href="/tags/Guava/" rel="tag"><i class="fa fa-tag"></i> Guava</a><a href="/tags/SpringEvent/" rel="tag"><i class="fa fa-tag"></i> SpringEvent</a><a href="/tags/EventBus/" rel="tag"><i class="fa fa-tag"></i> EventBus</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/essay/year-end-summary-2018/" rel="next" title="再见2018，你好2019"><i class="fa fa-chevron-left"></i> 再见2018，你好2019</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"></div></div></footer></div></article><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="gitment-container"></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span><span class="sidebar-toggle-line sidebar-toggle-line-middle"></span><span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div id="sidebar-dimmer"></div><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap"> 文章目录</li><li class="sidebar-nav-overview" data-target="site-overview-wrap"> 站点概览</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"> <img class="site-author-image" itemprop="image" src="/images/touxiang.jpeg" alt="陈瑞文"><p class="site-author-name" itemprop="name">陈瑞文</p><p class="site-description motion-element" itemprop="description">面向Google编程的java程序猿折腾指北</p></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"> <a href="/archives/"><span class="site-state-item-count">50</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"> <a href="/categories/index.html"><span class="site-state-item-count">16</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"> <a href="/tags/index.html"><span class="site-state-item-count">36</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="feed-link motion-element"><a href="/atom.xml" rel="alternate"><i class="fa fa-rss"></i> RSS</a></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/crrrrrw" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i> GitHub</a></span><span class="links-of-author-item"><a href="mailto:crw4085501@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i> E-Mail</a></span></div><div><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=18795423&auto=1&height=66"></iframe></div><div class="links-of-blogroll motion-element links-of-blogroll-block"><div class="links-of-blogroll-title"><i class="fa fa-fw fa-link"></i> 推荐链接</div><ul class="links-of-blogroll-list"><li class="links-of-blogroll-item"> <a href="http://ifeve.com/" title="并发编程网" target="_blank" rel="external nofollow">并发编程网</a></li><li class="links-of-blogroll-item"> <a href="http://www.importnew.com/" title="ImportNew" target="_blank" rel="external nofollow">ImportNew</a></li><li class="links-of-blogroll-item"> <a href="https://www.oschina.net/" title="开源中国" target="_blank" rel="external nofollow">开源中国</a></li><li class="links-of-blogroll-item"> <a href="http://www.spring4all.com/" title="spring4all" target="_blank" rel="external nofollow">spring4all</a></li><li class="links-of-blogroll-item"> <a href="http://www.infoq.com/cn/" title="InfoQ" target="_blank" rel="external nofollow">InfoQ</a></li><li class="links-of-blogroll-item"> <a href="http://stackoverflow.com/" title="stackoverflow" target="_blank" rel="external nofollow">stackoverflow</a></li><li class="links-of-blogroll-item"> <a href="https://linux.cn/" title="Linux中国" target="_blank" rel="external nofollow">Linux中国</a></li><li class="links-of-blogroll-item"> <a href="https://toutiao.io/" title="开发者头条" target="_blank" rel="external nofollow">开发者头条</a></li></ul></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QucikStart"><span class="nav-number">2.</span> <span class="nav-text">QucikStart</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Event"><span class="nav-number">2.1.</span> <span class="nav-text">Spring Event</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#举例场景"><span class="nav-number">2.1.1.</span> <span class="nav-text">举例场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建一个-Event"><span class="nav-number">2.1.2.</span> <span class="nav-text">创建一个 Event</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建一个-Publisher"><span class="nav-number">2.1.3.</span> <span class="nav-text">创建一个 Publisher</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#监听事件"><span class="nav-number">2.1.4.</span> <span class="nav-text">监听事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用事件发布"><span class="nav-number">2.1.5.</span> <span class="nav-text">使用事件发布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试创建订单事件"><span class="nav-number">2.1.6.</span> <span class="nav-text">测试创建订单事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#补充1-使用异步事件处理"><span class="nav-number">2.1.7.</span> <span class="nav-text">补充1: 使用异步事件处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#补充2-TransactionalEventListener实现事务监控"><span class="nav-number">2.1.8.</span> <span class="nav-text">补充2: TransactionalEventListener实现事务监控</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#补充3-事件的父类监听"><span class="nav-number">2.1.9.</span> <span class="nav-text">补充3: 事件的父类监听</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Guava-EventBus"><span class="nav-number">2.2.</span> <span class="nav-text">Guava EventBus</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#依赖guava包"><span class="nav-number">2.2.1.</span> <span class="nav-text">依赖guava包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建一个-Event-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">创建一个 Event</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建一个-Publisher-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">创建一个 Publisher</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#监听事件-1"><span class="nav-number">2.2.4.</span> <span class="nav-text">监听事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#发布事件"><span class="nav-number">2.2.5.</span> <span class="nav-text">发布事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试创建订单事件-1"><span class="nav-number">2.2.6.</span> <span class="nav-text">测试创建订单事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#补充1：使用异步事件处理"><span class="nav-number">2.2.7.</span> <span class="nav-text">补充1：使用异步事件处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#补充2：DeadEvent"><span class="nav-number">2.2.8.</span> <span class="nav-text">补充2：DeadEvent</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#补充3-事件的父类监听-1"><span class="nav-number">2.2.9.</span> <span class="nav-text">补充3: 事件的父类监听</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#补充4-AllowConcurrentEvents"><span class="nav-number">2.2.10.</span> <span class="nav-text">补充4: @AllowConcurrentEvents</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事件处理异常"><span class="nav-number">3.</span> <span class="nav-text">事件处理异常</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#EventBus"><span class="nav-number">3.1.</span> <span class="nav-text">EventBus</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring"><span class="nav-number">3.2.</span> <span class="nav-text">Spring</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分别适合的场景"><span class="nav-number">3.3.</span> <span class="nav-text">分别适合的场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步实现的区别"><span class="nav-number">4.</span> <span class="nav-text">异步实现的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#EventBus的异步实现"><span class="nav-number">4.1.</span> <span class="nav-text">EventBus的异步实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring的异步实现"><span class="nav-number">4.2.</span> <span class="nav-text">Spring的异步实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步方式小结"><span class="nav-number">4.3.</span> <span class="nav-text">异步方式小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-Event与-Guava-EventBus的比较"><span class="nav-number">5.</span> <span class="nav-text">Spring Event与 Guava EventBus的比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span><span class="with-love"><i class="fa fa-user"></i></span> <span class="author" itemprop="copyrightHolder">陈瑞文</span></div><div class="theme-info"><span id="showDays"></span></div><br><div class="theme-info"><div class="powered-by"></div> <span class="post-count">本站累计共98.5k字</span></div> &nbsp;&nbsp;|&nbsp;&nbsp;本站总点击<span id="busuanzi_value_site_pv"></span> 次 &nbsp;&nbsp;|&nbsp;&nbsp;您是第<span id="busuanzi_value_site_uv"></span> 位访客<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><script>var seconds=1e3,minutes=60*seconds,hours=60*minutes,days=24*hours,years=365*days,birthDay=Date.UTC(2018,4,14,0,0,0);setInterval(function(){var e=new Date,s=e.getFullYear(),t=e.getMonth()+1,a=e.getDate(),o=e.getHours(),r=e.getMinutes(),n=e.getSeconds(),h=Date.UTC(s,t,a,o,r,n)-birthDay,u=Math.floor(h/years),d=Math.floor(h/days-365*u),y=Math.floor((h-(365*u+d)*days)/hours),i=Math.floor((h-(365*u+d)*days-y*hours)/minutes),l=Math.floor((h-(365*u+d)*days-y*hours-i*minutes)/seconds);document.getElementById("showDays").innerHTML="本站已运行 "+u+" 年 "+d+" 天 "+y+" 小时 "+i+" 分钟 "+l+" 秒"},1e3)</script><script>var _hmt=_hmt||[];!function(){var e=document.createElement("script");e.src="https://hm.baidu.com/hm.js?24046c6beb6cd2056bee02dc2a0168c9";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)}()</script></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span id="scrollpercent"><span>0</span>%</span></div></div><script type="text/javascript">"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script><script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script><script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script><script src="/js/src/photoswipe.min.js?v=5.1.4"></script><script src="/js/src/photoswipe-ui-default.min.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script><link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css"><script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script><script type="text/javascript">function renderGitment(){new Gitmint({id:"1550902393000",owner:"crrrrrw",repo:"hexo_static_page",lang:navigator.language||navigator.systemLanguage||navigator.userLanguage,oauth:{client_secret:"bc55e698a64f91f9af7ad2e5d296f4cb244ad5cd",client_id:"80cec54113d1f1089a45"}}).render("gitment-container")}renderGitment()</script><script src="//unpkg.com/valine/dist/Valine.min.js"></script><script type="text/javascript">
+  new Valine({
+      av: AV,
+      el: '#comments' ,
+      app_id: '',
+      app_key: '',
+      placeholder: 'Just go go', // 默认 null
+      notify: false, // 默认 false
+      verify: false, // 默认 false
+      path: , // 默认 window.location.pathname
+      avatar: 'mm' // 默认 ''
+  });
+</script><script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script><script>!function(){var t=document.createElement("script"),e=window.location.protocol.split(":")[0];t.src="https"===e?"https://zz.bdstatic.com/linksubmit/push.js":"http://push.zhanzhang.baidu.com/push.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}()</script></body></html><script type="text/javascript" src="/js/src/love.js"></script><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script><script type="text/javascript">$(function(){hljs.initHighlighting(),$("pre code").each(function(){$(this).text().split("\n").length;var n=$("<ul/>").addClass("pre-numbering");$(this).addClass("has-numbering").parent().append(n)})})</script>
