@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.chenruiwen.cn/java-concurrency/delayqueue-leaderfollower/</loc>
+    
+    <lastmod>2019-05-06T12:50:37.867Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.chenruiwen.cn/about/index.html</loc>
     
     <lastmod>2019-02-23T06:17:11.850Z</lastmod>
