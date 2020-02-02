@@ -1,9 +1,577 @@
-<!DOCTYPE html><html class="theme-next muse use-motion" lang="zh-Hans"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css"><style>blockquote{color:#888;background-color:#eae6f3;border-left:1rem solid #5236a0;padding:0 1.5rem;position:relative;font-family:Roboto,sans-serif}blockquote:after,blockquote:before{color:#392570;font-size:2.5rem;position:absolute;line-height:2.5rem}blockquote:before{content:"\201C";left:-1rem;top:0}blockquote:after{content:"\201D";right:0;bottom:-1rem}</style><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script><link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"><style>.pace .pace-progress{background:#1e92fb;height:3px}.pace .pace-progress-inner{box-shadow:0 0 10px #1e92fb,0 0 5px #1e92fb}.pace .pace-activity{border-top-color:#1e92fb;border-left-color:#1e92fb}</style><meta name="theme-color" content="#222"><script src="/lib/pace/pace.min.js?v=1.0.2"></script><link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"><link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-gui.ico?v=5.1.4"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-32x32-gui.ico?v=5.1.4"><link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222"><meta name="keywords" content="spring-boot,cache,redis"><link rel="alternate" href="/atom.xml" title="Chen RuiWen's Space" type="application/atom+xml"><meta name="description" content="前言之前的文章spring-boot优雅的使用缓存介绍了使用spring3开始的cache功能， 并使用guava实现完成一次示例。但是在分布式环境下，进程内的本地缓存是独立的，在一些场景并不使用。 在现在互联网企业中广泛使用了一些中间件比如memcache,redis等来实现分布式环境下的集中式缓存。 本文将介绍spring-boot下集成redis做缓存的实现细节。"><meta name="keywords" content="spring-boot,cache,redis"><meta property="og:type" content="article"><meta property="og:title" content="spring-boot优雅使用redis集中式缓存"><meta property="og:url" content="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-redis/index.html"><meta property="og:site_name" content="Chen RuiWen&#39;s Space"><meta property="og:description" content="前言之前的文章spring-boot优雅的使用缓存介绍了使用spring3开始的cache功能， 并使用guava实现完成一次示例。但是在分布式环境下，进程内的本地缓存是独立的，在一些场景并不使用。 在现在互联网企业中广泛使用了一些中间件比如memcache,redis等来实现分布式环境下的集中式缓存。 本文将介绍spring-boot下集成redis做缓存的实现细节。"><meta property="og:locale" content="zh-Hans"><meta property="og:image" content="https://ws1.sinaimg.cn/large/87faef88ly1ftmdpcaqwwj20dw08cq2w.jpg"><meta property="og:image" content="https://ws1.sinaimg.cn/large/87faef88ly1ftlbyqd2wjj20vk0d841c.jpg"><meta property="og:updated_time" content="2018-07-25T12:40:59.000Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="spring-boot优雅使用redis集中式缓存"><meta name="twitter:description" content="前言之前的文章spring-boot优雅的使用缓存介绍了使用spring3开始的cache功能， 并使用guava实现完成一次示例。但是在分布式环境下，进程内的本地缓存是独立的，在一些场景并不使用。 在现在互联网企业中广泛使用了一些中间件比如memcache,redis等来实现分布式环境下的集中式缓存。 本文将介绍spring-boot下集成redis做缓存的实现细节。"><meta name="twitter:image" content="https://ws1.sinaimg.cn/large/87faef88ly1ftmdpcaqwwj20dw08cq2w.jpg"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Muse",version:"5.1.4",sidebar:{position:"left",display:"post",offset:12,b2t:!1,scrollpercent:!0,onmobile:!0},fancybox:!1,tabs:!0,motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"0",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-redis/"><title>spring-boot优雅使用redis集中式缓存 | Chen RuiWen's Space</title></head><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div> <a href="https://github.com/crrrrrw"><img style="position:absolute;top:0;right:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">Chen RuiWen's Space</span><span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle">Life is real, life is earnest</p></div><div class="site-nav-toggle"> <button><span class="btn-bar"></span><span class="btn-bar"></span><span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br> 首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i><br> 关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br> 标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br> 分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br> 归档</a></li><li class="menu-item menu-item-photos"><a href="/photos/" rel="section"><i class="menu-item-icon fa fa-fw fa-camera"></i><br> 相册</a></li><li class="menu-item menu-item-search"><a href="javascript:;" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br> 搜索</a></li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i></span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"> <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-redis/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="陈瑞文"><meta itemprop="description" content=""><meta itemprop="image" content="/images/touxiang.jpeg"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Chen RuiWen's Space"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">spring-boot优雅使用redis集中式缓存</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span> <span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-25T20:26:10+08:00">2018-07-25</time></span> <span id="busuanzi_container_page_pv">&nbsp;&nbsp;|&nbsp;&nbsp;阅读量<span id="busuanzi_value_page_pv"></span> 次</span> <span class="post-category"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span> <span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/spring-boot/" itemprop="url" rel="index"><span itemprop="name">spring-boot</span></a></span></span> <span class="post-comments-count"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-comment-o"></i></span><a href="/spring-boot/spring-boot-use-cache-redis/#comments" itemprop="discussionUrl"><span class="post-comments-count gitment-comments-count" data-xid="/spring-boot/spring-boot-use-cache-redis/" itemprop="commentsCount"></span></a></span><div class="post-wordcount"><span class="post-meta-item-icon"><i class="fa fa-file-word-o"></i></span> <span class="post-meta-item-text">字数统计&#58;</span> <span title="字数统计">2,264 字</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-clock-o"></i></span> <span class="post-meta-item-text">阅读时长 &asymp;</span> <span title="阅读时长">11 分钟</span></div></div></header><div class="post-body" itemprop="articleBody"><p><img src="https://ws1.sinaimg.cn/large/87faef88ly1ftmdpcaqwwj20dw08cq2w.jpg" alt=""></p><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前的文章<a href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/">spring-boot优雅的使用缓存</a>介绍了使用spring3开始的cache功能， 并使用<code>guava</code>实现完成一次示例。但是在分布式环境下，进程内的本地缓存是独立的，在一些场景并不使用。</p><p>在现在互联网企业中广泛使用了一些中间件比如<code>memcache</code>,<code>redis</code>等来实现分布式环境下的集中式缓存。 本文将介绍spring-boot下集成redis做缓存的实现细节。</p><a id="more"></a><h2 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h2><p><a href="https://redis.io/" target="_blank" rel="noopener">redis</a>是开源免费的、高性能key-value数据库。 它的特点主要有：</p><ul><li>高性能，基于内存内的数据结构，读写性能都很好</li><li>支持持久化，数据支持写进磁盘</li><li>数据结构有五种形式，string,list，set，zset，hash，各有特点，使用场景广泛。</li><li>高可用，支持集群</li><li>支持发布/订阅</li></ul><p>现如今大多公司使用<code>redis</code>，大有替代<code>memcache</code>的意思(具体根据业务场景选型)。</p><h2 id="集成redis"><a href="#集成redis" class="headerlink" title="集成redis"></a>集成redis</h2><p>依旧三步完成redis缓存：</p><ul><li>maven依赖</li><li>配置redis和缓存</li><li>代码使用及测试</li></ul><h3 id="maven依赖"><a href="#maven依赖" class="headerlink" title="maven依赖"></a>maven依赖</h3><p><code>1.4.x</code>版本的spring-boot可依赖如下:</p><pre><code>&lt;dependency&gt;
+<!DOCTYPE html>
+
+
+  
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
+<style>
+blockquote {
+  color: #888;
+  background-color: #eae6f3;
+  border-left: 1rem solid #5236a0;
+  padding: 0 1.5rem;
+  position: relative;
+  font-family: 'Roboto', sans-serif;
+}
+
+blockquote:before,
+blockquote:after {
+  color: #392570;
+  font-size: 2.5rem;
+  position: absolute;
+  line-height: 2.5rem;
+}
+
+blockquote:before {
+  content: "\201C";
+  left: -1rem;
+  top: 0;
+}
+
+blockquote:after {
+  content: "\201D";
+  right: 0;
+  bottom: -1rem;
+}
+</style>
+
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-gui.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-32x32-gui.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="spring-boot,cache,redis" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Chen RuiWen's Space" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="前言之前的文章spring-boot优雅的使用缓存介绍了使用spring3开始的cache功能， 并使用guava实现完成一次示例。但是在分布式环境下，进程内的本地缓存是独立的，在一些场景并不使用。 在现在互联网企业中广泛使用了一些中间件比如memcache,redis等来实现分布式环境下的集中式缓存。 本文将介绍spring-boot下集成redis做缓存的实现细节。">
+<meta name="keywords" content="spring-boot,cache,redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring-boot优雅使用redis集中式缓存">
+<meta property="og:url" content="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-redis/index.html">
+<meta property="og:site_name" content="Chen RuiWen&#39;s Space">
+<meta property="og:description" content="前言之前的文章spring-boot优雅的使用缓存介绍了使用spring3开始的cache功能， 并使用guava实现完成一次示例。但是在分布式环境下，进程内的本地缓存是独立的，在一些场景并不使用。 在现在互联网企业中广泛使用了一些中间件比如memcache,redis等来实现分布式环境下的集中式缓存。 本文将介绍spring-boot下集成redis做缓存的实现细节。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/87faef88ly1ftmdpcaqwwj20dw08cq2w.jpg">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/87faef88ly1ftlbyqd2wjj20vk0d841c.jpg">
+<meta property="og:updated_time" content="2018-07-25T12:40:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="spring-boot优雅使用redis集中式缓存">
+<meta name="twitter:description" content="前言之前的文章spring-boot优雅的使用缓存介绍了使用spring3开始的cache功能， 并使用guava实现完成一次示例。但是在分布式环境下，进程内的本地缓存是独立的，在一些场景并不使用。 在现在互联网企业中广泛使用了一些中间件比如memcache,redis等来实现分布式环境下的集中式缓存。 本文将介绍spring-boot下集成redis做缓存的实现细节。">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/87faef88ly1ftmdpcaqwwj20dw08cq2w.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-redis/"/>
+
+
+
+
+
+  <title>spring-boot优雅使用redis集中式缓存 | Chen RuiWen's Space</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/crrrrrw"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Chen RuiWen's Space</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is real, life is earnest</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-photos">
+          <a href="/photos/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-camera"></i> <br />
+            
+            相册
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-redis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈瑞文">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/touxiang.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen RuiWen's Space">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">spring-boot优雅使用redis集中式缓存</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-25T20:26:10+08:00">
+                2018-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span id="busuanzi_container_page_pv">&nbsp;&nbsp;|&nbsp;&nbsp;阅读量 <span id="busuanzi_value_page_pv"></span> 次</span>
+          
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/spring-boot/" itemprop="url" rel="index">
+                    <span itemprop="name">spring-boot</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/spring-boot/spring-boot-use-cache-redis/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/spring-boot/spring-boot-use-cache-redis/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,264 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  11 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://ws1.sinaimg.cn/large/87faef88ly1ftmdpcaqwwj20dw08cq2w.jpg" alt=""></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前的文章<a href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-guava/">spring-boot优雅的使用缓存</a>介绍了使用spring3开始的cache功能，
+并使用<code>guava</code>实现完成一次示例。但是在分布式环境下，进程内的本地缓存是独立的，在一些场景并不使用。</p>
+<p>在现在互联网企业中广泛使用了一些中间件比如<code>memcache</code>,<code>redis</code>等来实现分布式环境下的集中式缓存。
+本文将介绍spring-boot下集成redis做缓存的实现细节。</p>
+<a id="more"></a>
+<h2 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h2><p><a href="https://redis.io/" target="_blank" rel="noopener">redis</a>是开源免费的、高性能key-value数据库。
+它的特点主要有：</p>
+<ul>
+<li>高性能，基于内存内的数据结构，读写性能都很好</li>
+<li>支持持久化，数据支持写进磁盘</li>
+<li>数据结构有五种形式，string,list，set，zset，hash，各有特点，使用场景广泛。</li>
+<li>高可用，支持集群</li>
+<li>支持发布/订阅</li>
+</ul>
+<p>现如今大多公司使用<code>redis</code>，大有替代<code>memcache</code>的意思(具体根据业务场景选型)。</p>
+<h2 id="集成redis"><a href="#集成redis" class="headerlink" title="集成redis"></a>集成redis</h2><p>依旧三步完成redis缓存：</p>
+<ul>
+<li>maven依赖</li>
+<li>配置redis和缓存</li>
+<li>代码使用及测试</li>
+</ul>
+<h3 id="maven依赖"><a href="#maven依赖" class="headerlink" title="maven依赖"></a>maven依赖</h3><p><code>1.4.x</code>版本的spring-boot可依赖如下:</p>
+<pre><code>&lt;dependency&gt;
     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
     &lt;artifactId&gt;spring-boot-starter-redis&lt;/artifactId&gt;
 &lt;/dependency&gt;
 
-</code></pre><p>但是从<code>1.5.x</code>开始已经被废弃，请依赖如下:</p><pre><code>&lt;!-- redis --&gt;
+</code></pre><p>但是从<code>1.5.x</code>开始已经被废弃，请依赖如下:</p>
+<pre><code>&lt;!-- redis --&gt;
 &lt;dependency&gt;
     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
     &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;
@@ -24,7 +592,9 @@
 # cache
   cache:
     type: redis
-</code></pre><h3 id="代码使用及单元测试"><a href="#代码使用及单元测试" class="headerlink" title="代码使用及单元测试"></a>代码使用及单元测试</h3><h4 id="redis的配置类"><a href="#redis的配置类" class="headerlink" title="redis的配置类"></a>redis的配置类</h4><p>在<code>spring-boot-autoconfigure</code>包中的<code>RedisAutoConfiguration</code>类中有自动装配了<code>RedisConnectionFactory</code>,<code>RedisTemplate</code>,无需多配置即可完成直接调用即可。</p><p>但是此处我们想要定制<code>RedisTemplate</code>,因为默认的<code>RedisTemplate</code>的<code>keySerializer</code>和<code>valueSerializer</code>都是默认的<code>JdkSerializationRedisSerializer</code>。由于业务的需要(强迫症+颜控)，我们希望<code>key</code>是字符串类型，<code>value</code>是json格式。如下修改<code>RedisTemplate</code>的序列化格式即可:</p><pre><code class="java">@Bean
+</code></pre><h3 id="代码使用及单元测试"><a href="#代码使用及单元测试" class="headerlink" title="代码使用及单元测试"></a>代码使用及单元测试</h3><h4 id="redis的配置类"><a href="#redis的配置类" class="headerlink" title="redis的配置类"></a>redis的配置类</h4><p>在<code>spring-boot-autoconfigure</code>包中的<code>RedisAutoConfiguration</code>类中有自动装配了<code>RedisConnectionFactory</code>,<code>RedisTemplate</code>,无需多配置即可完成直接调用即可。</p>
+<p>但是此处我们想要定制<code>RedisTemplate</code>,因为默认的<code>RedisTemplate</code>的<code>keySerializer</code>和<code>valueSerializer</code>都是默认的<code>JdkSerializationRedisSerializer</code>。由于业务的需要(强迫症+颜控)，我们希望<code>key</code>是字符串类型，<code>value</code>是json格式。如下修改<code>RedisTemplate</code>的序列化格式即可:</p>
+<pre><code class="java">@Bean
 public RedisTemplate&lt;Object, Object&gt; redisTemplate(RedisConnectionFactory redisConnectionFactory) {
     RedisTemplate&lt;Object, Object&gt; redisTemplate = new RedisTemplate&lt;&gt;();
     redisTemplate.setConnectionFactory(redisConnectionFactory);
@@ -44,7 +614,16 @@ public RedisTemplate&lt;Object, Object&gt; redisTemplate(RedisConnectionFactory 
     redisTemplate.afterPropertiesSet();
     return redisTemplate;
 }
-</code></pre><h4 id="cache配置使用redis"><a href="#cache配置使用redis" class="headerlink" title="cache配置使用redis"></a>cache配置使用redis</h4><p>当<code>application.yml</code>指定为<code>spring.cache.type=redis</code>时，即已经会自动加载<code>spring-boot-autoconfigure</code>包中的<code>RedisCacheConfiguration</code>,从源码中可以看到它自动装配了<code>RedisCacheManager</code>，原则上无需配置直接使用即可。</p><p>但是此处默认的<code>RedisCacheManager</code>不没有设置过期时间，即不过期。这显然不合理。因此需要自定义<code>RedisCacheManager</code>。</p><p>有两种方式自定义<code>RedisCacheManager</code>:</p><ul><li>直接装配<code>RedisCacheManager</code></li><li>装配<code>CacheManagerCustomizer</code></li></ul><p>方式一. 直接手动装配<code>RedisCacheManager</code>方式如下:</p><pre><code class="java">@Bean
+</code></pre>
+<h4 id="cache配置使用redis"><a href="#cache配置使用redis" class="headerlink" title="cache配置使用redis"></a>cache配置使用redis</h4><p>当<code>application.yml</code>指定为<code>spring.cache.type=redis</code>时，即已经会自动加载<code>spring-boot-autoconfigure</code>包中的<code>RedisCacheConfiguration</code>,从源码中可以看到它自动装配了<code>RedisCacheManager</code>，原则上无需配置直接使用即可。</p>
+<p>但是此处默认的<code>RedisCacheManager</code>不没有设置过期时间，即不过期。这显然不合理。因此需要自定义<code>RedisCacheManager</code>。</p>
+<p>有两种方式自定义<code>RedisCacheManager</code>:</p>
+<ul>
+<li>直接装配<code>RedisCacheManager</code></li>
+<li>装配<code>CacheManagerCustomizer</code></li>
+</ul>
+<p>方式一. 直接手动装配<code>RedisCacheManager</code>方式如下:</p>
+<pre><code class="java">@Bean
 public CacheManager redisCacheManager(RedisTemplate redisTemplate) {
     RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate);
     redisCacheManager.setDefaultExpiration(60L); // 默认缓存 1 分钟
@@ -54,7 +633,9 @@ public CacheManager redisCacheManager(RedisTemplate redisTemplate) {
     redisCacheManager.setExpires(expires);
     return redisCacheManager;
 }
-</code></pre><p>方式二. spring boot添加了可扩展<code>RedisCacheManager</code>的方式，即<code>CacheManagerCustomizer</code>接口。可通过装配<code>CacheManagerCustomizer</code>的实现，实现其<code>customize(T cacheManager)</code>方法即可实现自定义：</p><pre><code class="java">@Bean
+</code></pre>
+<p>方式二. spring boot添加了可扩展<code>RedisCacheManager</code>的方式，即<code>CacheManagerCustomizer</code>接口。可通过装配<code>CacheManagerCustomizer</code>的实现，实现其<code>customize(T cacheManager)</code>方法即可实现自定义：</p>
+<pre><code class="java">@Bean
 public CacheManagerCustomizer redisCacheManagerCustomizer() {
     return (CacheManagerCustomizer&lt;RedisCacheManager&gt;) cacheManager -&gt; {
         cacheManager.setDefaultExpiration(60L);// 默认过期时间，单位秒
@@ -63,7 +644,9 @@ public CacheManagerCustomizer redisCacheManagerCustomizer() {
         cacheManager.setExpires(expires);
     };
 }
-</code></pre><h4 id="测试redis操作"><a href="#测试redis操作" class="headerlink" title="测试redis操作"></a>测试redis操作</h4><p>首先测试通过<code>redisTemplate</code>来操作redis。测试用例:</p><pre><code>@RunWith(SpringJUnit4ClassRunner.class)
+</code></pre>
+<h4 id="测试redis操作"><a href="#测试redis操作" class="headerlink" title="测试redis操作"></a>测试redis操作</h4><p>首先测试通过<code>redisTemplate</code>来操作redis。测试用例:</p>
+<pre><code>@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = App.class)
 public class RedisTemplateTest {
     @Autowired
@@ -77,7 +660,9 @@ public class RedisTemplateTest {
     }
 
 }
-</code></pre><p>调用正常结束，查看redis库中有此缓存。</p><h4 id="测试redis缓存"><a href="#测试redis缓存" class="headerlink" title="测试redis缓存"></a>测试redis缓存</h4><p>比如我们有个User服务，代码如下:</p><pre><code class="java">@Service
+</code></pre><p>调用正常结束，查看redis库中有此缓存。</p>
+<h4 id="测试redis缓存"><a href="#测试redis缓存" class="headerlink" title="测试redis缓存"></a>测试redis缓存</h4><p>比如我们有个User服务，代码如下:</p>
+<pre><code class="java">@Service
 @CacheConfig(cacheNames = &quot;userCache&quot;)
 public class SbpUserServiceImpl implements SbpUserService {
 
@@ -124,7 +709,16 @@ public class SbpUserServiceImpl implements SbpUserService {
         return sbpUserMapper.selectByPrimaryKey(id);
     }
 }
-</code></pre><p>说明:</p><ul><li><code>@CacheConfig(cacheNames = &quot;userCache&quot;)</code>注解表示<code>SbpUserServiceImpl</code>服务下的所有缓存的前缀加上了”userCache”。注意前提是<code>RedisCacheManager</code>配置的<code>usePrefix</code>为<code>true</code>时才生效。</li><li><code>@CachePut</code>注解使得数据更新时放入缓存，此处在<code>insert</code>和<code>update</code>方法时都使用了此注解更新缓存。</li><li><code>@CacheEvict</code>注解用在<code>delete</code>方法上，并配置了删除时清空”userCache”里的缓存。</li><li><code>@Cacheable</code>设置了查询缓存。</li></ul><p>单元测试用例:</p><pre><code class="java">@RunWith(SpringJUnit4ClassRunner.class)
+</code></pre>
+<p>说明:</p>
+<ul>
+<li><code>@CacheConfig(cacheNames = &quot;userCache&quot;)</code>注解表示<code>SbpUserServiceImpl</code>服务下的所有缓存的前缀加上了”userCache”。注意前提是<code>RedisCacheManager</code>配置的<code>usePrefix</code>为<code>true</code>时才生效。</li>
+<li><code>@CachePut</code>注解使得数据更新时放入缓存，此处在<code>insert</code>和<code>update</code>方法时都使用了此注解更新缓存。</li>
+<li><code>@CacheEvict</code>注解用在<code>delete</code>方法上，并配置了删除时清空”userCache”里的缓存。</li>
+<li><code>@Cacheable</code>设置了查询缓存。</li>
+</ul>
+<p>单元测试用例:</p>
+<pre><code class="java">@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = App.class)
 @Slf4j
 public class SbpUserServiceTest {
@@ -176,7 +770,9 @@ public class SbpUserServiceTest {
     }
 
 }
-</code></pre><p>控制台输出:</p><pre><code>JDBC Connection [com.mysql.jdbc.JDBC4Connection@759f45f1] will not be managed by Spring
+</code></pre>
+<p>控制台输出:</p>
+<pre><code>JDBC Connection [com.mysql.jdbc.JDBC4Connection@759f45f1] will not be managed by Spring
 ==&gt;  Preparing: insert into sbp_user (id, nick_name, password, mobile, create_at, update_at ) values (?, ?, ?, ?, ?, ? ) 
 ==&gt; Parameters: 666(Long), 老A(String), 111111(String), 11100006666(String), 1532439901401(Long), 1532439901401(Long)
 &lt;==    Updates: 1
@@ -235,7 +831,618 @@ Disconnected from the target VM, address: &#39;127.0.0.1:51531&#39;, transport: 
 
 Process finished with exit code 0
 
-</code></pre><p>输出结果分析：</p><ol><li>第一次查询在插入数据之后，并没有打印查询sql表明是从缓存查询。即<code>insert</code>操作的<code>@CachePut</code>注解其效果。</li><li>第二次查询在修改数据之后，也没有打印查询sql表明从缓存查询。继续观察输出的<code>user</code>对象，nickName已经从“老A”变为“老B”了。即<code>update</code>操作的<code>@CachePut</code>注解其效果。</li><li>第三次查询在删除数据之后，打印sql说明未从缓存查询。继续观察输出的<code>user</code>对象为null,说明<code>delete</code>操作的<code>@CacheEvict</code>注解其效果。</li><li>第四次查询在插入数据并删除缓存的情况下，打印sql了说明从数据库查询。再连接redis可以看到： <img src="https://ws1.sinaimg.cn/large/87faef88ly1ftlbyqd2wjj20vk0d841c.jpg" alt=""> 图上，redis已有缓存，说明<code>select</code>操作也会增加redis缓存。并且输出格式正如<code>RedisTemplate</code>配置的那样，<code>key</code>为字符串,<code>value</code>为json格式。同时设置的缓存时间为2000秒。</li></ol></div><div><div><div style="text-align:center;color:#ccc;font-size:14px">-------------本文结束,感谢您的阅读-------------</div></div></div><div><div style="padding:10px 0;margin:20px auto;width:90%;text-align:center"><div>贵在坚持，如果您觉得本文还不错，不妨打赏一下~</div> <button id="rewardButton" disable="enable" onclick='var qr=document.getElementById("QR");"none"===qr.style.display?qr.style.display="block":qr.style.display="none"'> <span>打赏</span></button><div id="QR" style="display:none"><div id="wechat" style="display:inline-block"> <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"><p>微信支付</p></div><div id="alipay" style="display:inline-block"> <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"><p>支付宝</p></div></div></div></div><div><ul class="post-copyright"><li class="post-copyright-author"> <strong>本文作者：</strong> 陈瑞文</li><li class="post-copyright-link"> <strong>本文链接：</strong> <a href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-redis/" title="spring-boot优雅使用redis集中式缓存">https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-redis/</a></li><li class="post-copyright-license"> <strong>版权声明：</strong> 欢迎转载~~本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li></ul></div><footer class="post-footer"><div class="post-tags"><a href="/tags/spring-boot/" rel="tag"><i class="fa fa-tag"></i> spring-boot</a><a href="/tags/cache/" rel="tag"><i class="fa fa-tag"></i> cache</a><a href="/tags/redis/" rel="tag"><i class="fa fa-tag"></i> redis</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/spring-boot/spring-boot-use-cache-guava/" rel="next" title="spring-boot优雅的使用缓存"><i class="fa fa-chevron-left"></i> spring-boot优雅的使用缓存</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"> <a href="/java-concurrency/java-concurrency-se-16-synchronized/" rel="prev" title="Java SE1.6中的Synchronized">Java SE1.6中的Synchronized<i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-body"><div class="recommended_posts"><div class="note primary"><h3 class="recommended"> 相关文章：</h3><ul class="recommended-ul"><li class="popular-posts-item"><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-cache-guava/">spring-boot优雅的使用缓存</a></div></li><li class="popular-posts-item"><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-mybatis/">spring-boot集成mybatis</a></div></li><li class="popular-posts-item"><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-log4j2/">spring-boot集成Log4j2</a></div></li><li class="popular-posts-item"><div class="popular-posts-item"><a href="/spring-boot/mybatis-plugins-pagehelper/">mybatis集成分页插件pageHelper</a></div></li><li class="popular-posts-item"><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-activemq/">spring-boot集成ActiveMQ</a></div></li><li class="popular-posts-item"><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-rabbitmq/">spring-boot集成RabbitMQ</a></div></li><li class="popular-posts-item"><div class="popular-posts-item"><a href="/redis/redis-hyperloglog/">redis“冷门”知识点：HyperLogLog</a></div></li><li class="popular-posts-item"><div class="popular-posts-item"><a href="/redis/JedisPool-optimize-record/">记一次jedis连接异常引发的血案</a></div></li></ul></div></div></div><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="gitment-container"></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span><span class="sidebar-toggle-line sidebar-toggle-line-middle"></span><span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div id="sidebar-dimmer"></div><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap"> 文章目录</li><li class="sidebar-nav-overview" data-target="site-overview-wrap"> 站点概览</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"> <img class="site-author-image" itemprop="image" src="/images/touxiang.jpeg" alt="陈瑞文"><p class="site-author-name" itemprop="name">陈瑞文</p><p class="site-description motion-element" itemprop="description">面向Google编程的java程序猿折腾指北</p></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"> <a href="/archives/"><span class="site-state-item-count">52</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"> <a href="/categories/index.html"><span class="site-state-item-count">16</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"> <a href="/tags/index.html"><span class="site-state-item-count">36</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="feed-link motion-element"><a href="/atom.xml" rel="alternate"><i class="fa fa-rss"></i> RSS</a></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/crrrrrw" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i> GitHub</a></span><span class="links-of-author-item"><a href="mailto:crw4085501@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i> E-Mail</a></span></div><div><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=18795423&auto=1&height=66"></iframe></div><div class="links-of-blogroll motion-element links-of-blogroll-block"><div class="links-of-blogroll-title"><i class="fa fa-fw fa-link"></i> 推荐链接</div><ul class="links-of-blogroll-list"><li class="links-of-blogroll-item"> <a href="http://ifeve.com/" title="并发编程网" target="_blank" rel="external nofollow">并发编程网</a></li><li class="links-of-blogroll-item"> <a href="http://www.importnew.com/" title="ImportNew" target="_blank" rel="external nofollow">ImportNew</a></li><li class="links-of-blogroll-item"> <a href="https://www.oschina.net/" title="开源中国" target="_blank" rel="external nofollow">开源中国</a></li><li class="links-of-blogroll-item"> <a href="http://www.spring4all.com/" title="spring4all" target="_blank" rel="external nofollow">spring4all</a></li><li class="links-of-blogroll-item"> <a href="http://www.infoq.com/cn/" title="InfoQ" target="_blank" rel="external nofollow">InfoQ</a></li><li class="links-of-blogroll-item"> <a href="http://stackoverflow.com/" title="stackoverflow" target="_blank" rel="external nofollow">stackoverflow</a></li><li class="links-of-blogroll-item"> <a href="https://linux.cn/" title="Linux中国" target="_blank" rel="external nofollow">Linux中国</a></li><li class="links-of-blogroll-item"> <a href="https://toutiao.io/" title="开发者头条" target="_blank" rel="external nofollow">开发者头条</a></li></ul></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis"><span class="nav-number">2.</span> <span class="nav-text">redis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集成redis"><span class="nav-number">3.</span> <span class="nav-text">集成redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#maven依赖"><span class="nav-number">3.1.</span> <span class="nav-text">maven依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件application-yml添加redis相关配置，以及缓存开启为redis"><span class="nav-number">3.2.</span> <span class="nav-text">配置文件application.yml添加redis相关配置，以及缓存开启为redis.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码使用及单元测试"><span class="nav-number">3.3.</span> <span class="nav-text">代码使用及单元测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#redis的配置类"><span class="nav-number">3.3.1.</span> <span class="nav-text">redis的配置类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cache配置使用redis"><span class="nav-number">3.3.2.</span> <span class="nav-text">cache配置使用redis</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试redis操作"><span class="nav-number">3.3.3.</span> <span class="nav-text">测试redis操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试redis缓存"><span class="nav-number">3.3.4.</span> <span class="nav-text">测试redis缓存</span></a></li></ol></li></ol></li></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span><span class="with-love"><i class="fa fa-user"></i></span> <span class="author" itemprop="copyrightHolder">陈瑞文</span></div><div class="theme-info"><span id="showDays"></span></div><br><div class="theme-info"><div class="powered-by"></div> <span class="post-count">本站累计共100.6k字</span></div> &nbsp;&nbsp;|&nbsp;&nbsp;本站总点击<span id="busuanzi_value_site_pv"></span> 次 &nbsp;&nbsp;|&nbsp;&nbsp;您是第<span id="busuanzi_value_site_uv"></span> 位访客<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><script>var seconds=1e3,minutes=60*seconds,hours=60*minutes,days=24*hours,years=365*days,birthDay=Date.UTC(2018,4,14,0,0,0);setInterval(function(){var e=new Date,s=e.getFullYear(),t=e.getMonth()+1,a=e.getDate(),o=e.getHours(),r=e.getMinutes(),n=e.getSeconds(),h=Date.UTC(s,t,a,o,r,n)-birthDay,u=Math.floor(h/years),d=Math.floor(h/days-365*u),y=Math.floor((h-(365*u+d)*days)/hours),i=Math.floor((h-(365*u+d)*days-y*hours)/minutes),l=Math.floor((h-(365*u+d)*days-y*hours-i*minutes)/seconds);document.getElementById("showDays").innerHTML="本站已运行 "+u+" 年 "+d+" 天 "+y+" 小时 "+i+" 分钟 "+l+" 秒"},1e3)</script><script>var _hmt=_hmt||[];!function(){var e=document.createElement("script");e.src="https://hm.baidu.com/hm.js?24046c6beb6cd2056bee02dc2a0168c9";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)}()</script></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span id="scrollpercent"><span>0</span>%</span></div></div><script type="text/javascript">"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script><script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script><script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script><script src="/js/src/photoswipe.min.js?v=5.1.4"></script><script src="/js/src/photoswipe-ui-default.min.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script><link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css"><script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script><script type="text/javascript">function renderGitment(){new Gitmint({id:"1532521570000",owner:"crrrrrw",repo:"hexo_static_page",lang:navigator.language||navigator.systemLanguage||navigator.userLanguage,oauth:{client_secret:"bc55e698a64f91f9af7ad2e5d296f4cb244ad5cd",client_id:"80cec54113d1f1089a45"}}).render("gitment-container")}renderGitment()</script><script src="//unpkg.com/valine/dist/Valine.min.js"></script><script type="text/javascript">
+</code></pre><p>输出结果分析：</p>
+<ol>
+<li>第一次查询在插入数据之后，并没有打印查询sql表明是从缓存查询。即<code>insert</code>操作的<code>@CachePut</code>注解其效果。</li>
+<li>第二次查询在修改数据之后，也没有打印查询sql表明从缓存查询。继续观察输出的<code>user</code>对象，nickName已经从“老A”变为“老B”了。即<code>update</code>操作的<code>@CachePut</code>注解其效果。</li>
+<li>第三次查询在删除数据之后，打印sql说明未从缓存查询。继续观察输出的<code>user</code>对象为null,说明<code>delete</code>操作的<code>@CacheEvict</code>注解其效果。</li>
+<li>第四次查询在插入数据并删除缓存的情况下，打印sql了说明从数据库查询。再连接redis可以看到：
+<img src="https://ws1.sinaimg.cn/large/87faef88ly1ftlbyqd2wjj20vk0d841c.jpg" alt="">
+图上，redis已有缓存，说明<code>select</code>操作也会增加redis缓存。并且输出格式正如<code>RedisTemplate</code>配置的那样，<code>key</code>为字符串,<code>value</code>为json格式。同时设置的缓存时间为2000秒。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束,</i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+      
+    </div>
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>贵在坚持，如果您觉得本文还不错，不妨打赏一下~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    陈瑞文
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-redis/" title="spring-boot优雅使用redis集中式缓存">https://www.chenruiwen.cn/spring-boot/spring-boot-use-cache-redis/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    欢迎转载~~本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spring-boot/" rel="tag"><i class="fa fa-tag"></i>
+               spring-boot</a>
+          
+            <a href="/tags/cache/" rel="tag"><i class="fa fa-tag"></i>
+               cache</a>
+          
+            <a href="/tags/redis/" rel="tag"><i class="fa fa-tag"></i>
+               redis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/spring-boot/spring-boot-use-cache-guava/" rel="next" title="spring-boot优雅的使用缓存">
+                <i class="fa fa-chevron-left"></i> spring-boot优雅的使用缓存
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/java-concurrency/java-concurrency-se-16-synchronized/" rel="prev" title="Java SE1.6中的Synchronized">
+                Java SE1.6中的Synchronized <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  
+  	<div class="post-body"><div class="recommended_posts"><div class="note primary"><h3 class="recommended"> 相关文章：</h3><ul class="recommended-ul"><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-cache-guava/">spring-boot优雅的使用缓存</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-mybatis/">spring-boot集成mybatis</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-log4j2/">spring-boot集成Log4j2</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/spring-boot/mybatis-plugins-pagehelper/">mybatis集成分页插件pageHelper</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-rabbitmq/">spring-boot集成RabbitMQ</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/spring-boot/spring-boot-use-activemq/">spring-boot集成ActiveMQ</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/redis/redis-hyperloglog/">redis“冷门”知识点：HyperLogLog</a></div></li><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/redis/JedisPool-optimize-record/">记一次jedis连接异常引发的血案</a></div></li></ul></div></div></div> 
+  
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/touxiang.jpeg"
+                alt="陈瑞文" />
+            
+              <p class="site-author-name" itemprop="name">陈瑞文</p>
+              <p class="site-description motion-element" itemprop="description">面向Google编程的java程序猿折腾指北</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/crrrrrw" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:crw4085501@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          <!-- 添加音乐播放器 -->
+          
+            <div>
+              <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86
+                src="//music.163.com/outchain/player?type=2&id=18795423&auto=1&height=66">
+              </iframe>
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                推荐链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://ifeve.com/" title="并发编程网" target="_blank" rel="external nofollow" >并发编程网</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.importnew.com/" title="ImportNew" target="_blank" rel="external nofollow" >ImportNew</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.oschina.net/" title="开源中国" target="_blank" rel="external nofollow" >开源中国</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.spring4all.com/" title="spring4all" target="_blank" rel="external nofollow" >spring4all</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.infoq.com/cn/" title="InfoQ" target="_blank" rel="external nofollow" >InfoQ</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://stackoverflow.com/" title="stackoverflow" target="_blank" rel="external nofollow" >stackoverflow</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://linux.cn/" title="Linux中国" target="_blank" rel="external nofollow" >Linux中国</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://toutiao.io/" title="开发者头条" target="_blank" rel="external nofollow" >开发者头条</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis"><span class="nav-number">2.</span> <span class="nav-text">redis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集成redis"><span class="nav-number">3.</span> <span class="nav-text">集成redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#maven依赖"><span class="nav-number">3.1.</span> <span class="nav-text">maven依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置文件application-yml添加redis相关配置，以及缓存开启为redis"><span class="nav-number">3.2.</span> <span class="nav-text">配置文件application.yml添加redis相关配置，以及缓存开启为redis.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码使用及单元测试"><span class="nav-number">3.3.</span> <span class="nav-text">代码使用及单元测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#redis的配置类"><span class="nav-number">3.3.1.</span> <span class="nav-text">redis的配置类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cache配置使用redis"><span class="nav-number">3.3.2.</span> <span class="nav-text">cache配置使用redis</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试redis操作"><span class="nav-number">3.3.3.</span> <span class="nav-text">测试redis操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试redis缓存"><span class="nav-number">3.3.4.</span> <span class="nav-text">测试redis缓存</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈瑞文</span>
+
+  
+</div>
+
+
+
+
+
+
+<div class="theme-info">
+  <span id="showDays"></span>
+</div><br/>
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">本站累计共100.6k字</span>
+</div>
+
+&nbsp;&nbsp;|&nbsp;&nbsp;本站总点击 <span id="busuanzi_value_site_pv"></span> 次
+&nbsp;&nbsp;|&nbsp;&nbsp;您是第 <span id="busuanzi_value_site_uv"></span> 位访客
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+<script>
+  var seconds = 1000;
+  var minutes = seconds * 60;
+  var hours = minutes * 60;
+  var days = hours * 24;
+  var years = days * 365;
+  var birthDay = Date.UTC(2018,04,14,00,00,00); // 这里设置建站时间
+  setInterval(function() {
+    var today = new Date();
+    var todayYear = today.getFullYear();
+    var todayMonth = today.getMonth()+1;
+    var todayDate = today.getDate();
+    var todayHour = today.getHours();
+    var todayMinute = today.getMinutes();
+    var todaySecond = today.getSeconds();
+    var now = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+    var diff = now - birthDay;
+    var diffYears = Math.floor(diff/years);
+    var diffDays = Math.floor((diff/days)-diffYears*365);
+    var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+    var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+    var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+      document.getElementById('showDays').innerHTML="本站已运行 "+diffYears+" 年 "+diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
+  }, 1000);
+</script>
+
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?24046c6beb6cd2056bee02dc2a0168c9";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+<script src="/js/src/photoswipe.min.js?v=5.1.4"></script>
+<script src="/js/src/photoswipe-ui-default.min.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: '1532521570000', 
+            owner: 'crrrrrw',
+            repo: 'hexo_static_page',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'bc55e698a64f91f9af7ad2e5d296f4cb244ad5cd',
+            
+                client_id: '80cec54113d1f1089a45'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script type="text/javascript">
   new Valine({
       av: AV,
       el: '#comments' ,
@@ -247,7 +1454,12 @@ Process finished with exit code 0
       path: , // 默认 window.location.pathname
       avatar: 'mm' // 默认 ''
   });
-</script><script type="text/javascript">
+</script>
+
+
+  
+
+  <script type="text/javascript">
     // Popup Window;
     var isfetched = false;
     var isXml = true;
@@ -562,4 +1774,63 @@ Process finished with exit code 0
         onPopupClose();
       }
     });
-  </script><script>!function(){var t=document.createElement("script"),e=window.location.protocol.split(":")[0];t.src="https"===e?"https://zz.bdstatic.com/linksubmit/push.js":"http://push.zhanzhang.baidu.com/push.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}()</script></body></html><script type="text/javascript" src="/js/src/love.js"></script><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script><script type="text/javascript">$(function(){hljs.initHighlighting(),$("pre code").each(function(){$(this).text().split("\n").length;var n=$("<ul/>").addClass("pre-numbering");$(this).addClass("has-numbering").parent().append(n)})})</script>
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+<!-- highlight 高亮 start-->
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script type="text/javascript">
+  $(function() {
+    hljs.initHighlighting();
+    $('pre code').each(function() {
+      var lines = $(this).text().split('\n').length - 1;
+      var $numbering = $('<ul/>').addClass('pre-numbering');
+      $(this)
+        .addClass('has-numbering')
+        .parent()
+        .append($numbering);
+    });
+  });
+
+</script>
+<!-- highlight 高亮 end-->

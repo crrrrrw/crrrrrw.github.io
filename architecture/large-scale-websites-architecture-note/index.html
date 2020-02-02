@@ -1,4 +1,1526 @@
-<!DOCTYPE html><html class="theme-next muse use-motion" lang="zh-Hans"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css"><style>blockquote{color:#888;background-color:#eae6f3;border-left:1rem solid #5236a0;padding:0 1.5rem;position:relative;font-family:Roboto,sans-serif}blockquote:after,blockquote:before{color:#392570;font-size:2.5rem;position:absolute;line-height:2.5rem}blockquote:before{content:"\201C";left:-1rem;top:0}blockquote:after{content:"\201D";right:0;bottom:-1rem}</style><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script><link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"><style>.pace .pace-progress{background:#1e92fb;height:3px}.pace .pace-progress-inner{box-shadow:0 0 10px #1e92fb,0 0 5px #1e92fb}.pace .pace-activity{border-top-color:#1e92fb;border-left-color:#1e92fb}</style><meta name="theme-color" content="#222"><script src="/lib/pace/pace.min.js?v=1.0.2"></script><link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"><link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-gui.ico?v=5.1.4"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-32x32-gui.ico?v=5.1.4"><link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222"><meta name="keywords" content="architecture,read notes,"><link rel="alternate" href="/atom.xml" title="Chen RuiWen's Space" type="application/atom+xml"><meta name="description" content="前言又把《大型网站技术架构-核心原理与案例分析》看了一遍，之前走马观花看了一遍，没有体会到精髓。现在具备一定“中型”网站开发经验后再看之，又有些体会，故整理一下这本书的内容。"><meta name="keywords" content="architecture,read notes"><meta property="og:type" content="article"><meta property="og:title" content="《大型网站技术架构》知识总结"><meta property="og:url" content="https://www.chenruiwen.cn/architecture/large-scale-websites-architecture-note/index.html"><meta property="og:site_name" content="Chen RuiWen&#39;s Space"><meta property="og:description" content="前言又把《大型网站技术架构-核心原理与案例分析》看了一遍，之前走马观花看了一遍，没有体会到精髓。现在具备一定“中型”网站开发经验后再看之，又有些体会，故整理一下这本书的内容。"><meta property="og:locale" content="zh-Hans"><meta property="og:image" content="https://ws1.sinaimg.cn/large/87faef88ly1fvjtco0bevj20r20e2mxf.jpg"><meta property="og:updated_time" content="2018-09-24T13:04:33.531Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="《大型网站技术架构》知识总结"><meta name="twitter:description" content="前言又把《大型网站技术架构-核心原理与案例分析》看了一遍，之前走马观花看了一遍，没有体会到精髓。现在具备一定“中型”网站开发经验后再看之，又有些体会，故整理一下这本书的内容。"><meta name="twitter:image" content="https://ws1.sinaimg.cn/large/87faef88ly1fvjtco0bevj20r20e2mxf.jpg"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Muse",version:"5.1.4",sidebar:{position:"left",display:"post",offset:12,b2t:!1,scrollpercent:!0,onmobile:!0},fancybox:!1,tabs:!0,motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"0",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://www.chenruiwen.cn/architecture/large-scale-websites-architecture-note/"><title>《大型网站技术架构》知识总结 | Chen RuiWen's Space</title></head><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div> <a href="https://github.com/crrrrrw"><img style="position:absolute;top:0;right:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">Chen RuiWen's Space</span><span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle">Life is real, life is earnest</p></div><div class="site-nav-toggle"> <button><span class="btn-bar"></span><span class="btn-bar"></span><span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br> 首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i><br> 关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br> 标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br> 分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br> 归档</a></li><li class="menu-item menu-item-photos"><a href="/photos/" rel="section"><i class="menu-item-icon fa fa-fw fa-camera"></i><br> 相册</a></li><li class="menu-item menu-item-search"><a href="javascript:;" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br> 搜索</a></li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i></span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"> <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/architecture/large-scale-websites-architecture-note/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="陈瑞文"><meta itemprop="description" content=""><meta itemprop="image" content="/images/touxiang.jpeg"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Chen RuiWen's Space"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">《大型网站技术架构》知识总结</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span> <span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-23T23:10:24+08:00">2018-09-23</time></span> <span id="busuanzi_container_page_pv">&nbsp;&nbsp;|&nbsp;&nbsp;阅读量<span id="busuanzi_value_page_pv"></span> 次</span> <span class="post-category"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span> <span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/architecture/" itemprop="url" rel="index"><span itemprop="name">architecture</span></a></span></span> <span class="post-comments-count"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-comment-o"></i></span><a href="/architecture/large-scale-websites-architecture-note/#comments" itemprop="discussionUrl"><span class="post-comments-count gitment-comments-count" data-xid="/architecture/large-scale-websites-architecture-note/" itemprop="commentsCount"></span></a></span><div class="post-wordcount"><span class="post-meta-item-icon"><i class="fa fa-file-word-o"></i></span> <span class="post-meta-item-text">字数统计&#58;</span> <span title="字数统计">3,585 字</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-clock-o"></i></span> <span class="post-meta-item-text">阅读时长 &asymp;</span> <span title="阅读时长">12 分钟</span></div></div></header><div class="post-body" itemprop="articleBody"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>又把《大型网站技术架构-核心原理与案例分析》看了一遍，之前走马观花看了一遍，没有体会到精髓。现在具备一定“中型”网站开发经验后再看之，又有些体会，故整理一下这本书的内容。<a id="more"></a></p><h2 id="大型网站架构演化"><a href="#大型网站架构演化" class="headerlink" title="大型网站架构演化"></a>大型网站架构演化</h2><h3 id="大型网站软件的特点"><a href="#大型网站软件的特点" class="headerlink" title="大型网站软件的特点"></a>大型网站软件的特点</h3><ul><li>高并发、大流量</li><li>高可用</li><li>海量数据</li><li>用户分布广泛</li><li>安全环境恶劣</li><li>需求变更快，发布频繁</li><li>渐进式发展</li></ul><h3 id="大型网站架构演化发展历程"><a href="#大型网站架构演化发展历程" class="headerlink" title="大型网站架构演化发展历程"></a>大型网站架构演化发展历程</h3><ol><li><strong>初始阶段的网站架构</strong>：all in one，一台服务器，部署了应用程序，数据库，文件，等所有资源。比如经典的<code>LAMP</code>架构。</li><li><strong>应用和数据服务分离</strong>：应用程序，数据库，文件分别用了3台服务器部署。</li><li><strong>使用缓存改善网站性能</strong>：本地缓存+分布式缓存。</li><li><strong>使用应用服务器集群改善网站并发处理能力</strong>：通过负载均衡调度服务器来将访问请求分发到应用服务器集群中的任何一台机器。</li><li><strong>数据库读写分离</strong>：数据库采用主从热备，写数据在主数据库中，主数据库通过主从复制机制将数据更新同步到从数据库。读数据从从库读取。</li><li><strong>使用反向代理和 CDN 加速网站响应</strong>：这两者基本原理都是缓存。CDN 部署在网络提供商的机房，使用户可从离距离自己最近的提供商机房获取数据;反向代理部署在网站的中心机房，减轻后端负载压力，反向代理服务器命中的静态数据可直接返回。</li><li><strong>使用分布式文件系统和分布式数据库系统</strong>：数据库拆分的最后手段，解决单表特别大的情况。</li><li><strong>使用 NoSQL 和搜索引擎</strong>：对可伸缩的分布式有更好的支持。</li><li><strong>业务拆分</strong>：将整个网站业务拆分成不同的应用，每个应用独立部署维护，应用之间通过超链接建立联系/消息队列进行数据分发/访问同一数据存储系统</li><li><strong>分布式服务</strong>：公共业务提取出来独立部署</li></ol><p>大型网站演化到这里，大多数技术问题都得以解决，如图： <img src="https://ws1.sinaimg.cn/large/87faef88ly1fvjtco0bevj20r20e2mxf.jpg" alt=""></p><h3 id="大型网站架构演化的价值观"><a href="#大型网站架构演化的价值观" class="headerlink" title="大型网站架构演化的价值观"></a>大型网站架构演化的价值观</h3><ul><li>大型网站架构的核心价值是随网站所需灵活应对</li><li>驱动大型网站技术发展的主要力量是网站的业务发展</li></ul><h3 id="网站架构设计误区"><a href="#网站架构设计误区" class="headerlink" title="网站架构设计误区"></a>网站架构设计误区</h3><ul><li>一味追随大公司的解决方案</li><li>为了技术而技术</li><li>企图用技术解决所有问题</li></ul><h2 id="大型网站架构模式"><a href="#大型网站架构模式" class="headerlink" title="大型网站架构模式"></a>大型网站架构模式</h2><ul><li>分层:计算机世界无处不在，操作系统与硬件，网络七层，网站应用MVC分层。</li><li>分割：按业务分割</li><li>分布式：<ul><li>分布式应用和服务</li><li>分布式静态资源</li><li>分布式数据和存储</li><li>分布式计算</li></ul></li><li>集群</li><li>缓存：<ul><li>CDN</li><li>反向代理</li><li>本地缓存</li><li>分布式缓存</li></ul></li><li>异步：<ul><li>提供系统可用性</li><li>加快网站响应速度</li><li>消除高并发访问高峰</li></ul></li><li>冗余：服务器冗余运行，数据库冗余备份（冷热备份）</li><li>自动化：自动化代码管理；自动化发布；自动化测试；自动化安全检测；自动化部署；自动化监控；自动化报警；自动化失效转移；自动化失效恢复；自动化降级；自动化分配资源。</li><li>安全：防止XSS攻击、sql注入。</li></ul><h2 id="大型网站核心架构要素"><a href="#大型网站核心架构要素" class="headerlink" title="大型网站核心架构要素"></a>大型网站核心架构要素</h2><ul><li>性能<ol><li>浏览器端:浏览器缓存，页面压缩，合理布局页面，减少Cookie传输</li><li>CDN：静态内容分发到离用户最近的网络服务商机房。</li><li>应用服务器：缓存+异步。</li><li>代码层面：多线程+改善内存等手段优化。</li><li>数据库：索引，缓存，SQL优化等。</li></ol></li><li>可用性：只要手段是冗余<ol><li>应用服务器：负载均衡组成集群。</li><li>数据库：实时备份。</li><li>软件开发质量保证：预发布验证，自动化测试，自动化发布，灰度发布等。</li></ol></li><li>伸缩性：主要标准是是否可以构成集群，是否容易不断地向服务器集群加服务器<ol><li>应用服务器集群：负载均衡设备。</li><li>缓存服务器集群：改进缓存路由算法保证存储数据的可访问性。</li><li>数据库：路由分区等。</li><li>NoSQL数据库：先天良好支持。</li></ol></li><li>扩展性：指业务上是否可以少有改动快速上线。主要手段是事件驱动架构和分布式服务。<ol><li>事件驱动架构：通常用消息队列实现。</li><li>分布式服务：按业务和可复用性将服务分离。</li></ol></li><li>安全性：标准是针对现存和潜在的各种攻击和窃密手段，是否有可靠的应对策略。</li></ul><h2 id="瞬时响应：网站的高性能架构"><a href="#瞬时响应：网站的高性能架构" class="headerlink" title="瞬时响应：网站的高性能架构"></a>瞬时响应：网站的高性能架构</h2><h3 id="网站性能测试"><a href="#网站性能测试" class="headerlink" title="网站性能测试"></a>网站性能测试</h3><ul><li>不同视角下网站的性能<ul><li>用户视角网站性能：响应时间。</li><li>开发人员视角的网站性能：响应时间、并发量、吞吐量。</li><li>运维人员视角的网站性能：资源。</li></ul></li><li>性能测试指标<ul><li>响应时间：直观反映系统快慢。</li><li>并发数：反映系统负载特性。</li><li>吞吐量：反映系统整体处理能力。通过qps,tps,hps测量。</li><li>性能计数器：描述服务器或操作系统的数据指标。包括System Load、对象与线程数、内存使用、CPU使用、磁盘与网络I/O等指标。</li></ul></li><li>性能测试方法<ul><li>性能测试：验证系统在资源可接受范围内。</li><li>负载测试：测试安全临界值。</li><li>压力测试：测试系统最大压力承受能力。</li><li>稳定性测试：模拟生产环境。</li></ul></li><li>性能测试报告</li><li>性能优化策略<ul><li>性能分析：1.检测请求各环节日志，分析那个环节响应时间不合理。2.检查监控数据。</li><li>性能优化：<ul><li>Web前端性能优化</li><li>应用服务器性能优化</li><li>存储服务器性能优化</li></ul></li></ul></li></ul><h3 id="web前端性能优化"><a href="#web前端性能优化" class="headerlink" title="web前端性能优化"></a>web前端性能优化</h3><ul><li>浏览器访问优化<ul><li>减少http请求</li><li>使用浏览器缓存</li><li>启用压缩</li><li>css放在网页最上面 js最下面</li><li>减少cookie传输</li></ul></li><li>CDN加速</li><li>反向代理：安全屏障；缓存静态和热点数据；负载均衡。</li></ul><h3 id="应用服务器性能优化"><a href="#应用服务器性能优化" class="headerlink" title="应用服务器性能优化"></a>应用服务器性能优化</h3><p>优化的主要手段还是：缓存，异步，集群。</p><ul><li>分布式缓存<ul><li>缓存的基本原理</li><li>合理的使用缓存<ul><li>频繁修改数据：读写比2：1以上缓存才有意义</li><li>没有热点的访问</li><li>数据不一致与脏读</li><li>缓存可用性</li><li>缓存预热</li><li>缓存穿透</li></ul></li><li>分布式缓存架构</li></ul></li><li>异步操作：削峰</li><li>使用集群</li><li>代码优化<ul><li>多线程：<ul><li>将对象设计为无状态对象</li><li>使用局部对象</li><li>并发访问资源加锁</li></ul></li><li>资源复用：单例和对象池</li><li>数据结构</li><li>垃圾回收</li></ul></li></ul><h3 id="存储性能优化"><a href="#存储性能优化" class="headerlink" title="存储性能优化"></a>存储性能优化</h3><ul><li>机械硬盘 vs. 固态硬盘</li><li>B+ 树 vs. LSM 树</li><li>RAID vs. HDFS</li></ul><h2 id="万无一失：网站的高可用架构"><a href="#万无一失：网站的高可用架构" class="headerlink" title="万无一失：网站的高可用架构"></a>万无一失：网站的高可用架构</h2><h3 id="网站可用性的度量和考核"><a href="#网站可用性的度量和考核" class="headerlink" title="网站可用性的度量和考核"></a>网站可用性的度量和考核</h3><ul><li>网站可行性度量<ul><li>网站不可用时间(故障时间) = 故障修复时间点 - 故障发现时间点</li><li>网站年度可用性指标 = (1 - 网站不可用时间/年度总时间) * 100%</li><li>2个9基本可用，3个9较高可用，4个9具有自动恢复能力的高可用，5个9是极高可用性</li></ul></li><li>网站可用性考核:故障分 = 故障时间 * 故障权重</li></ul><h3 id="高可用的网站架构"><a href="#高可用的网站架构" class="headerlink" title="高可用的网站架构"></a>高可用的网站架构</h3><p>分层+分割+集群</p><h3 id="高可用的应用"><a href="#高可用的应用" class="headerlink" title="高可用的应用"></a>高可用的应用</h3><ul><li>通过负载均衡进行无状态服务的失效转移</li><li>应用服务器集群的session管理<ul><li>session复制：简单，适用于集群规模较小的情况</li><li>session绑定：粘性session</li><li>利用cookie记录 session：简单易用，可用性高，支持线性伸缩，但是每次响应都会传输cookie，影响性能。</li><li>session服务器：利用分布式缓存。</li></ul></li></ul><h3 id="高可用的应用-1"><a href="#高可用的应用-1" class="headerlink" title="高可用的应用"></a>高可用的应用</h3><ul><li>分级管理：核心应用与服务优先使用更好的硬件；部署上进行隔离。</li><li>超时设置</li><li>异步调用</li><li>服务降级：手段有二：拒绝服务及关闭服务。</li><li>幂等性设计：业务代码层面通过有效性校验等。<h3 id="高可用的数据"><a href="#高可用的数据" class="headerlink" title="高可用的数据"></a>高可用的数据</h3></li><li>CAP原理<ul><li>数据持久性</li><li>数据可访问性</li><li>数据一致性<ul><li>数据强一致性</li><li>数据用户一致性</li><li>数据最终一致性</li></ul></li></ul></li><li>数据备份<ul><li>冷备:简单廉价，成本和技术难度低；但不能保证数据最终一致。恢复时间可能会长，一段时间不可用。</li><li>热备：同步和异步方式</li></ul></li><li>失效转移<ul><li>失效确认</li><li>访问转移</li><li>数据恢复</li></ul></li></ul><h3 id="高可用软件质量保障"><a href="#高可用软件质量保障" class="headerlink" title="高可用软件质量保障"></a>高可用软件质量保障</h3><ul><li><p>网站发布：脚本发布，流程大致如下</p><ol><li>关闭负载均衡服务器上一台或一小批服务器路由</li><li>关闭这些服务器应用</li><li>同步(复制)软件代码包到这些服务器上</li><li>启动这些服务器</li><li>打开负载均衡服务器这些服务器的路由</li><li>集群所有机器发布完成？是则退出：否则继续1.</li></ol></li><li><p>自动化测试</p></li><li>预发布验证</li><li>代码控制<ul><li>主干开发，分支发布</li><li>分支开发，主干发布</li></ul></li><li>自动化发布</li><li>灰度发布</li></ul><h3 id="网站运行监控"><a href="#网站运行监控" class="headerlink" title="网站运行监控"></a>网站运行监控</h3><ul><li>监控数据采集<ul><li>用户行为日志收集</li><li>服务器性能检测</li><li>运行数据报告</li></ul></li><li>监控管理<ul><li>系统报警</li><li>失效转移</li><li>自动优雅降级</li></ul></li></ul><h2 id="永无止尽：网站的伸缩性架构"><a href="#永无止尽：网站的伸缩性架构" class="headerlink" title="永无止尽：网站的伸缩性架构"></a>永无止尽：网站的伸缩性架构</h2><h3 id="网站伸缩性设计"><a href="#网站伸缩性设计" class="headerlink" title="网站伸缩性设计"></a>网站伸缩性设计</h3><ul><li>不同功能进行物理分离实现伸缩<ul><li>纵向分离(分层后分离)</li><li>横向分离(业务分割后分离)</li></ul></li><li>单一功能通过集群实现伸缩</li></ul><h3 id="应用服务器集群伸缩设计"><a href="#应用服务器集群伸缩设计" class="headerlink" title="应用服务器集群伸缩设计"></a>应用服务器集群伸缩设计</h3><ul><li>http重定向负载均衡：简单，但是浏览器需要两次请求服务器。</li><li>Dns域名解析负载均衡：省掉了管理运维负载均衡服务器的麻烦，能支持基于地理位置的域名解析加速访问；但是生效时间较长，以及无法做更多改善和更强大的管理。</li><li>反向代理负载均衡：发生在http协议层，也叫应用层负载均衡。</li><li>ip负载均衡：发生在网络层，修改请求目标地址进行负载均衡。</li><li>数据链路层负载均衡：发生在通信协议的数据链路层，通过修改mac地址进行负载均衡。广泛使用的一种方式，比如：LVS(Linux Virtual Server)</li><li>负载均衡算法<ul><li>轮询</li><li>加权轮询</li><li>随机</li><li>最少链接</li><li>源地址散列</li></ul></li></ul><h3 id="分布式缓存集群的伸缩性设计"><a href="#分布式缓存集群的伸缩性设计" class="headerlink" title="分布式缓存集群的伸缩性设计"></a>分布式缓存集群的伸缩性设计</h3><ul><li>Memcached分布式缓存集群的访问模型</li><li>Memcached分布式缓存集群的伸缩性挑战</li><li>分布式缓存的一致性hash算法</li></ul><h3 id="数据存储服务器集群的伸缩性设计"><a href="#数据存储服务器集群的伸缩性设计" class="headerlink" title="数据存储服务器集群的伸缩性设计"></a>数据存储服务器集群的伸缩性设计</h3><ul><li>关系数据库集群的伸缩性设计：从业务上回避分布式关系型数据库的各种缺点：避免事务或利用事务补偿机制代替数据库事务；避免JOIN操作等。</li><li>Nosql数据库的伸缩性设计</li></ul><h2 id="随机应变：网站的可扩展性架构"><a href="#随机应变：网站的可扩展性架构" class="headerlink" title="随机应变：网站的可扩展性架构"></a>随机应变：网站的可扩展性架构</h2><h3 id="构建可扩展性的网站架构"><a href="#构建可扩展性的网站架构" class="headerlink" title="构建可扩展性的网站架构"></a>构建可扩展性的网站架构</h3><p>软件架构师的最大价值不在于掌握多少先进的技术，而在于具有将一个大系统切分层N个低耦合的子模块的能力，这些子模块包含横向的业务模块，也包含纵向的基础技术模块。</p><h3 id="利用分布式消息队列降低系统耦合性"><a href="#利用分布式消息队列降低系统耦合性" class="headerlink" title="利用分布式消息队列降低系统耦合性"></a>利用分布式消息队列降低系统耦合性</h3><ul><li>事件驱动架构</li><li>分布式消息队列</li></ul><h3 id="利用分布式服务打造可复用的业务平台"><a href="#利用分布式服务打造可复用的业务平台" class="headerlink" title="利用分布式服务打造可复用的业务平台"></a>利用分布式服务打造可复用的业务平台</h3><ul><li>web service与企业级分布式服务：缺点有臃肿的注册和发现机制，抵消的XML序列化手段，开销相对较高的HTTP远程通信，复杂的部署与维护手段。</li><li>大型网站分布式服务的需求与特点<ul><li>负载均衡</li><li>失效转移</li><li>高效的远程通信</li><li>整合异构系统</li><li>对应用最少侵入</li><li>版本控制</li><li>实时监控</li></ul></li><li>分布式服务框架设计</li></ul><h3 id="可扩展的数据结构"><a href="#可扩展的数据结构" class="headerlink" title="可扩展的数据结构"></a>可扩展的数据结构</h3><p>利用NoSQL的ColumnFamily(列族)设计。</p><h3 id="利用开放平台建设网站生态圈"><a href="#利用开放平台建设网站生态圈" class="headerlink" title="利用开放平台建设网站生态圈"></a>利用开放平台建设网站生态圈</h3><ul><li>api接口</li><li>协议转移</li><li>安全</li><li>审计</li><li>路由</li><li>流程</li></ul><h2 id="固若金汤：网站的安全架构"><a href="#固若金汤：网站的安全架构" class="headerlink" title="固若金汤：网站的安全架构"></a>固若金汤：网站的安全架构</h2><h3 id="道高一尺魔高一丈的网站应用攻击与防御"><a href="#道高一尺魔高一丈的网站应用攻击与防御" class="headerlink" title="道高一尺魔高一丈的网站应用攻击与防御"></a>道高一尺魔高一丈的网站应用攻击与防御</h3><p>全球70%的web攻击来自XSS攻击和SQL注入。</p><ul><li>xss攻击<ul><li>消毒：转移html字符</li><li>httponly：避免攻击脚本窃取</li></ul></li><li>注入攻击<ul><li>开源</li><li>错误回显</li><li>盲注</li><li>消毒</li><li>参数绑定</li></ul></li><li>csrf攻击：防御的主要手段是识别访问者身份。<ul><li>表单token</li><li>验证码</li><li>referer check</li></ul></li><li>其他攻击和漏洞<ul><li>error code</li><li>html注释</li><li>文件上传</li><li>路径遍历</li></ul></li><li>web应用防火墙</li><li>网站安全漏洞扫描</li></ul><h3 id="信息加密技术及密钥安全管理"><a href="#信息加密技术及密钥安全管理" class="headerlink" title="信息加密技术及密钥安全管理"></a>信息加密技术及密钥安全管理</h3><ul><li>单向散列加密：MD5,SHA等</li><li>对称加密：DES,RC等</li><li>非对称加密：RSA等</li><li>密钥安全管理</li></ul><h3 id="信息过滤与反垃圾"><a href="#信息过滤与反垃圾" class="headerlink" title="信息过滤与反垃圾"></a>信息过滤与反垃圾</h3><ul><li>文本匹配<ul><li>正则表达式匹配：适用于敏感词较少</li><li>Trie树、双数组Trie树：时间和空间复杂度都较好</li><li>多级hash表：速度较快，但浪费部分空间</li></ul></li><li>分类算法：朴素贝叶斯算法。</li><li>黑名单：布隆过滤器。</li></ul><h3 id="电子商务风险控制"><a href="#电子商务风险控制" class="headerlink" title="电子商务风险控制"></a>电子商务风险控制</h3><ul><li>风险<ul><li>账号风险</li><li>买家风险</li><li>卖家风险</li><li>交易风险</li></ul></li><li>风控<ul><li>规则引擎</li><li>统计模型</li></ul></li></ul><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>大致总结了李智慧老师的<a href="https://book.douban.com/subject/25723064/" target="_blank" rel="noopener">《大型网站技术架构——核心原理与案例分析》</a>一书中的部分知识点的原理部分， 又重新加深了架构演进的过程。建议还是需要购买原书看一看。</p></div><div><div><div style="text-align:center;color:#ccc;font-size:14px">-------------本文结束,感谢您的阅读-------------</div></div></div><div><div style="padding:10px 0;margin:20px auto;width:90%;text-align:center"><div>贵在坚持，如果您觉得本文还不错，不妨打赏一下~</div> <button id="rewardButton" disable="enable" onclick='var qr=document.getElementById("QR");"none"===qr.style.display?qr.style.display="block":qr.style.display="none"'> <span>打赏</span></button><div id="QR" style="display:none"><div id="wechat" style="display:inline-block"> <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"><p>微信支付</p></div><div id="alipay" style="display:inline-block"> <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"><p>支付宝</p></div></div></div></div><div><ul class="post-copyright"><li class="post-copyright-author"> <strong>本文作者：</strong> 陈瑞文</li><li class="post-copyright-link"> <strong>本文链接：</strong> <a href="https://www.chenruiwen.cn/architecture/large-scale-websites-architecture-note/" title="《大型网站技术架构》知识总结">https://www.chenruiwen.cn/architecture/large-scale-websites-architecture-note/</a></li><li class="post-copyright-license"> <strong>版权声明：</strong> 欢迎转载~~本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li></ul></div><footer class="post-footer"><div class="post-tags"><a href="/tags/architecture/" rel="tag"><i class="fa fa-tag"></i> architecture</a><a href="/tags/read-notes/" rel="tag"><i class="fa fa-tag"></i> read notes</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/java-concurrency/java-util-concurrent-callable-future-futureTask/" rel="next" title="浅析java并发包(五)：Callable、Future和FutureTask"><i class="fa fa-chevron-left"></i> 浅析java并发包(五)：Callable、Future和FutureTask</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"> <a href="/travel/traveling-all-around-Bali/" rel="prev" title="巴厘岛旅行记">巴厘岛旅行记<i class="fa fa-chevron-right"></i></a></div></div></footer></div></article><div class="post-body"><div class="recommended_posts"><div class="note primary"><h3 class="recommended"> 相关文章：</h3><ul class="recommended-ul"><li class="popular-posts-item"><div class="popular-posts-item"><a href="/Linux/Linux-performance-analysis-util/">Linux常用性能分析工具</a></div></li></ul></div></div></div><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="gitment-container"></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span><span class="sidebar-toggle-line sidebar-toggle-line-middle"></span><span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div id="sidebar-dimmer"></div><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap"> 文章目录</li><li class="sidebar-nav-overview" data-target="site-overview-wrap"> 站点概览</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"> <img class="site-author-image" itemprop="image" src="/images/touxiang.jpeg" alt="陈瑞文"><p class="site-author-name" itemprop="name">陈瑞文</p><p class="site-description motion-element" itemprop="description">面向Google编程的java程序猿折腾指北</p></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"> <a href="/archives/"><span class="site-state-item-count">52</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"> <a href="/categories/index.html"><span class="site-state-item-count">16</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"> <a href="/tags/index.html"><span class="site-state-item-count">36</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="feed-link motion-element"><a href="/atom.xml" rel="alternate"><i class="fa fa-rss"></i> RSS</a></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/crrrrrw" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i> GitHub</a></span><span class="links-of-author-item"><a href="mailto:crw4085501@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i> E-Mail</a></span></div><div><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=18795423&auto=1&height=66"></iframe></div><div class="links-of-blogroll motion-element links-of-blogroll-block"><div class="links-of-blogroll-title"><i class="fa fa-fw fa-link"></i> 推荐链接</div><ul class="links-of-blogroll-list"><li class="links-of-blogroll-item"> <a href="http://ifeve.com/" title="并发编程网" target="_blank" rel="external nofollow">并发编程网</a></li><li class="links-of-blogroll-item"> <a href="http://www.importnew.com/" title="ImportNew" target="_blank" rel="external nofollow">ImportNew</a></li><li class="links-of-blogroll-item"> <a href="https://www.oschina.net/" title="开源中国" target="_blank" rel="external nofollow">开源中国</a></li><li class="links-of-blogroll-item"> <a href="http://www.spring4all.com/" title="spring4all" target="_blank" rel="external nofollow">spring4all</a></li><li class="links-of-blogroll-item"> <a href="http://www.infoq.com/cn/" title="InfoQ" target="_blank" rel="external nofollow">InfoQ</a></li><li class="links-of-blogroll-item"> <a href="http://stackoverflow.com/" title="stackoverflow" target="_blank" rel="external nofollow">stackoverflow</a></li><li class="links-of-blogroll-item"> <a href="https://linux.cn/" title="Linux中国" target="_blank" rel="external nofollow">Linux中国</a></li><li class="links-of-blogroll-item"> <a href="https://toutiao.io/" title="开发者头条" target="_blank" rel="external nofollow">开发者头条</a></li></ul></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大型网站架构演化"><span class="nav-number">2.</span> <span class="nav-text">大型网站架构演化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#大型网站软件的特点"><span class="nav-number">2.1.</span> <span class="nav-text">大型网站软件的特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大型网站架构演化发展历程"><span class="nav-number">2.2.</span> <span class="nav-text">大型网站架构演化发展历程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大型网站架构演化的价值观"><span class="nav-number">2.3.</span> <span class="nav-text">大型网站架构演化的价值观</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网站架构设计误区"><span class="nav-number">2.4.</span> <span class="nav-text">网站架构设计误区</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大型网站架构模式"><span class="nav-number">3.</span> <span class="nav-text">大型网站架构模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大型网站核心架构要素"><span class="nav-number">4.</span> <span class="nav-text">大型网站核心架构要素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#瞬时响应：网站的高性能架构"><span class="nav-number">5.</span> <span class="nav-text">瞬时响应：网站的高性能架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网站性能测试"><span class="nav-number">5.1.</span> <span class="nav-text">网站性能测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web前端性能优化"><span class="nav-number">5.2.</span> <span class="nav-text">web前端性能优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用服务器性能优化"><span class="nav-number">5.3.</span> <span class="nav-text">应用服务器性能优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存储性能优化"><span class="nav-number">5.4.</span> <span class="nav-text">存储性能优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#万无一失：网站的高可用架构"><span class="nav-number">6.</span> <span class="nav-text">万无一失：网站的高可用架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网站可用性的度量和考核"><span class="nav-number">6.1.</span> <span class="nav-text">网站可用性的度量和考核</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用的网站架构"><span class="nav-number">6.2.</span> <span class="nav-text">高可用的网站架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用的应用"><span class="nav-number">6.3.</span> <span class="nav-text">高可用的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用的应用-1"><span class="nav-number">6.4.</span> <span class="nav-text">高可用的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用的数据"><span class="nav-number">6.5.</span> <span class="nav-text">高可用的数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用软件质量保障"><span class="nav-number">6.6.</span> <span class="nav-text">高可用软件质量保障</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网站运行监控"><span class="nav-number">6.7.</span> <span class="nav-text">网站运行监控</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#永无止尽：网站的伸缩性架构"><span class="nav-number">7.</span> <span class="nav-text">永无止尽：网站的伸缩性架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网站伸缩性设计"><span class="nav-number">7.1.</span> <span class="nav-text">网站伸缩性设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用服务器集群伸缩设计"><span class="nav-number">7.2.</span> <span class="nav-text">应用服务器集群伸缩设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式缓存集群的伸缩性设计"><span class="nav-number">7.3.</span> <span class="nav-text">分布式缓存集群的伸缩性设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据存储服务器集群的伸缩性设计"><span class="nav-number">7.4.</span> <span class="nav-text">数据存储服务器集群的伸缩性设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#随机应变：网站的可扩展性架构"><span class="nav-number">8.</span> <span class="nav-text">随机应变：网站的可扩展性架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构建可扩展性的网站架构"><span class="nav-number">8.1.</span> <span class="nav-text">构建可扩展性的网站架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用分布式消息队列降低系统耦合性"><span class="nav-number">8.2.</span> <span class="nav-text">利用分布式消息队列降低系统耦合性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用分布式服务打造可复用的业务平台"><span class="nav-number">8.3.</span> <span class="nav-text">利用分布式服务打造可复用的业务平台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可扩展的数据结构"><span class="nav-number">8.4.</span> <span class="nav-text">可扩展的数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用开放平台建设网站生态圈"><span class="nav-number">8.5.</span> <span class="nav-text">利用开放平台建设网站生态圈</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#固若金汤：网站的安全架构"><span class="nav-number">9.</span> <span class="nav-text">固若金汤：网站的安全架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#道高一尺魔高一丈的网站应用攻击与防御"><span class="nav-number">9.1.</span> <span class="nav-text">道高一尺魔高一丈的网站应用攻击与防御</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信息加密技术及密钥安全管理"><span class="nav-number">9.2.</span> <span class="nav-text">信息加密技术及密钥安全管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信息过滤与反垃圾"><span class="nav-number">9.3.</span> <span class="nav-text">信息过滤与反垃圾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#电子商务风险控制"><span class="nav-number">9.4.</span> <span class="nav-text">电子商务风险控制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">10.</span> <span class="nav-text">总结</span></a></li></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span><span class="with-love"><i class="fa fa-user"></i></span> <span class="author" itemprop="copyrightHolder">陈瑞文</span></div><div class="theme-info"><span id="showDays"></span></div><br><div class="theme-info"><div class="powered-by"></div> <span class="post-count">本站累计共100.6k字</span></div> &nbsp;&nbsp;|&nbsp;&nbsp;本站总点击<span id="busuanzi_value_site_pv"></span> 次 &nbsp;&nbsp;|&nbsp;&nbsp;您是第<span id="busuanzi_value_site_uv"></span> 位访客<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><script>var seconds=1e3,minutes=60*seconds,hours=60*minutes,days=24*hours,years=365*days,birthDay=Date.UTC(2018,4,14,0,0,0);setInterval(function(){var e=new Date,s=e.getFullYear(),t=e.getMonth()+1,a=e.getDate(),o=e.getHours(),r=e.getMinutes(),n=e.getSeconds(),h=Date.UTC(s,t,a,o,r,n)-birthDay,u=Math.floor(h/years),d=Math.floor(h/days-365*u),y=Math.floor((h-(365*u+d)*days)/hours),i=Math.floor((h-(365*u+d)*days-y*hours)/minutes),l=Math.floor((h-(365*u+d)*days-y*hours-i*minutes)/seconds);document.getElementById("showDays").innerHTML="本站已运行 "+u+" 年 "+d+" 天 "+y+" 小时 "+i+" 分钟 "+l+" 秒"},1e3)</script><script>var _hmt=_hmt||[];!function(){var e=document.createElement("script");e.src="https://hm.baidu.com/hm.js?24046c6beb6cd2056bee02dc2a0168c9";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)}()</script></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span id="scrollpercent"><span>0</span>%</span></div></div><script type="text/javascript">"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script><script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script><script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script><script src="/js/src/photoswipe.min.js?v=5.1.4"></script><script src="/js/src/photoswipe-ui-default.min.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script><link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css"><script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script><script type="text/javascript">function renderGitment(){new Gitmint({id:"1537715424000",owner:"crrrrrw",repo:"hexo_static_page",lang:navigator.language||navigator.systemLanguage||navigator.userLanguage,oauth:{client_secret:"bc55e698a64f91f9af7ad2e5d296f4cb244ad5cd",client_id:"80cec54113d1f1089a45"}}).render("gitment-container")}renderGitment()</script><script src="//unpkg.com/valine/dist/Valine.min.js"></script><script type="text/javascript">
+<!DOCTYPE html>
+
+
+  
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css">
+<style>
+blockquote {
+  color: #888;
+  background-color: #eae6f3;
+  border-left: 1rem solid #5236a0;
+  padding: 0 1.5rem;
+  position: relative;
+  font-family: 'Roboto', sans-serif;
+}
+
+blockquote:before,
+blockquote:after {
+  color: #392570;
+  font-size: 2.5rem;
+  position: absolute;
+  line-height: 2.5rem;
+}
+
+blockquote:before {
+  content: "\201C";
+  left: -1rem;
+  top: 0;
+}
+
+blockquote:after {
+  content: "\201D";
+  right: 0;
+  bottom: -1rem;
+}
+</style>
+
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-gui.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-32x32-gui.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="architecture,read notes," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Chen RuiWen's Space" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="前言又把《大型网站技术架构-核心原理与案例分析》看了一遍，之前走马观花看了一遍，没有体会到精髓。现在具备一定“中型”网站开发经验后再看之，又有些体会，故整理一下这本书的内容。">
+<meta name="keywords" content="architecture,read notes">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《大型网站技术架构》知识总结">
+<meta property="og:url" content="https://www.chenruiwen.cn/architecture/large-scale-websites-architecture-note/index.html">
+<meta property="og:site_name" content="Chen RuiWen&#39;s Space">
+<meta property="og:description" content="前言又把《大型网站技术架构-核心原理与案例分析》看了一遍，之前走马观花看了一遍，没有体会到精髓。现在具备一定“中型”网站开发经验后再看之，又有些体会，故整理一下这本书的内容。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/87faef88ly1fvjtco0bevj20r20e2mxf.jpg">
+<meta property="og:updated_time" content="2018-09-24T13:04:33.531Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《大型网站技术架构》知识总结">
+<meta name="twitter:description" content="前言又把《大型网站技术架构-核心原理与案例分析》看了一遍，之前走马观花看了一遍，没有体会到精髓。现在具备一定“中型”网站开发经验后再看之，又有些体会，故整理一下这本书的内容。">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/87faef88ly1fvjtco0bevj20r20e2mxf.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.chenruiwen.cn/architecture/large-scale-websites-architecture-note/"/>
+
+
+
+
+
+  <title>《大型网站技术架构》知识总结 | Chen RuiWen's Space</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/crrrrrw"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Chen RuiWen's Space</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Life is real, life is earnest</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-photos">
+          <a href="/photos/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-camera"></i> <br />
+            
+            相册
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/architecture/large-scale-websites-architecture-note/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="陈瑞文">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/touxiang.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen RuiWen's Space">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《大型网站技术架构》知识总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-23T23:10:24+08:00">
+                2018-09-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span id="busuanzi_container_page_pv">&nbsp;&nbsp;|&nbsp;&nbsp;阅读量 <span id="busuanzi_value_page_pv"></span> 次</span>
+          
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/architecture/" itemprop="url" rel="index">
+                    <span itemprop="name">architecture</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/architecture/large-scale-websites-architecture-note/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/architecture/large-scale-websites-architecture-note/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3,585 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  12 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>又把《大型网站技术架构-核心原理与案例分析》看了一遍，之前走马观花看了一遍，没有体会到精髓。现在具备一定“中型”网站开发经验后再看之，又有些体会，故整理一下这本书的内容。
+<a id="more"></a></p>
+<h2 id="大型网站架构演化"><a href="#大型网站架构演化" class="headerlink" title="大型网站架构演化"></a>大型网站架构演化</h2><h3 id="大型网站软件的特点"><a href="#大型网站软件的特点" class="headerlink" title="大型网站软件的特点"></a>大型网站软件的特点</h3><ul>
+<li>高并发、大流量</li>
+<li>高可用</li>
+<li>海量数据</li>
+<li>用户分布广泛</li>
+<li>安全环境恶劣</li>
+<li>需求变更快，发布频繁</li>
+<li>渐进式发展</li>
+</ul>
+<h3 id="大型网站架构演化发展历程"><a href="#大型网站架构演化发展历程" class="headerlink" title="大型网站架构演化发展历程"></a>大型网站架构演化发展历程</h3><ol>
+<li><strong>初始阶段的网站架构</strong>：all in one，一台服务器，部署了应用程序，数据库，文件，等所有资源。比如经典的<code>LAMP</code>架构。</li>
+<li><strong>应用和数据服务分离</strong>：应用程序，数据库，文件分别用了3台服务器部署。</li>
+<li><strong>使用缓存改善网站性能</strong>：本地缓存+分布式缓存。</li>
+<li><strong>使用应用服务器集群改善网站并发处理能力</strong>：通过负载均衡调度服务器来将访问请求分发到应用服务器集群中的任何一台机器。</li>
+<li><strong>数据库读写分离</strong>：数据库采用主从热备，写数据在主数据库中，主数据库通过主从复制机制将数据更新同步到从数据库。读数据从从库读取。</li>
+<li><strong>使用反向代理和 CDN 加速网站响应</strong>：这两者基本原理都是缓存。CDN 部署在网络提供商的机房，使用户可从离距离自己最近的提供商机房获取数据;反向代理部署在网站的中心机房，减轻后端负载压力，反向代理服务器命中的静态数据可直接返回。</li>
+<li><strong>使用分布式文件系统和分布式数据库系统</strong>：数据库拆分的最后手段，解决单表特别大的情况。</li>
+<li><strong>使用 NoSQL 和搜索引擎</strong>：对可伸缩的分布式有更好的支持。</li>
+<li><strong>业务拆分</strong>：将整个网站业务拆分成不同的应用，每个应用独立部署维护，应用之间通过超链接建立联系/消息队列进行数据分发/访问同一数据存储系统</li>
+<li><strong>分布式服务</strong>：公共业务提取出来独立部署</li>
+</ol>
+<p>大型网站演化到这里，大多数技术问题都得以解决，如图：
+<img src="https://ws1.sinaimg.cn/large/87faef88ly1fvjtco0bevj20r20e2mxf.jpg" alt=""></p>
+<h3 id="大型网站架构演化的价值观"><a href="#大型网站架构演化的价值观" class="headerlink" title="大型网站架构演化的价值观"></a>大型网站架构演化的价值观</h3><ul>
+<li>大型网站架构的核心价值是随网站所需灵活应对</li>
+<li>驱动大型网站技术发展的主要力量是网站的业务发展</li>
+</ul>
+<h3 id="网站架构设计误区"><a href="#网站架构设计误区" class="headerlink" title="网站架构设计误区"></a>网站架构设计误区</h3><ul>
+<li>一味追随大公司的解决方案</li>
+<li>为了技术而技术</li>
+<li>企图用技术解决所有问题</li>
+</ul>
+<h2 id="大型网站架构模式"><a href="#大型网站架构模式" class="headerlink" title="大型网站架构模式"></a>大型网站架构模式</h2><ul>
+<li>分层:计算机世界无处不在，操作系统与硬件，网络七层，网站应用MVC分层。</li>
+<li>分割：按业务分割</li>
+<li>分布式：<ul>
+<li>分布式应用和服务</li>
+<li>分布式静态资源</li>
+<li>分布式数据和存储</li>
+<li>分布式计算</li>
+</ul>
+</li>
+<li>集群</li>
+<li>缓存：<ul>
+<li>CDN</li>
+<li>反向代理</li>
+<li>本地缓存</li>
+<li>分布式缓存</li>
+</ul>
+</li>
+<li>异步：<ul>
+<li>提供系统可用性</li>
+<li>加快网站响应速度</li>
+<li>消除高并发访问高峰</li>
+</ul>
+</li>
+<li>冗余：服务器冗余运行，数据库冗余备份（冷热备份）</li>
+<li>自动化：自动化代码管理；自动化发布；自动化测试；自动化安全检测；自动化部署；自动化监控；自动化报警；自动化失效转移；自动化失效恢复；自动化降级；自动化分配资源。</li>
+<li>安全：防止XSS攻击、sql注入。</li>
+</ul>
+<h2 id="大型网站核心架构要素"><a href="#大型网站核心架构要素" class="headerlink" title="大型网站核心架构要素"></a>大型网站核心架构要素</h2><ul>
+<li>性能<ol>
+<li>浏览器端:浏览器缓存，页面压缩，合理布局页面，减少Cookie传输</li>
+<li>CDN：静态内容分发到离用户最近的网络服务商机房。</li>
+<li>应用服务器：缓存+异步。</li>
+<li>代码层面：多线程+改善内存等手段优化。</li>
+<li>数据库：索引，缓存，SQL优化等。</li>
+</ol>
+</li>
+<li>可用性：只要手段是冗余<ol>
+<li>应用服务器：负载均衡组成集群。</li>
+<li>数据库：实时备份。</li>
+<li>软件开发质量保证：预发布验证，自动化测试，自动化发布，灰度发布等。</li>
+</ol>
+</li>
+<li>伸缩性：主要标准是是否可以构成集群，是否容易不断地向服务器集群加服务器<ol>
+<li>应用服务器集群：负载均衡设备。</li>
+<li>缓存服务器集群：改进缓存路由算法保证存储数据的可访问性。</li>
+<li>数据库：路由分区等。</li>
+<li>NoSQL数据库：先天良好支持。</li>
+</ol>
+</li>
+<li>扩展性：指业务上是否可以少有改动快速上线。主要手段是事件驱动架构和分布式服务。<ol>
+<li>事件驱动架构：通常用消息队列实现。</li>
+<li>分布式服务：按业务和可复用性将服务分离。</li>
+</ol>
+</li>
+<li>安全性：标准是针对现存和潜在的各种攻击和窃密手段，是否有可靠的应对策略。</li>
+</ul>
+<h2 id="瞬时响应：网站的高性能架构"><a href="#瞬时响应：网站的高性能架构" class="headerlink" title="瞬时响应：网站的高性能架构"></a>瞬时响应：网站的高性能架构</h2><h3 id="网站性能测试"><a href="#网站性能测试" class="headerlink" title="网站性能测试"></a>网站性能测试</h3><ul>
+<li>不同视角下网站的性能 <ul>
+<li>用户视角网站性能：响应时间。</li>
+<li>开发人员视角的网站性能：响应时间、并发量、吞吐量。</li>
+<li>运维人员视角的网站性能：资源。</li>
+</ul>
+</li>
+<li>性能测试指标 <ul>
+<li>响应时间：直观反映系统快慢。</li>
+<li>并发数：反映系统负载特性。</li>
+<li>吞吐量：反映系统整体处理能力。通过qps,tps,hps测量。</li>
+<li>性能计数器：描述服务器或操作系统的数据指标。包括System Load、对象与线程数、内存使用、CPU使用、磁盘与网络I/O等指标。</li>
+</ul>
+</li>
+<li>性能测试方法 <ul>
+<li>性能测试：验证系统在资源可接受范围内。</li>
+<li>负载测试：测试安全临界值。</li>
+<li>压力测试：测试系统最大压力承受能力。</li>
+<li>稳定性测试：模拟生产环境。</li>
+</ul>
+</li>
+<li>性能测试报告</li>
+<li>性能优化策略 <ul>
+<li>性能分析：1.检测请求各环节日志，分析那个环节响应时间不合理。2.检查监控数据。</li>
+<li>性能优化：<ul>
+<li>Web前端性能优化</li>
+<li>应用服务器性能优化</li>
+<li>存储服务器性能优化</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="web前端性能优化"><a href="#web前端性能优化" class="headerlink" title="web前端性能优化"></a>web前端性能优化</h3><ul>
+<li>浏览器访问优化 <ul>
+<li>减少http请求</li>
+<li>使用浏览器缓存</li>
+<li>启用压缩</li>
+<li>css放在网页最上面 js最下面</li>
+<li>减少cookie传输</li>
+</ul>
+</li>
+<li>CDN加速</li>
+<li>反向代理：安全屏障；缓存静态和热点数据；负载均衡。</li>
+</ul>
+<h3 id="应用服务器性能优化"><a href="#应用服务器性能优化" class="headerlink" title="应用服务器性能优化"></a>应用服务器性能优化</h3><p>优化的主要手段还是：缓存，异步，集群。</p>
+<ul>
+<li>分布式缓存 <ul>
+<li>缓存的基本原理</li>
+<li>合理的使用缓存 <ul>
+<li>频繁修改数据：读写比2：1以上缓存才有意义</li>
+<li>没有热点的访问</li>
+<li>数据不一致与脏读</li>
+<li>缓存可用性</li>
+<li>缓存预热</li>
+<li>缓存穿透</li>
+</ul>
+</li>
+<li>分布式缓存架构</li>
+</ul>
+</li>
+<li>异步操作：削峰</li>
+<li>使用集群</li>
+<li>代码优化<ul>
+<li>多线程：<ul>
+<li>将对象设计为无状态对象</li>
+<li>使用局部对象</li>
+<li>并发访问资源加锁</li>
+</ul>
+</li>
+<li>资源复用：单例和对象池</li>
+<li>数据结构</li>
+<li>垃圾回收</li>
+</ul>
+</li>
+</ul>
+<h3 id="存储性能优化"><a href="#存储性能优化" class="headerlink" title="存储性能优化"></a>存储性能优化</h3><ul>
+<li>机械硬盘 vs. 固态硬盘</li>
+<li>B+ 树 vs. LSM 树</li>
+<li>RAID vs. HDFS</li>
+</ul>
+<h2 id="万无一失：网站的高可用架构"><a href="#万无一失：网站的高可用架构" class="headerlink" title="万无一失：网站的高可用架构"></a>万无一失：网站的高可用架构</h2><h3 id="网站可用性的度量和考核"><a href="#网站可用性的度量和考核" class="headerlink" title="网站可用性的度量和考核"></a>网站可用性的度量和考核</h3><ul>
+<li>网站可行性度量<ul>
+<li>网站不可用时间(故障时间) = 故障修复时间点 - 故障发现时间点</li>
+<li>网站年度可用性指标 = (1 - 网站不可用时间/年度总时间) * 100%</li>
+<li>2个9基本可用，3个9较高可用，4个9具有自动恢复能力的高可用，5个9是极高可用性</li>
+</ul>
+</li>
+<li>网站可用性考核:故障分 = 故障时间 * 故障权重</li>
+</ul>
+<h3 id="高可用的网站架构"><a href="#高可用的网站架构" class="headerlink" title="高可用的网站架构"></a>高可用的网站架构</h3><p>分层+分割+集群</p>
+<h3 id="高可用的应用"><a href="#高可用的应用" class="headerlink" title="高可用的应用"></a>高可用的应用</h3><ul>
+<li>通过负载均衡进行无状态服务的失效转移</li>
+<li>应用服务器集群的session管理 <ul>
+<li>session复制：简单，适用于集群规模较小的情况</li>
+<li>session绑定：粘性session</li>
+<li>利用cookie记录 session：简单易用，可用性高，支持线性伸缩，但是每次响应都会传输cookie，影响性能。</li>
+<li>session服务器：利用分布式缓存。</li>
+</ul>
+</li>
+</ul>
+<h3 id="高可用的应用-1"><a href="#高可用的应用-1" class="headerlink" title="高可用的应用"></a>高可用的应用</h3><ul>
+<li>分级管理：核心应用与服务优先使用更好的硬件；部署上进行隔离。</li>
+<li>超时设置</li>
+<li>异步调用</li>
+<li>服务降级：手段有二：拒绝服务及关闭服务。</li>
+<li>幂等性设计：业务代码层面通过有效性校验等。 <h3 id="高可用的数据"><a href="#高可用的数据" class="headerlink" title="高可用的数据"></a>高可用的数据</h3></li>
+<li>CAP原理 <ul>
+<li>数据持久性</li>
+<li>数据可访问性</li>
+<li>数据一致性 <ul>
+<li>数据强一致性</li>
+<li>数据用户一致性</li>
+<li>数据最终一致性</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>数据备份<ul>
+<li>冷备:简单廉价，成本和技术难度低；但不能保证数据最终一致。恢复时间可能会长，一段时间不可用。</li>
+<li>热备：同步和异步方式</li>
+</ul>
+</li>
+<li>失效转移 <ul>
+<li>失效确认</li>
+<li>访问转移</li>
+<li>数据恢复</li>
+</ul>
+</li>
+</ul>
+<h3 id="高可用软件质量保障"><a href="#高可用软件质量保障" class="headerlink" title="高可用软件质量保障"></a>高可用软件质量保障</h3><ul>
+<li><p>网站发布：脚本发布，流程大致如下</p>
+<ol>
+<li>关闭负载均衡服务器上一台或一小批服务器路由</li>
+<li>关闭这些服务器应用</li>
+<li>同步(复制)软件代码包到这些服务器上</li>
+<li>启动这些服务器</li>
+<li>打开负载均衡服务器这些服务器的路由</li>
+<li>集群所有机器发布完成？是则退出：否则继续1.</li>
+</ol>
+</li>
+<li><p>自动化测试</p>
+</li>
+<li>预发布验证</li>
+<li>代码控制 <ul>
+<li>主干开发，分支发布</li>
+<li>分支开发，主干发布</li>
+</ul>
+</li>
+<li>自动化发布</li>
+<li>灰度发布</li>
+</ul>
+<h3 id="网站运行监控"><a href="#网站运行监控" class="headerlink" title="网站运行监控"></a>网站运行监控</h3><ul>
+<li>监控数据采集 <ul>
+<li>用户行为日志收集</li>
+<li>服务器性能检测</li>
+<li>运行数据报告</li>
+</ul>
+</li>
+<li>监控管理 <ul>
+<li>系统报警</li>
+<li>失效转移</li>
+<li>自动优雅降级</li>
+</ul>
+</li>
+</ul>
+<h2 id="永无止尽：网站的伸缩性架构"><a href="#永无止尽：网站的伸缩性架构" class="headerlink" title="永无止尽：网站的伸缩性架构"></a>永无止尽：网站的伸缩性架构</h2><h3 id="网站伸缩性设计"><a href="#网站伸缩性设计" class="headerlink" title="网站伸缩性设计"></a>网站伸缩性设计</h3><ul>
+<li>不同功能进行物理分离实现伸缩<ul>
+<li>纵向分离(分层后分离)</li>
+<li>横向分离(业务分割后分离)</li>
+</ul>
+</li>
+<li>单一功能通过集群实现伸缩</li>
+</ul>
+<h3 id="应用服务器集群伸缩设计"><a href="#应用服务器集群伸缩设计" class="headerlink" title="应用服务器集群伸缩设计"></a>应用服务器集群伸缩设计</h3><ul>
+<li>http重定向负载均衡：简单，但是浏览器需要两次请求服务器。</li>
+<li>Dns域名解析负载均衡：省掉了管理运维负载均衡服务器的麻烦，能支持基于地理位置的域名解析加速访问；但是生效时间较长，以及无法做更多改善和更强大的管理。</li>
+<li>反向代理负载均衡：发生在http协议层，也叫应用层负载均衡。</li>
+<li>ip负载均衡：发生在网络层，修改请求目标地址进行负载均衡。</li>
+<li>数据链路层负载均衡：发生在通信协议的数据链路层，通过修改mac地址进行负载均衡。广泛使用的一种方式，比如：LVS(Linux Virtual Server)</li>
+<li>负载均衡算法 <ul>
+<li>轮询</li>
+<li>加权轮询</li>
+<li>随机</li>
+<li>最少链接</li>
+<li>源地址散列</li>
+</ul>
+</li>
+</ul>
+<h3 id="分布式缓存集群的伸缩性设计"><a href="#分布式缓存集群的伸缩性设计" class="headerlink" title="分布式缓存集群的伸缩性设计"></a>分布式缓存集群的伸缩性设计</h3><ul>
+<li>Memcached分布式缓存集群的访问模型</li>
+<li>Memcached分布式缓存集群的伸缩性挑战</li>
+<li>分布式缓存的一致性hash算法</li>
+</ul>
+<h3 id="数据存储服务器集群的伸缩性设计"><a href="#数据存储服务器集群的伸缩性设计" class="headerlink" title="数据存储服务器集群的伸缩性设计"></a>数据存储服务器集群的伸缩性设计</h3><ul>
+<li>关系数据库集群的伸缩性设计：从业务上回避分布式关系型数据库的各种缺点：避免事务或利用事务补偿机制代替数据库事务；避免JOIN操作等。</li>
+<li>Nosql数据库的伸缩性设计</li>
+</ul>
+<h2 id="随机应变：网站的可扩展性架构"><a href="#随机应变：网站的可扩展性架构" class="headerlink" title="随机应变：网站的可扩展性架构"></a>随机应变：网站的可扩展性架构</h2><h3 id="构建可扩展性的网站架构"><a href="#构建可扩展性的网站架构" class="headerlink" title="构建可扩展性的网站架构"></a>构建可扩展性的网站架构</h3><p>软件架构师的最大价值不在于掌握多少先进的技术，而在于具有将一个大系统切分层N个低耦合的子模块的能力，这些子模块包含横向的业务模块，也包含纵向的基础技术模块。</p>
+<h3 id="利用分布式消息队列降低系统耦合性"><a href="#利用分布式消息队列降低系统耦合性" class="headerlink" title="利用分布式消息队列降低系统耦合性"></a>利用分布式消息队列降低系统耦合性</h3><ul>
+<li>事件驱动架构</li>
+<li>分布式消息队列</li>
+</ul>
+<h3 id="利用分布式服务打造可复用的业务平台"><a href="#利用分布式服务打造可复用的业务平台" class="headerlink" title="利用分布式服务打造可复用的业务平台"></a>利用分布式服务打造可复用的业务平台</h3><ul>
+<li>web service与企业级分布式服务：缺点有臃肿的注册和发现机制，抵消的XML序列化手段，开销相对较高的HTTP远程通信，复杂的部署与维护手段。</li>
+<li>大型网站分布式服务的需求与特点 <ul>
+<li>负载均衡</li>
+<li>失效转移</li>
+<li>高效的远程通信</li>
+<li>整合异构系统</li>
+<li>对应用最少侵入</li>
+<li>版本控制</li>
+<li>实时监控</li>
+</ul>
+</li>
+<li>分布式服务框架设计</li>
+</ul>
+<h3 id="可扩展的数据结构"><a href="#可扩展的数据结构" class="headerlink" title="可扩展的数据结构"></a>可扩展的数据结构</h3><p>利用NoSQL的ColumnFamily(列族)设计。</p>
+<h3 id="利用开放平台建设网站生态圈"><a href="#利用开放平台建设网站生态圈" class="headerlink" title="利用开放平台建设网站生态圈"></a>利用开放平台建设网站生态圈</h3><ul>
+<li>api接口</li>
+<li>协议转移</li>
+<li>安全</li>
+<li>审计</li>
+<li>路由</li>
+<li>流程</li>
+</ul>
+<h2 id="固若金汤：网站的安全架构"><a href="#固若金汤：网站的安全架构" class="headerlink" title="固若金汤：网站的安全架构"></a>固若金汤：网站的安全架构</h2><h3 id="道高一尺魔高一丈的网站应用攻击与防御"><a href="#道高一尺魔高一丈的网站应用攻击与防御" class="headerlink" title="道高一尺魔高一丈的网站应用攻击与防御"></a>道高一尺魔高一丈的网站应用攻击与防御</h3><p>全球70%的web攻击来自XSS攻击和SQL注入。</p>
+<ul>
+<li>xss攻击 <ul>
+<li>消毒：转移html字符</li>
+<li>httponly：避免攻击脚本窃取</li>
+</ul>
+</li>
+<li>注入攻击 <ul>
+<li>开源</li>
+<li>错误回显</li>
+<li>盲注</li>
+<li>消毒</li>
+<li>参数绑定</li>
+</ul>
+</li>
+<li>csrf攻击：防御的主要手段是识别访问者身份。<ul>
+<li>表单token</li>
+<li>验证码</li>
+<li>referer check</li>
+</ul>
+</li>
+<li>其他攻击和漏洞 <ul>
+<li>error code</li>
+<li>html注释</li>
+<li>文件上传</li>
+<li>路径遍历</li>
+</ul>
+</li>
+<li>web应用防火墙</li>
+<li>网站安全漏洞扫描</li>
+</ul>
+<h3 id="信息加密技术及密钥安全管理"><a href="#信息加密技术及密钥安全管理" class="headerlink" title="信息加密技术及密钥安全管理"></a>信息加密技术及密钥安全管理</h3><ul>
+<li>单向散列加密：MD5,SHA等</li>
+<li>对称加密：DES,RC等</li>
+<li>非对称加密：RSA等</li>
+<li>密钥安全管理</li>
+</ul>
+<h3 id="信息过滤与反垃圾"><a href="#信息过滤与反垃圾" class="headerlink" title="信息过滤与反垃圾"></a>信息过滤与反垃圾</h3><ul>
+<li>文本匹配<ul>
+<li>正则表达式匹配：适用于敏感词较少</li>
+<li>Trie树、双数组Trie树：时间和空间复杂度都较好</li>
+<li>多级hash表：速度较快，但浪费部分空间</li>
+</ul>
+</li>
+<li>分类算法：朴素贝叶斯算法。</li>
+<li>黑名单：布隆过滤器。</li>
+</ul>
+<h3 id="电子商务风险控制"><a href="#电子商务风险控制" class="headerlink" title="电子商务风险控制"></a>电子商务风险控制</h3><ul>
+<li>风险 <ul>
+<li>账号风险</li>
+<li>买家风险</li>
+<li>卖家风险</li>
+<li>交易风险</li>
+</ul>
+</li>
+<li>风控<ul>
+<li>规则引擎</li>
+<li>统计模型</li>
+</ul>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>大致总结了李智慧老师的<a href="https://book.douban.com/subject/25723064/" target="_blank" rel="noopener">《大型网站技术架构——核心原理与案例分析》</a>一书中的部分知识点的原理部分，
+又重新加深了架构演进的过程。建议还是需要购买原书看一看。</p>
+
+      
+    </div>
+    
+    
+    
+
+    <div>
+      
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束,</i>感谢您的阅读-------------</div>
+    
+</div>
+
+
+      
+    </div>
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>贵在坚持，如果您觉得本文还不错，不妨打赏一下~</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    陈瑞文
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://www.chenruiwen.cn/architecture/large-scale-websites-architecture-note/" title="《大型网站技术架构》知识总结">https://www.chenruiwen.cn/architecture/large-scale-websites-architecture-note/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    欢迎转载~~本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/architecture/" rel="tag"><i class="fa fa-tag"></i>
+               architecture</a>
+          
+            <a href="/tags/read-notes/" rel="tag"><i class="fa fa-tag"></i>
+               read notes</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/java-concurrency/java-util-concurrent-callable-future-futureTask/" rel="next" title="浅析java并发包(五)：Callable、Future和FutureTask">
+                <i class="fa fa-chevron-left"></i> 浅析java并发包(五)：Callable、Future和FutureTask
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/travel/traveling-all-around-Bali/" rel="prev" title="巴厘岛旅行记">
+                巴厘岛旅行记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+  
+  	<div class="post-body"><div class="recommended_posts"><div class="note primary"><h3 class="recommended"> 相关文章：</h3><ul class="recommended-ul"><li class="popular-posts-item" ><div class="popular-posts-item"><a href="/Linux/Linux-performance-analysis-util/">Linux常用性能分析工具</a></div></li></ul></div></div></div> 
+  
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/touxiang.jpeg"
+                alt="陈瑞文" />
+            
+              <p class="site-author-name" itemprop="name">陈瑞文</p>
+              <p class="site-description motion-element" itemprop="description">面向Google编程的java程序猿折腾指北</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">52</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/crrrrrw" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:crw4085501@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          <!-- 添加音乐播放器 -->
+          
+            <div>
+              <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86
+                src="//music.163.com/outchain/player?type=2&id=18795423&auto=1&height=66">
+              </iframe>
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                推荐链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://ifeve.com/" title="并发编程网" target="_blank" rel="external nofollow" >并发编程网</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.importnew.com/" title="ImportNew" target="_blank" rel="external nofollow" >ImportNew</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://www.oschina.net/" title="开源中国" target="_blank" rel="external nofollow" >开源中国</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.spring4all.com/" title="spring4all" target="_blank" rel="external nofollow" >spring4all</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.infoq.com/cn/" title="InfoQ" target="_blank" rel="external nofollow" >InfoQ</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://stackoverflow.com/" title="stackoverflow" target="_blank" rel="external nofollow" >stackoverflow</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://linux.cn/" title="Linux中国" target="_blank" rel="external nofollow" >Linux中国</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://toutiao.io/" title="开发者头条" target="_blank" rel="external nofollow" >开发者头条</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大型网站架构演化"><span class="nav-number">2.</span> <span class="nav-text">大型网站架构演化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#大型网站软件的特点"><span class="nav-number">2.1.</span> <span class="nav-text">大型网站软件的特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大型网站架构演化发展历程"><span class="nav-number">2.2.</span> <span class="nav-text">大型网站架构演化发展历程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大型网站架构演化的价值观"><span class="nav-number">2.3.</span> <span class="nav-text">大型网站架构演化的价值观</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网站架构设计误区"><span class="nav-number">2.4.</span> <span class="nav-text">网站架构设计误区</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大型网站架构模式"><span class="nav-number">3.</span> <span class="nav-text">大型网站架构模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大型网站核心架构要素"><span class="nav-number">4.</span> <span class="nav-text">大型网站核心架构要素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#瞬时响应：网站的高性能架构"><span class="nav-number">5.</span> <span class="nav-text">瞬时响应：网站的高性能架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网站性能测试"><span class="nav-number">5.1.</span> <span class="nav-text">网站性能测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web前端性能优化"><span class="nav-number">5.2.</span> <span class="nav-text">web前端性能优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用服务器性能优化"><span class="nav-number">5.3.</span> <span class="nav-text">应用服务器性能优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存储性能优化"><span class="nav-number">5.4.</span> <span class="nav-text">存储性能优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#万无一失：网站的高可用架构"><span class="nav-number">6.</span> <span class="nav-text">万无一失：网站的高可用架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网站可用性的度量和考核"><span class="nav-number">6.1.</span> <span class="nav-text">网站可用性的度量和考核</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用的网站架构"><span class="nav-number">6.2.</span> <span class="nav-text">高可用的网站架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用的应用"><span class="nav-number">6.3.</span> <span class="nav-text">高可用的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用的应用-1"><span class="nav-number">6.4.</span> <span class="nav-text">高可用的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用的数据"><span class="nav-number">6.5.</span> <span class="nav-text">高可用的数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高可用软件质量保障"><span class="nav-number">6.6.</span> <span class="nav-text">高可用软件质量保障</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网站运行监控"><span class="nav-number">6.7.</span> <span class="nav-text">网站运行监控</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#永无止尽：网站的伸缩性架构"><span class="nav-number">7.</span> <span class="nav-text">永无止尽：网站的伸缩性架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网站伸缩性设计"><span class="nav-number">7.1.</span> <span class="nav-text">网站伸缩性设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用服务器集群伸缩设计"><span class="nav-number">7.2.</span> <span class="nav-text">应用服务器集群伸缩设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式缓存集群的伸缩性设计"><span class="nav-number">7.3.</span> <span class="nav-text">分布式缓存集群的伸缩性设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据存储服务器集群的伸缩性设计"><span class="nav-number">7.4.</span> <span class="nav-text">数据存储服务器集群的伸缩性设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#随机应变：网站的可扩展性架构"><span class="nav-number">8.</span> <span class="nav-text">随机应变：网站的可扩展性架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构建可扩展性的网站架构"><span class="nav-number">8.1.</span> <span class="nav-text">构建可扩展性的网站架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用分布式消息队列降低系统耦合性"><span class="nav-number">8.2.</span> <span class="nav-text">利用分布式消息队列降低系统耦合性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用分布式服务打造可复用的业务平台"><span class="nav-number">8.3.</span> <span class="nav-text">利用分布式服务打造可复用的业务平台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可扩展的数据结构"><span class="nav-number">8.4.</span> <span class="nav-text">可扩展的数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用开放平台建设网站生态圈"><span class="nav-number">8.5.</span> <span class="nav-text">利用开放平台建设网站生态圈</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#固若金汤：网站的安全架构"><span class="nav-number">9.</span> <span class="nav-text">固若金汤：网站的安全架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#道高一尺魔高一丈的网站应用攻击与防御"><span class="nav-number">9.1.</span> <span class="nav-text">道高一尺魔高一丈的网站应用攻击与防御</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信息加密技术及密钥安全管理"><span class="nav-number">9.2.</span> <span class="nav-text">信息加密技术及密钥安全管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信息过滤与反垃圾"><span class="nav-number">9.3.</span> <span class="nav-text">信息过滤与反垃圾</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#电子商务风险控制"><span class="nav-number">9.4.</span> <span class="nav-text">电子商务风险控制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">10.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">陈瑞文</span>
+
+  
+</div>
+
+
+
+
+
+
+<div class="theme-info">
+  <span id="showDays"></span>
+</div><br/>
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">本站累计共100.6k字</span>
+</div>
+
+&nbsp;&nbsp;|&nbsp;&nbsp;本站总点击 <span id="busuanzi_value_site_pv"></span> 次
+&nbsp;&nbsp;|&nbsp;&nbsp;您是第 <span id="busuanzi_value_site_uv"></span> 位访客
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+<script>
+  var seconds = 1000;
+  var minutes = seconds * 60;
+  var hours = minutes * 60;
+  var days = hours * 24;
+  var years = days * 365;
+  var birthDay = Date.UTC(2018,04,14,00,00,00); // 这里设置建站时间
+  setInterval(function() {
+    var today = new Date();
+    var todayYear = today.getFullYear();
+    var todayMonth = today.getMonth()+1;
+    var todayDate = today.getDate();
+    var todayHour = today.getHours();
+    var todayMinute = today.getMinutes();
+    var todaySecond = today.getSeconds();
+    var now = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+    var diff = now - birthDay;
+    var diffYears = Math.floor(diff/years);
+    var diffDays = Math.floor((diff/days)-diffYears*365);
+    var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+    var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+    var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+      document.getElementById('showDays').innerHTML="本站已运行 "+diffYears+" 年 "+diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
+  }, 1000);
+</script>
+
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?24046c6beb6cd2056bee02dc2a0168c9";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+<script src="/js/src/photoswipe.min.js?v=5.1.4"></script>
+<script src="/js/src/photoswipe-ui-default.min.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: '1537715424000', 
+            owner: 'crrrrrw',
+            repo: 'hexo_static_page',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: 'bc55e698a64f91f9af7ad2e5d296f4cb244ad5cd',
+            
+                client_id: '80cec54113d1f1089a45'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
+
+
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<script type="text/javascript">
   new Valine({
       av: AV,
       el: '#comments' ,
@@ -10,7 +1532,12 @@
       path: , // 默认 window.location.pathname
       avatar: 'mm' // 默认 ''
   });
-</script><script type="text/javascript">
+</script>
+
+
+  
+
+  <script type="text/javascript">
     // Popup Window;
     var isfetched = false;
     var isXml = true;
@@ -325,4 +1852,63 @@
         onPopupClose();
       }
     });
-  </script><script>!function(){var t=document.createElement("script"),e=window.location.protocol.split(":")[0];t.src="https"===e?"https://zz.bdstatic.com/linksubmit/push.js":"http://push.zhanzhang.baidu.com/push.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}()</script></body></html><script type="text/javascript" src="/js/src/love.js"></script><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script><script type="text/javascript">$(function(){hljs.initHighlighting(),$("pre code").each(function(){$(this).text().split("\n").length;var n=$("<ul/>").addClass("pre-numbering");$(this).addClass("has-numbering").parent().append(n)})})</script>
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+<!-- highlight 高亮 start-->
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script type="text/javascript">
+  $(function() {
+    hljs.initHighlighting();
+    $('pre code').each(function() {
+      var lines = $(this).text().split('\n').length - 1;
+      var $numbering = $('<ul/>').addClass('pre-numbering');
+      $(this)
+        .addClass('has-numbering')
+        .parent()
+        .append($numbering);
+    });
+  });
+
+</script>
+<!-- highlight 高亮 end-->
