@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.chenruiwen.cn/"/>
-  <updated>2019-05-06T12:50:37.867Z</updated>
+  <updated>2020-02-02T08:45:33.751Z</updated>
   <id>https://www.chenruiwen.cn/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="https://www.chenruiwen.cn/All/undefined/"/>
+    <id>https://www.chenruiwen.cn/All/undefined/</id>
+    <published>2020-02-02T08:45:33.750Z</published>
+    <updated>2020-02-02T08:45:33.751Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Netty，一个无法拒绝的基于java语言编写的网络通信框架，其线程模型是最为复杂，也是面试官最爱考的问题之一。Netty的线程模型是基于Reactor模型发展来的，所以有必要了解Reactor模型的发展历程。</p><h2 id="经典模式"><a href="#经典模式" class="headerlink" title="经典模式"></a>经典模式</h2><p>最开始的网络服务设计，即传统BIO JAVA网络服务那样，一个客户端请求过来，服务端分配一个hander处理read-&gt;biz-&gt;send等所有工作。如图：<img src="http://ww1.sinaimg.cn/large/87faef88ly1gakx62tbgrj219g0v2q9g.jpg" alt="传统BIO网络模式.png"></p><h2 id="Reactor-模式"><a href="#Reactor-模式" class="headerlink" title="Reactor 模式"></a>Reactor 模式</h2><p>与传统BIO服务不同，Reactor模式是基于事件驱动的。对每个IO事件，Reactor通过分发(dispatch)给不同的hander处理各自的业务请求。简单的说，就是IO复用+线程池的组合，如图：<img src="http://ww1.sinaimg.cn/large/87faef88ly1gakxgmha3jj21900vywkj.jpg" alt="Reactor模式基础架构.png">解释：</p><ol><li>客户端发起请求事件到Reactor，Reactor通过IO复用接受请求事件。</li><li>Reactor不处理业务操作，而是把业务处理操作分配给工作线程池处理。</li><li>工作线程完成业务操作后再将结果返回给客户端。</li></ol><h2 id="单Reactor单线程"><a href="#单Reactor单线程" class="headerlink" title="单Reactor单线程"></a>单Reactor单线程</h2><p>即通过一个main线程处理接受请求事件-&gt;read-&gt;handle biz-&gt;send 一系列的操作。<img src="http://ww1.sinaimg.cn/large/87faef88ly1gakxuiti33j21860r0jx5.jpg" alt="单Reactor单线程.png">这种方式的缺点非常明显，只用一个线程处理，非常容易出现瓶颈，而且无法充分利用现代计算机多核CPU的优势；低可靠性，一旦main线程意外，则整个系统通信模块就会故障，节点不可用。</p><p>优点：模型简单，没有多线程、多进程通信，不存在竞争问题。</p><h2 id="单Reactor多线程"><a href="#单Reactor多线程" class="headerlink" title="单Reactor多线程"></a>单Reactor多线程</h2><p><img src="http://ww1.sinaimg.cn/large/87faef88ly1gaky2oo37cj21920xsdmp.jpg" alt="单Reactor多线程.png">解释：</p><ol><li>Reactor通过acceptor接受客户端请求事件。</li><li>Reactor接受到事件后，把相应的业务分发出给相应的hander处理，hander负责read和send响应数据。</li><li>hander只负责响应事件，不做具体业务处理，通过read读取数据后，会把业务交给线程池的某个worker线程处理业务。</li><li>线程处理完业务后，会把响应返回给hander，再由hander响应，通过send发送给客户端。</li></ol><ul><li>优点：相较于单Reactor单线程模式，它把业务操作放在线程池里处理，能充分利用CPU多核处理能力</li><li>缺点：多线程数据共享和访问比较复杂，Reactor处理所有事件监听和响应，Reactor还是单线程的，高并发场景还是容易出现性能瓶颈。</li></ul><h2 id="主从多线程"><a href="#主从多线程" class="headerlink" title="主从多线程"></a>主从多线程</h2><p>针对单Reactor多线程模型中，Reactor只有一个线程，在高并发场景下很容易出现性能瓶颈，因此可以使Reactor在多线程中运行，如图。<img src="http://ww1.sinaimg.cn/large/87faef88ly1gamzuh18j6j219a0zc7bw.jpg" alt="主从多线程模式.png"></p><p>针对单Reactor多线程模型中，Reactor只有一个线程，在高并发场景下很容易出现性能瓶颈，因此可以使Reactor在多线程中运行，如图。</p><p>解释：</p><ol><li>Reactor主线程通过 mainReactor 对象通过select监听连接事件，收到事件交给 acceptor 处理连接事件。</li><li>acceptor 处理连接事件后，mainReactor 将连接分配给一个 subReactor。</li><li>subReactor 将连接键入连接队列进行监听，并创建 handler 进行事件处理。</li><li>handler 在 read 操作后再将连接交给工作线程池(worker thread pool)处理业务，由线程池分配独立线程进行业务操作。</li><li>线程处理完业务后，会把响应返回给hander，再由hander响应，通过send发送给客户端。</li><li>mainReactor 可以对于多个 subReactor ，因此称此模型为主从多线程模型。</li></ol><ul><li>优点：父线程和子线程的数据交互简单，职责明确，父线程只需要接受新连接，而子线程只需完成业务处理，子线程也无须返回数据。</li><li>缺点：复杂度高</li></ul><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>参考资料:《Scalable IO In Java》,是java.util.concurrent包的作者，大师Doug Lea关于分析与构建可伸缩的高性能IO服务的一篇经典文章。本文的图片截图均截自此书，建议先阅读大师的经典文章。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;Netty，一个无法拒绝的基于java语言编写的网络通信框架，其线程模型是最为复杂，也是面试官最爱考的问题之一。Netty的线程模型是基于R
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>从DelayQueue到 Leader-follower线程模型</title>
@@ -496,31 +517,6 @@
     
       &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;闭锁(&lt;code&gt;CountDownlatch&lt;/code&gt;)和栅栏(&lt;code&gt;CyclicBarrier&lt;/code&gt;)功能看起来相似，都是同步工具类，
 看起来都是可以阻塞一个操作，等待其依赖的一组操作完成之后再执行。但是害死有所区别。
-    
-    </summary>
-    
-      <category term="java-concurrency" scheme="https://www.chenruiwen.cn/categories/java-concurrency/"/>
-    
-    
-      <category term="java" scheme="https://www.chenruiwen.cn/tags/java/"/>
-    
-      <category term="java concurrency" scheme="https://www.chenruiwen.cn/tags/java-concurrency/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>浅析java并发包(三)：阻塞队列(BlockingQueue)</title>
-    <link href="https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-BlockingQueue/"/>
-    <id>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-BlockingQueue/</id>
-    <published>2018-09-08T08:16:24.000Z</published>
-    <updated>2018-09-08T16:04:47.785Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>阻塞队列 (<code>BlockingQueue</code>)是<code>j.u.c</code>下重要的数据结构，<code>BlockingQueue</code>提供了线程安全的队列访问方式：当阻塞队列进行插入数据时，如果队列已满，线程将会阻塞等待直到队列非满；从阻塞队列取数据时，如果队列已空，线程将会阻塞等待直到队列非空。</p><a id="more"></a><h2 id="接口-BlockingQueue"><a href="#接口-BlockingQueue" class="headerlink" title="接口 BlockingQueue"></a>接口 BlockingQueue</h2><h3 id="提供的方法API"><a href="#提供的方法API" class="headerlink" title="提供的方法API"></a>提供的方法API</h3><p>从API文档上看，<code>BlockingQueue</code>定义的方法有四种形式，具有不同的操作方式，不能立即满足，但可能在将来的某个时间点满足：一个抛出异常，第二个返回一个特殊值（ null或false ，具体取决于操作），第三个程序将无限期地阻止当前线程，直到操作成功为止，而第四个程序块在放弃之前只有给定的最大时限。 这些方法总结在下表中：</p><table><thead><tr><th>method\way</th><th>Throws exception</th><th>Special value</th><th>Blocks</th><th>Times out</th></tr></thead><tbody><tr><td>Insert</td><td>add(e)</td><td>offer(e)</td><td>put(e)</td><td>offer(e, time, unit) </td></tr><tr><td>Remove</td><td>remove()</td><td>poll()</td><td>take()</td><td>poll(time, unit)</td></tr><tr><td>Examine</td><td>element()</td><td>peek()</td><td>not applicable</td><td>not applicable</td></tr></tbody></table><p>简单解释一下四种行为方式：</p><ul><li>抛异常(Throws exception)：如果试图的操作无法立即执行，抛一个异常。</li><li>特定值(Special value)：如果试图的操作无法立即执行，返回一个特定的值(常常是 true / false)。</li><li>阻塞(Blocks)：如果试图的操作无法立即执行，该方法调用将会发生阻塞，直到能够执行。</li><li>超时(Times out)：如果试图的操作无法立即执行，该方法调用将会发生阻塞，直到能够执行，但等待时间不会超过给定值。返回一个特定值以告知该操作是否成功(典型的是true / false)。</li></ul><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>阻塞队列的典型使用场景就是生产者 - 消费者场景，它可以安全的与多个生产者和多个消费者一起使用。引用API文档里的例子：</p><pre><code class="java">class Producer implements Runnable {   private final BlockingQueue queue;   Producer(BlockingQueue q) { queue = q; }   public void run() {     try {       while (true) { queue.put(produce()); }     } catch (InterruptedException ex) { ... handle ...}   }   Object produce() { ... } } class Consumer implements Runnable {   private final BlockingQueue queue;   Consumer(BlockingQueue q) { queue = q; }   public void run() {     try {       while (true) { consume(queue.take()); }     } catch (InterruptedException ex) { ... handle ...}   }   void consume(Object x) { ... } } class Setup {   void main() {     BlockingQueue q = new SomeQueueImplementation();     Producer p = new Producer(q);     Consumer c1 = new Consumer(q);     Consumer c2 = new Consumer(q);     new Thread(p).start();     new Thread(c1).start();     new Thread(c2).start();   } }</code></pre><h3 id="其他特性"><a href="#其他特性" class="headerlink" title="其他特性"></a>其他特性</h3><ul><li>不接受null元素。当尝试对一个阻塞队列执行add,put或offer一个null对象时，会抛出NullPointerException。</li><li>BlockingQueue实现是线程安全的。 所有排队方法使用内部锁或其他形式的并发控制在原子上实现其效果。 </li></ul><h2 id="BlockingQueue常见实现类与介绍"><a href="#BlockingQueue常见实现类与介绍" class="headerlink" title="BlockingQueue常见实现类与介绍"></a>BlockingQueue常见实现类与介绍</h2><ul><li>有界阻塞队列：ArrayBlockingQueue,LinkedBlockingQueue…</li><li>无界阻塞队列：PriorityBlockingQueue,DelayQueue…</li><li>优先级阻塞队列：PriorityBlockingQueue</li><li>延迟阻塞队列：DelayQueue</li></ul><h3 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h3><p>有界阻塞队列，FIFO队列，内部是通过数组实现的，大小固定，创建后容量无法修改。尝试put成满的队列的元件将导致在操作阻挡; 尝试take从空队列的元件将类似地阻塞。</p><p>举个栗子：</p><pre><code class="java">public class BlockingQueueTest {    /**     * 实例化一个队列，队列中的容量为10     */    private static BlockingQueue&lt;Integer&gt; blockingQueue = new ArrayBlockingQueue&lt;&gt;(10);    public static void main(String[] args) {        ScheduledExecutorService product = Executors.newScheduledThreadPool(1);        Random random = new Random();        product.scheduleAtFixedRate(() -&gt; {            int value = random.nextInt(101);            try {                blockingQueue.offer(value);  //offer()方法就是往队列的尾部设置值                System.out.println(&quot;已经往队列里加入数据:&quot; + value);            } catch (Exception ex) {                ex.printStackTrace();            }        }, 0, 100, TimeUnit.MILLISECONDS);  //每100毫秒执行线程        new Thread(() -&gt; {            while (true) {                try {                    Thread.sleep(1000);                    Integer poll = blockingQueue.poll();// 弹出                    System.out.println(&quot;已经从队列里取出数据:&quot; + poll);                } catch (InterruptedException e) {                    e.printStackTrace();                }            }        }).start();    }}</code></pre><p>以上实现一个固定队列的例子，容量为10，可以通过构造器创建容量大小为n的阻塞队列。</p><h3 id="LinkedBlockingQueue"><a href="#LinkedBlockingQueue" class="headerlink" title="LinkedBlockingQueue"></a>LinkedBlockingQueue</h3><p>有界阻塞队列，FIFO队列，基于链表实现，创建时可以不指定容量，不指定时默认容量Integer.MAX_VALUE。队列的节点可以动态扩展，只是不能超过容量。这一点上与<code>ArrayBlockingQueue</code>区别在于<code>ArrayBlockingQueue</code>创建后不能再扩展队列的元素了。</p><p>使用方式，将上面的<code>BlockingQueueTest</code>里的阻塞队列的实现改为<code>LinkedBlockingQueue</code>即可。</p><h3 id="PriorityBlockingQueue"><a href="#PriorityBlockingQueue" class="headerlink" title="PriorityBlockingQueue"></a>PriorityBlockingQueue</h3><p>无界阻塞队列，优先级排序。<code>PriorityBlockingQueue</code>只能指定初始的队列大小，后面插入元素的时候，如果空间不够的话会自动扩容。所以，虽然这个队列逻辑上无界，但是可能会耗尽资源导致OOM的问题。<code>PriorityBlockingQueue</code>的内部排序默认是自然排序，也可通过<code>omparator</code>指定排序规则，便于自定义优先级逻辑。</p><p><code>PriorityBlockingQueue</code>内部也是通过数组实现，数组的容量可以动态扩展，源码如下：</p><pre><code class="java">/** * Tries to grow array to accommodate at least one more element * (but normally expand by about 50%), giving up (allowing retry) * on contention (which we expect to be rare). Call only while * holding lock. * * @param array the heap array * @param oldCap the length of the array */private void tryGrow(Object[] array, int oldCap) {    lock.unlock(); // must release and then re-acquire main lock    Object[] newArray = null;    if (allocationSpinLock == 0 &amp;&amp;        UNSAFE.compareAndSwapInt(this, allocationSpinLockOffset,                                 0, 1)) {        try {            int newCap = oldCap + ((oldCap &lt; 64) ?                                   (oldCap + 2) : // grow faster if small                                   (oldCap &gt;&gt; 1));            if (newCap - MAX_ARRAY_SIZE &gt; 0) {    // possible overflow                int minCap = oldCap + 1;                if (minCap &lt; 0 || minCap &gt; MAX_ARRAY_SIZE)                    throw new OutOfMemoryError();                newCap = MAX_ARRAY_SIZE;            }            if (newCap &gt; oldCap &amp;&amp; queue == array)                newArray = new Object[newCap];        } finally {            allocationSpinLock = 0;        }    }    if (newArray == null) // back off if another thread is allocating        Thread.yield();    lock.lock();    if (newArray != null &amp;&amp; queue == array) {        queue = newArray;        System.arraycopy(array, 0, newArray, 0, oldCap);    }}</code></pre><h3 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a>DelayQueue</h3><p>无界阻塞队列，其元素是一个<code>Delayed</code>元素，其元素只能在其延迟到期时才被使用。在创建元素时可以指定多久才能从队列中获取当前元素。只有在延迟期满时才能从队列中提取元素。</p><p>其使用场景：</p><ul><li>定时任务调度。通过<code>DelayQueue</code>保存执行的任务和执行时间，当从<code>DelayQueue</code>中获取到任务时立即执行，从而实现定时调度。</li><li>缓存有效期。缓存元素的有效期，当循环获取队列的元素时，只要获取到就说明缓存有效期过了。</li></ul><h3 id="其他队列"><a href="#其他队列" class="headerlink" title="其他队列"></a>其他队列</h3><p>除了常用的队列以外，jdk还提供了一些其他的实现，比如：<code>SynchronousQueue</code>，<code>LinkedTransferQueue</code>，<code>LinkedBlockingDeque</code>等，各有特色与其使用场景。</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;阻塞队列 (&lt;code&gt;BlockingQueue&lt;/code&gt;)是&lt;code&gt;j.u.c&lt;/code&gt;下重要的数据结构，&lt;code&gt;BlockingQueue&lt;/code&gt;提供了线程安全的队列访问方式：
-当阻塞队列进行插入数据时，如果队列已满，线程将会阻塞等待直到队列非满；从阻塞队列取数据时，如果队列已空，线程将会阻塞等待直到队列非空。&lt;/p&gt;
     
     </summary>
     
