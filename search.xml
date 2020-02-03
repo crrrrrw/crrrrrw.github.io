@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[一分钟看清Netty的工作流程]]></title>
+    <url>%2FNetty%2Fnetty-workflow%2F</url>
+    <content type="text"><![CDATA[前言之前摸清了 Reactor 线程模型及其演变，最近看了下相关文章和代码，也熟悉了netty的工作模型，记录之。 netty工作模型 Netty 抽象出两组线程池：BossGroup、WorkerGroup。 BossGroup专门负责接受客户端的连接，相当于 mainReactor;WorkerGroup专门负责网络的读写，相当于subReactor。 BossGroup、WorkerGroup 类型都是 NioEventLoopGroup. NioEventLoopGroup 即事件循环组，里面含有多个事件循环（NioEventLoop），即 一个 NioEventLoopGroup 对应多个 NioEventLoop NioEventLoop 表示一个不断循环的执行处理任务的线程，每个 NioEventLoop 都有一个 selector ，用于监听绑定在其上的 socket 的网络通信。 每个 boss 的 NioEventLoopGroup 循环执行的步骤： 轮询 accept 事件 处理 accept 事件，与 client 建立连接，生产 NioSocketChannel，并将其注册到某个 woker 的 NioEventLoop 上的 selector 处理任务队列，即 runAllTasks 每个 worker 的 NioEventLoopGroup 循环执行的步骤： 轮询 read,write 事件 处理I/O事件，即 read,write 事件，在对应的 NioSocketChannel 处理。 处理任务队列，即 runAllTasks 每个 worker 的 NioEventLoopGroup 处理业务时，会使用 ChannelPipeline ，即通道。ChannelPipeline 中包含了 channel ， ChannelPipeline 中也有各种处理器（编码、解码、业务处理…） 后记之后准备用netty写一个IM项目练练手，代码会比较简单，非常适合熟悉netty。]]></content>
+      <categories>
+        <category>Netty</category>
+      </categories>
+      <tags>
+        <tag>Netty</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[R.I.P Kobe Bryant, Mamba Never Out]]></title>
     <url>%2Fessay%2Fmamba-never-out%2F</url>
     <content type="text"><![CDATA[R.I.P Kobe Bryant 今天上午6点半，被噩梦惊醒，醒来打开手机准备刷刷新闻看一看今天的全国疫情情况的，结果看到老姐发来的微信： 科比坠机死亡。我心想又是恶心的标题党吧，然后打开朋友圈，oh, fk!这不可能！又去微博、头条等新闻媒体看新闻， 才确定这是真的，那一刻的感觉，真的是心碎，仿佛亲人离去的感觉。那可是科比啊。 真的说不出的感受，一个好强的不屈的生命就这样结束了，记得曾经你退役后说过，“在我的人生中最成功的 事情是篮球，那么我就是失败者。” 我想，这样的你将来还会做出怎样让人惊叹的成就啊。 上学打球的时候，你也正是巅峰的年龄，那时候，我们喜欢麦迪，艾弗森，加内特，纳什，白巧克力，打球时候喜欢黑你“打铁”，“不传球”，作为曾经的凯尔特人球迷，纳什球迷，也“讨厌”过你夺走过总冠军，1-3逆转太阳等。初高中那会让，身边一些不太懂球的同学，都说喜欢你，是你粉丝，嘴上说着科比牛逼。我不喜欢跟风，虽然知道NBA中最接近乔丹的就是你了，但也没喜欢上你。再后来，渐渐的打球少了，熟悉的球星一个一个也退役了，才越发珍惜那年群星聚萃的景象，我会支持每一个学生时代的偶像，当然有你，科比。在你跟腱断裂的那一天，我看的直播，那一刻，心碎难受，尤其你好强的罚了制胜的关键两球，尊敬，这就是老大。2016.4.14日，无数球迷翘班也要看球的日子，那一天你退役了，最后一句“Mamba out”，全场欢呼、流泪，青春真的感觉到不在了。 直到今天真正的失去了你，我们才发现，这些年内心深处对你是真正喜欢。 今天，一看到你的报道，球迷做的你的视频，就忍不住点进去，但每个视频都没有看完过就退出来了，真的看不下去了。 Rest in peace, Kobe, Mamba never out! Mamba Never Out 科比那些激励一代又一代年轻人的经典语录，Thank you , Kobe，曼巴精神将被人们传承。 总有一个人要赢，为什么不能是我呢？ 如果创造历史轻而易举，那又何苦如此费尽心力。 如果你害怕失败，你就会失败！ 我宁愿30投0中，也不愿9投0中，因为9投0中意味着你被自己打败了！ 第二名只能说明你是头号输家！ 你见过凌晨洛杉矶四点的样子吗？ 朋友来来往往，但冠军之旗永不落。 嘘声又不能盖掉我！ 24，就是24小时都全力以赴。 by the way, fuck 那些炒鞋的鞋贩子fuck 那些炒鞋的鞋贩子，你们不配。]]></content>
@@ -335,8 +346,8 @@
         <category>java-concurrency</category>
       </categories>
       <tags>
-        <tag>java</tag>
         <tag>转载摘抄</tag>
+        <tag>java</tag>
         <tag>java concurrency</tag>
       </tags>
   </entry>
@@ -349,8 +360,8 @@
       </categories>
       <tags>
         <tag>spring-boot</tag>
-        <tag>cache</tag>
         <tag>redis</tag>
+        <tag>cache</tag>
       </tags>
   </entry>
   <entry>

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://www.chenruiwen.cn/"/>
-  <updated>2020-02-02T12:08:58.189Z</updated>
+  <updated>2020-02-03T12:40:45.232Z</updated>
   <id>https://www.chenruiwen.cn/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一分钟看清Netty的工作流程</title>
+    <link href="https://www.chenruiwen.cn/Netty/netty-workflow/"/>
+    <id>https://www.chenruiwen.cn/Netty/netty-workflow/</id>
+    <published>2020-02-03T12:36:24.000Z</published>
+    <updated>2020-02-03T12:40:45.232Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前摸清了 Reactor 线程模型及其演变，最近看了下相关文章和代码，也熟悉了netty的工作模型，记录之。<a id="more"></a></p><h2 id="netty工作模型"><a href="#netty工作模型" class="headerlink" title="netty工作模型"></a>netty工作模型</h2><p><img src="http://ww1.sinaimg.cn/large/87faef88ly1gbjhmtam7jj227818sgtv.jpg" alt="netty模型.png"></p><ul><li>Netty 抽象出两组线程池：BossGroup、WorkerGroup。BossGroup专门负责接受客户端的连接，相当于 mainReactor;WorkerGroup专门负责网络的读写，相当于subReactor。</li><li>BossGroup、WorkerGroup 类型都是 NioEventLoopGroup.</li><li>NioEventLoopGroup 即事件循环组，里面含有多个事件循环（NioEventLoop），即 一个 NioEventLoopGroup 对应多个 NioEventLoop</li><li>NioEventLoop 表示一个不断循环的执行处理任务的线程，每个 NioEventLoop 都有一个 selector ，用于监听绑定在其上的 socket 的网络通信。</li><li>每个 boss 的 NioEventLoopGroup 循环执行的步骤：<ol><li>轮询 accept 事件</li><li>处理 accept 事件，与 client 建立连接，生产 NioSocketChannel，并将其注册到某个 woker 的 NioEventLoop 上的 selector</li><li>处理任务队列，即 runAllTasks</li></ol></li><li><p>每个 worker 的 NioEventLoopGroup 循环执行的步骤：</p><ol><li>轮询 read,write 事件</li><li>处理I/O事件，即 read,write 事件，在对应的 NioSocketChannel 处理。</li><li>处理任务队列，即 runAllTasks</li></ol></li><li><p>每个 worker 的 NioEventLoopGroup 处理业务时，会使用 ChannelPipeline ，即通道。ChannelPipeline 中包含了 channel ， ChannelPipeline 中也有各种处理器（编码、解码、业务处理…）</p></li></ul><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>之后准备用netty写一个IM项目练练手，代码会比较简单，非常适合熟悉netty。</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;之前摸清了 Reactor 线程模型及其演变，最近看了下相关文章和代码，也熟悉了netty的工作模型，记录之。
+    
+    </summary>
+    
+      <category term="Netty" scheme="https://www.chenruiwen.cn/categories/Netty/"/>
+    
+    
+      <category term="Netty" scheme="https://www.chenruiwen.cn/tags/Netty/"/>
+    
+  </entry>
   
   <entry>
     <title>R.I.P Kobe Bryant, Mamba Never Out</title>
@@ -505,32 +527,6 @@
       <category term="architecture" scheme="https://www.chenruiwen.cn/tags/architecture/"/>
     
       <category term="read notes" scheme="https://www.chenruiwen.cn/tags/read-notes/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>浅析java并发包(五)：Callable、Future和FutureTask</title>
-    <link href="https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-callable-future-futureTask/"/>
-    <id>https://www.chenruiwen.cn/java-concurrency/java-util-concurrent-callable-future-futureTask/</id>
-    <published>2018-09-17T14:24:24.000Z</published>
-    <updated>2018-09-17T14:21:37.472Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>创建一个线程，最熟悉的做法是集成<code>Thread</code>类或者实现<code>Runnable</code>接口重新<code>run()</code>。但是这两种创建方式在一些场景比如想要获取线程的执行结果时却不那么好用。<code>J.U.C</code>满足了这种需求。今天说一下不得不知的<code>Callable</code>、<code>Future</code>和<code>FutureTask</code><a id="more"></a></p><h2 id="Callable"><a href="#Callable" class="headerlink" title="Callable"></a>Callable</h2><p>比对<code>Runnable</code>接口与<code>Callable</code>接口：</p><pre><code class="java">public interface Runnable {    public abstract void run();}public interface Callable&lt;V&gt; {    V call() throws Exception;}</code></pre><p>可以看到，<code>Callable</code>接口代表一种能返回结果并可能引发异常的任务。 实现者只要实现<code>call()</code>并返回任务结果即可。<code>Callable</code>接口类似于Runnable，但是，<code>Runnable</code>不返回结果，也不能抛出被检查的异常。</p><p>一个好的事实是，无论是<code>Callable</code>还是<code>Runnable</code>，都可以很好的与<code>Executor</code>框架结合使用：</p><pre><code class="java">&lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task);&lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result);Future&lt;?&gt; submit(Runnable task);</code></pre><h2 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h2><p><code>future</code>,单从语义上就知道代表未来，实际上也是如此。先看接口定义：</p><pre><code class="java">public interface Future&lt;V&gt; {    boolean cancel(boolean mayInterruptIfRunning);    boolean isCancelled();    boolean isDone();    V get() throws InterruptedException, ExecutionException;    V get(long timeout, TimeUnit unit)        throws InterruptedException, ExecutionException, TimeoutException;}</code></pre><p><code>Future</code>提供了5个方法:</p><ul><li>cancel(boolean mayInterruptIfRunning):尝试取消执行此任务。</li><li>isCancelled():如果此任务在正常完成之前被取消，则返回 true 。</li><li>isDone():如果任务已完成返回 true。</li><li>get():一直阻塞直至获取执行结果。</li><li>get(long timeout, TimeUnit unit)：在指定时间内获取执行结果，获取不到抛出TimeoutException</li></ul><h2 id="FutureTask"><a href="#FutureTask" class="headerlink" title="FutureTask"></a>FutureTask</h2><p><code>FutureTask</code>实现了<code>RunnableFuture</code>接口，看下<code>RunnableFuture</code>接口：</p><pre><code class="java">public interface RunnableFuture&lt;V&gt; extends Runnable, Future&lt;V&gt; {    void run();}</code></pre><p>可以看到它即实现了<code>Runnable</code>接口，也实现了<code>Future</code>接口，因此<code>FutureTask</code>可以作为<code>Runnable</code>的实现，也可以作为<code>Future</code>来获取<code>Callable</code>的返回。看其构造器便知如何选择：</p><pre><code class="java">public FutureTask(Callable&lt;V&gt; callable) {}public FutureTask(Runnable runnable, V result) {}</code></pre><h2 id="推荐的使用方式"><a href="#推荐的使用方式" class="headerlink" title="推荐的使用方式"></a>推荐的使用方式</h2><p>开发中建议使用线程池+<code>Callable</code>返回<code>Future</code>的方式来获取异步结果,最好给予超时时间：</p><pre><code class="java">ExecutorService es = Executors.newSingleThreadExecutor();Future&lt;Integer&gt; future = es.submit(() -&gt; {    try {        System.out.println(&quot;开始执行计算任务...&quot;);        Thread.sleep(5000L);    } catch (InterruptedException e) {        e.printStackTrace();    }    return 100;});es.shutdown();//        Integer integer = future.get();//        System.out.println(&quot;get() 获取异步任务结果:&quot; + integer);Integer integer;try {    integer = future.get(2, TimeUnit.SECONDS);} catch (TimeoutException e) {    System.out.println(&quot;调用超时，返回错误结果&quot;);    integer = -1;}System.out.println(&quot;get(timeout) 获取异步任务结果:&quot; + integer);}</code></pre><p>返回的结果值:</p><pre><code>开始执行计算任务...调用超时，返回错误结果get(timeout) 获取异步任务结果:-1</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;创建一个线程，最熟悉的做法是集成&lt;code&gt;Thread&lt;/code&gt;类或者实现&lt;code&gt;Runnable&lt;/code&gt;接口重新&lt;code&gt;run()&lt;/code&gt;。
-但是这两种创建方式在一些场景比如想要获取线程的执行结果时却不那么好用。&lt;code&gt;J.U.C&lt;/code&gt;满足了这种需求。
-今天说一下不得不知的&lt;code&gt;Callable&lt;/code&gt;、&lt;code&gt;Future&lt;/code&gt;和&lt;code&gt;FutureTask&lt;/code&gt;
-    
-    </summary>
-    
-      <category term="java-concurrency" scheme="https://www.chenruiwen.cn/categories/java-concurrency/"/>
-    
-    
-      <category term="java" scheme="https://www.chenruiwen.cn/tags/java/"/>
-    
-      <category term="java concurrency" scheme="https://www.chenruiwen.cn/tags/java-concurrency/"/>
     
   </entry>
   
