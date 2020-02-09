@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.chenruiwen.cn/Netty/netty-server-accept-request-analyse/</loc>
+    
+    <lastmod>2020-02-09T07:21:37.767Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.chenruiwen.cn/Netty/netty-server-start-src-analyse/</loc>
     
     <lastmod>2020-02-09T03:17:47.084Z</lastmod>
