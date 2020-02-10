@@ -1,0 +1,469 @@
+<!DOCTYPE html><html class="theme-next muse use-motion" lang="zh-Hans"><link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/darcula.min.css"><style>blockquote{color:#888;background-color:#eae6f3;border-left:1rem solid #5236a0;padding:0 1.5rem;position:relative;font-family:Roboto,sans-serif}blockquote:after,blockquote:before{color:#392570;font-size:2.5rem;position:absolute;line-height:2.5rem}blockquote:before{content:"\201C";left:-1rem;top:0}blockquote:after{content:"\201D";right:0;bottom:-1rem}</style><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script><link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet"><style>.pace .pace-progress{background:#1e92fb;height:3px}.pace .pace-progress-inner{box-shadow:0 0 10px #1e92fb,0 0 5px #1e92fb}.pace .pace-activity{border-top-color:#1e92fb;border-left-color:#1e92fb}</style><meta name="theme-color" content="#222"><script src="/lib/pace/pace.min.js?v=1.0.2"></script><link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css"><link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css"><link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css"><link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4"><link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-gui.ico?v=5.1.4"><link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-32x32-gui.ico?v=5.1.4"><link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222"><meta name="keywords" content="Netty,"><link rel="alternate" href="/atom.xml" title="Chen RuiWen's Space" type="application/atom+xml"><meta name="description" content="目的ChannelPipeline、ChannelHandler、ChannelHandlerContext 在 Netty 中是非常核心的概念，因此对此进行一次梳理。"><meta name="keywords" content="Netty"><meta property="og:type" content="article"><meta property="og:title" content="ChannelPipeline、ChannelHandler、ChannelHandlerContext 源码剖析"><meta property="og:url" content="https://www.chenruiwen.cn/Netty/netty-pipeline-handler-context/index.html"><meta property="og:site_name" content="Chen RuiWen&#39;s Space"><meta property="og:description" content="目的ChannelPipeline、ChannelHandler、ChannelHandlerContext 在 Netty 中是非常核心的概念，因此对此进行一次梳理。"><meta property="og:locale" content="zh-Hans"><meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1gbq7r27gllj227y0o0n1z.jpg"><meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1gbq7zdl1sbj20xs09gwf8.jpg"><meta property="og:image" content="http://ww1.sinaimg.cn/large/87faef88ly1gbrasqqs5tj219e10qwlg.jpg"><meta property="og:updated_time" content="2020-02-10T09:46:11.043Z"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="ChannelPipeline、ChannelHandler、ChannelHandlerContext 源码剖析"><meta name="twitter:description" content="目的ChannelPipeline、ChannelHandler、ChannelHandlerContext 在 Netty 中是非常核心的概念，因此对此进行一次梳理。"><meta name="twitter:image" content="http://ww1.sinaimg.cn/large/87faef88ly1gbq7r27gllj227y0o0n1z.jpg"><script type="text/javascript" id="hexo.configurations">var NexT=window.NexT||{},CONFIG={root:"/",scheme:"Muse",version:"5.1.4",sidebar:{position:"left",display:"post",offset:12,b2t:!1,scrollpercent:!0,onmobile:!0},fancybox:!1,tabs:!0,motion:{enable:!0,async:!1,transition:{post_block:"fadeIn",post_header:"slideDownIn",post_body:"slideDownIn",coll_header:"slideLeftIn",sidebar:"slideUpIn"}},duoshuo:{userId:"0",author:"博主"},algolia:{applicationID:"",apiKey:"",indexName:"",hits:{per_page:10},labels:{input_placeholder:"Search for Posts",hits_empty:"We didn't find any results for the search: ${query}",hits_stats:"${hits} results found in ${time} ms"}}}</script><link rel="canonical" href="https://www.chenruiwen.cn/Netty/netty-pipeline-handler-context/"><title>ChannelPipeline、ChannelHandler、ChannelHandlerContext 源码剖析 | Chen RuiWen's Space</title></head><body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans"><div class="container sidebar-position-left page-post-detail"><div class="headband"></div> <a href="https://github.com/crrrrrw"><img style="position:absolute;top:0;right:0;border:0" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a><header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="header-inner"><div class="site-brand-wrapper"><div class="site-meta"><div class="custom-logo-site-title"><a href="/" class="brand" rel="start"><span class="logo-line-before"><i></i></span> <span class="site-title">Chen RuiWen's Space</span><span class="logo-line-after"><i></i></span></a></div><p class="site-subtitle">Life is real, life is earnest</p></div><div class="site-nav-toggle"> <button><span class="btn-bar"></span><span class="btn-bar"></span><span class="btn-bar"></span></button></div></div><nav class="site-nav"><ul id="menu" class="menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i><br> 首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i><br> 关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i><br> 标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i><br> 分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i><br> 归档</a></li><li class="menu-item menu-item-photos"><a href="/photos/" rel="section"><i class="menu-item-icon fa fa-fw fa-camera"></i><br> 相册</a></li><li class="menu-item menu-item-search"><a href="javascript:;" class="popup-trigger"><i class="menu-item-icon fa fa-search fa-fw"></i><br> 搜索</a></li></ul><div class="site-search"><div class="popup search-popup local-search-popup"><div class="local-search-header clearfix"><span class="search-icon"><i class="fa fa-search"></i></span><span class="popup-btn-close"><i class="fa fa-times-circle"></i></span><div class="local-search-input-wrapper"> <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input"></div></div><div id="local-search-result"></div></div></div></nav></div></header><main id="main" class="main"><div class="main-inner"><div class="content-wrap"><div id="content" class="content"><div id="posts" class="posts-expand"><article class="post post-type-normal" itemscope itemtype="http://schema.org/Article"><div class="post-block"><link itemprop="mainEntityOfPage" href="https://www.chenruiwen.cn/Netty/netty-pipeline-handler-context/"><span hidden itemprop="author" itemscope itemtype="http://schema.org/Person"><meta itemprop="name" content="陈瑞文"><meta itemprop="description" content=""><meta itemprop="image" content="/images/touxiang.jpeg"></span><span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization"><meta itemprop="name" content="Chen RuiWen's Space"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">ChannelPipeline、ChannelHandler、ChannelHandlerContext 源码剖析</h1><div class="post-meta"><span class="post-time"><span class="post-meta-item-icon"><i class="fa fa-calendar-o"></i></span> <span class="post-meta-item-text">发表于</span> <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-10T17:42:38+08:00">2020-02-10</time></span> <span id="busuanzi_container_page_pv">&nbsp;&nbsp;|&nbsp;&nbsp;阅读量<span id="busuanzi_value_page_pv"></span> 次</span> <span class="post-category"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-folder-o"></i></span> <span class="post-meta-item-text">分类于</span> <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Netty/" itemprop="url" rel="index"><span itemprop="name">Netty</span></a></span></span> <span class="post-comments-count"><span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-comment-o"></i></span><a href="/Netty/netty-pipeline-handler-context/#comments" itemprop="discussionUrl"><span class="post-comments-count gitment-comments-count" data-xid="/Netty/netty-pipeline-handler-context/" itemprop="commentsCount"></span></a></span><div class="post-wordcount"><span class="post-meta-item-icon"><i class="fa fa-file-word-o"></i></span> <span class="post-meta-item-text">字数统计&#58;</span> <span title="字数统计">1,754 字</span> <span class="post-meta-divider">|</span><span class="post-meta-item-icon"><i class="fa fa-clock-o"></i></span> <span class="post-meta-item-text">阅读时长 &asymp;</span> <span title="阅读时长">7 分钟</span></div></div></header><div class="post-body" itemprop="articleBody"><h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>ChannelPipeline、ChannelHandler、ChannelHandlerContext 在 Netty 中是非常核心的概念，因此对此进行一次梳理。<a id="more"></a></p><h2 id="三者关系"><a href="#三者关系" class="headerlink" title="三者关系"></a>三者关系</h2><ol><li>每当 ServerSocket 创建一个新的连接，就会创建一个 Socket，与目标客户端对应。</li><li>每一个新创建的 Socket 都会分配一个全新的 ChannelPipeline。</li><li>每一个 ChannelPipeline 内部都含有多个 ChannelHandlerContext。</li><li>ChannelPipeline 和 ChannelHandlerContext 都是双向链表的结构，context 用于包装在调用 addLast 方法时添加的 ChannelHandler。</li></ol><p>总之，一图胜千言。 <img src="http://ww1.sinaimg.cn/large/87faef88ly1gbq7r27gllj227y0o0n1z.jpg" alt="pipleline,handler,ctx关系.png"></p><ul><li>ChannelSocket 与 ChannelPipeline 是一对一的关系，而 ChannelPipeline 内部的多个 ChannelHandlerContext 形成了链表， ChannelHandlerContext 是对 ChannelHandler 的封装，通过 ChannelHandlerContext 可以获取到相应的 ChannelHandler、ChannelPipeline以及Channel。</li><li>请求会通过 Socket 进入相应的 pipeline，并经过 pipeline 上所有的 handler，典型的响应链设计模式。</li></ul><h2 id="ChannelPipeline"><a href="#ChannelPipeline" class="headerlink" title="ChannelPipeline"></a>ChannelPipeline</h2><p>接口继承图： <img src="http://ww1.sinaimg.cn/large/87faef88ly1gbq7zdl1sbj20xs09gwf8.jpg" alt="ChannelPipleline接口继承图.png"> 可以看出接口继承了ChannelInboundInvoker， ChannelOutboundInvoker， Iterable接口，表示它可以调用出站和入站的方法，同时能遍历内部链表，其内部的方法基本都是对 handler 链表的操作，同时也能获取到一个 channel 对象。</p><p>再看看官方接口api对pipeline的介绍：</p><pre><code class="java">/*
+* &lt;pre&gt;
+*                                                 I/O Request
+*                                            via {@link Channel} or
+*                                        {@link ChannelHandlerContext}
+*                                                      |
+*  +---------------------------------------------------+---------------+
+*  |                           ChannelPipeline         |               |
+*  |                                                  \|/              |
+*  |    +---------------------+            +-----------+----------+    |
+*  |    | Inbound Handler  N  |            | Outbound Handler  1  |    |
+*  |    +----------+----------+            +-----------+----------+    |
+*  |              /|\                                  |               |
+*  |               |                                  \|/              |
+*  |    +----------+----------+            +-----------+----------+    |
+*  |    | Inbound Handler N-1 |            | Outbound Handler  2  |    |
+*  |    +----------+----------+            +-----------+----------+    |
+*  |              /|\                                  .               |
+*  |               .                                   .               |
+*  | ChannelHandlerContext.fireIN_EVT() ChannelHandlerContext.OUT_EVT()|
+*  |        [ method call]                       [method call]         |
+*  |               .                                   .               |
+*  |               .                                  \|/              |
+*  |    +----------+----------+            +-----------+----------+    |
+*  |    | Inbound Handler  2  |            | Outbound Handler M-1 |    |
+*  |    +----------+----------+            +-----------+----------+    |
+*  |              /|\                                  |               |
+*  |               |                                  \|/              |
+*  |    +----------+----------+            +-----------+----------+    |
+*  |    | Inbound Handler  1  |            | Outbound Handler  M  |    |
+*  |    +----------+----------+            +-----------+----------+    |
+*  |              /|\                                  |               |
+*  +---------------+-----------------------------------+---------------+
+*                  |                                  \|/
+*  +---------------+-----------------------------------+---------------+
+*  |               |                                   |               |
+*  |       [ Socket.read() ]                    [ Socket.write() ]     |
+*  |                                                                   |
+*  |  Netty Internal I/O Threads (Transport Implementation)            |
+*  +-------------------------------------------------------------------+
+* &lt;/pre&gt;
+*/
+</code></pre><ul><li>这是一个 handler 的 list，handler 用于处理入站出站事件，pipeline 实现了过滤器的高级形式，以便用户控制事件如何处理 handler 在 pipeline 的执行顺序等。</li><li>入站事件由入站程序自下而上的方向处理，入站处理程序通常处理由图底部的I/O线程生成的入站数据。入站数据通常从如SocketChannel.read(ByteBuffer)获取。</li><li>这也展示了 handler 在 pipeline 中处理 I/O 事件的方式，I/ O事件分别由 Inbound Handler 和 Outbound Handler 处理。通过 ChannelHandlerContext.fireChannelRead 方法传递转发给下一个处理程序。可以看下源码:</li></ul><pre><code class="java">public ChannelHandlerContext fireChannelRead(final Object msg) {
+    invokeChannelRead(findContextInbound(), msg);
+    return this;
+}
+
+private AbstractChannelHandlerContext findContextInbound() {
+    AbstractChannelHandlerContext ctx = this;
+    do {
+        ctx = ctx.next; // 当前 ctx 的下一个ctx
+    } while (!ctx.inbound); // 直到找到一个入站ctx为止
+    return ctx;
+}
+
+private AbstractChannelHandlerContext findContextOutbound() {
+    AbstractChannelHandlerContext ctx = this;
+    do {
+        ctx = ctx.prev; // 当前 ctx 的前一个ctx
+    } while (!ctx.outbound); // 直到找到一个出站ctx为止
+    return ctx;
+}
+</code></pre><p>实践：</p><ul><li>通常一个 pipeline 有多个 handler ，在实践中，通常会包含编码器、解码器、多个业务处理程序等 handler 。</li><li>切记业务程序不能将线程阻塞，否则会影响 I/O 速度，从而影响整个Netty程序的性能。</li><li>耗时操作需要<strong>异步执行</strong>。<ul><li>可以在添加 handler 的时候添加一个线程池。比如：<strong>pipeline.addLast(group, “bizHandler”, new BizHandler()); // 这个任务不会阻塞IO线程，执行线程来自 group 线程池</strong></li><li>可以放到 netty 的任务队列 taskQueue 中或者 scheduledTaskQueue 中，比如：<ul><li>ctx.channel().eventLoop().execute(() -&gt; System.out.println(“do something”));</li><li>ctx.channel().eventLoop().schedule(() -&gt; System.out.println(“do something”), 1, TimeUnit.HOURS);</li></ul></li></ul></li></ul><h2 id="ChannelHandler"><a href="#ChannelHandler" class="headerlink" title="ChannelHandler"></a>ChannelHandler</h2><pre><code class="java">public interface ChannelHandler {
+
+    /**
+     * handler 添加到 ctx 时被调用
+     */
+    void handlerAdded(ChannelHandlerContext ctx) throws Exception;
+
+    /**
+     * handler 从 ctx 上被删除时被调用
+     */
+    void handlerRemoved(ChannelHandlerContext ctx) throws Exception;
+
+    /**
+     * handler 处理过程发生异常被调用
+     */
+    @Deprecated
+    void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception;
+
+
+}
+</code></pre><p>ChannelHandler 的作用是处理 I/O 事件或拦截 I/O 事件，并将其转发给下一个 ChannelHandler 处理程序。ChannelHandler 处理事件时分入站和出站的，两个方向的操作都是不同的，因此 Netty 定义了2个子接口继承 ChannelHandler:</p><ul><li>ChannelInboundHandler : 增加了读取事件过程中发生相关状态时的处理接口。当接收到数据或者与之关联的 Channel 状态改变时调用。之前已经注意到了，这些方法与 Channel 的生命周期接近。</li><li>ChannelOutboundHandler : 增加了写出事件过程中发生相关状态时的处理接口。ChannelOutboundHandler 另个一个强大的方面是它具有在请求时延迟操作或者事件的能力。比如，当你在写数据到 remote peer 的过程中被意外暂停，你可以延迟执行刷新操作，然后在迟些时候继续。</li></ul><p>Netty 也提供了即能处理入站事件也能处理出站事件的接口:</p><ul><li>ChannelDuplexHandler</li></ul><h2 id="ChannelHandlerContext"><a href="#ChannelHandlerContext" class="headerlink" title="ChannelHandlerContext"></a>ChannelHandlerContext</h2><p>接口继承图： <img src="http://ww1.sinaimg.cn/large/87faef88ly1gbrasqqs5tj219e10qwlg.jpg" alt="ChannelHandlerContext接口继承图.png"> 说明:</p><ul><li>ChannelHandlerContext 继承了AttributeMap， ChannelInboundInvoker，ChannelOutboundInvoker，这两个 Invoker 是针对入站和出站调用时提供的方法，因此 ChannelHandlerContext 可以处理入站出站操作。</li><li>ChannelHandlerContext 自身也定义了丰富的方法，它能够获取 context 上下文环境中对应的 channel，executor，handler，pipeline，内存分配器等有用的对象。</li><li>context 就是包装了 handler 的一切，以便其能在 pipeline 中方便的操作 handler。</li></ul><h2 id="ChannelPipeline、ChannelHandler、ChannelHandlerContext-创建过程"><a href="#ChannelPipeline、ChannelHandler、ChannelHandlerContext-创建过程" class="headerlink" title="ChannelPipeline、ChannelHandler、ChannelHandlerContext 创建过程"></a>ChannelPipeline、ChannelHandler、ChannelHandlerContext 创建过程</h2><p>主要分为三部分来看创建过程:</p><ul><li>任何一个 Channel 创建的同时都会创建一个 pipeline。</li><li>当用户或系统内部调用 pipeline 的 add方法添加 handler 时，都会创建一个包装这 handler 的 context。</li><li>context 在 pipeline 组成双向链表。</li></ul><h3 id="Channel-创建时创建-ChannelPipeline"><a href="#Channel-创建时创建-ChannelPipeline" class="headerlink" title="Channel 创建时创建 ChannelPipeline"></a>Channel 创建时创建 ChannelPipeline</h3><pre><code class="java">protected AbstractChannel(Channel parent, ChannelId id) {
+    this.parent = parent;
+    this.id = id;
+    unsafe = newUnsafe();
+    pipeline = newChannelPipeline();
+}
+</code></pre><p>可以看到 Channel 创建的时候创建了 ChannelPipeline。</p><pre><code class="java">protected DefaultChannelPipeline(Channel channel) {
+    this.channel = ObjectUtil.checkNotNull(channel, &quot;channel&quot;);
+    succeededFuture = new SucceededChannelFuture(channel, null);
+    voidPromise =  new VoidChannelPromise(channel, true);
+
+    tail = new TailContext(this);
+    head = new HeadContext(this);
+
+    head.next = tail;
+    tail.prev = head;
+}
+</code></pre><ul><li>将 channel 绑定到 pipeline 中。</li><li>创建了一个 SucceededChannelFuture 和 VoidChannelPromise 用于异步回调使用。</li><li>创建了一个 Inbound 的。 TailContext，创建了一个即是 Inbound 也是 Outbound 的 HeadContext。</li><li>将 tail 和 head 结合起来形成双向链表。</li></ul><h3 id="pipeline-的-add方法时创建-context-并形成双向链表"><a href="#pipeline-的-add方法时创建-context-并形成双向链表" class="headerlink" title="pipeline 的 add方法时创建 context 并形成双向链表"></a>pipeline 的 add方法时创建 context 并形成双向链表</h3><pre><code class="java">public final ChannelPipeline addLast(EventExecutorGroup group, String name, ChannelHandler handler) {
+    final AbstractChannelHandlerContext newCtx;
+    synchronized (this) {
+        checkMultiplicity(handler); // 检查 handler 是否共享
+
+        newCtx = newContext(group, filterName(name, handler), handler); // 创建一个 ctx ，管理它所关联的 handler 和 同一个 pipeline 中其他 handler 之间的交互
+
+        addLast0(newCtx); // ctx 添加到链表末尾，tail 节点的前面
+
+        // If the registered is false it means that the channel was not registered on an eventloop yet.
+        // In this case we add the context to the pipeline and add a task that will call
+        // ChannelHandler.handlerAdded(...) once the channel is registered.
+        if (!registered) {
+            newCtx.setAddPending();
+            callHandlerCallbackLater(newCtx, true); // 添加到代办任务中稍后处理
+            return this;
+        }
+
+        EventExecutor executor = newCtx.executor();
+        if (!executor.inEventLoop()) {
+            newCtx.setAddPending();
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    callHandlerAdded0(newCtx); // 同步或异步或晚点异步添加 handler
+                }
+            });
+            return this;
+        }
+    }
+    callHandlerAdded0(newCtx);
+    return this;
+}
+
+private void addLast0(AbstractChannelHandlerContext newCtx) {
+    AbstractChannelHandlerContext prev = tail.prev;
+    newCtx.prev = prev;
+    newCtx.next = tail;
+    prev.next = newCtx;
+    tail.prev = newCtx;
+}
+
+</code></pre><p>说明：</p><ul><li>Netty 为了防止多线程导致安全问题，同步了这段代码块。</li><li>检查 handler 实例是否是共享。如果不是，且已经被别的pipeline 使用了，则抛出异常。</li><li>创建一个新的 context 包装 handler。</li><li>调用 addLast0 方法将 context 添加到链表中。</li><li>如果这个通道还没有注册到 selector 上，就将这个 context 添加到这个 pipeline 的待办任务中。当注册好了之后，再调用 callHandlerAdded0 方法(此方法默认什么都没做，用户可实现当做钩子使用)</li></ul><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>ChannelPipeline、ChannelHandler、ChannelHandlerContext 三者关系主要还是看那幅图即可方便理解。</p></div><div><div><div style="text-align:center;color:#ccc;font-size:14px">-------------本文结束,感谢您的阅读-------------</div></div></div><div><div style="padding:10px 0;margin:20px auto;width:90%;text-align:center"><div>贵在坚持，如果您觉得本文还不错，不妨打赏一下~</div> <button id="rewardButton" disable="enable" onclick='var qr=document.getElementById("QR");"none"===qr.style.display?qr.style.display="block":qr.style.display="none"'> <span>打赏</span></button><div id="QR" style="display:none"><div id="wechat" style="display:inline-block"> <img id="wechat_qr" src="/images/my-wxpay-thx.png" alt="陈瑞文 微信支付"><p>微信支付</p></div><div id="alipay" style="display:inline-block"> <img id="alipay_qr" src="/images/my-alipay-thx.png" alt="陈瑞文 支付宝"><p>支付宝</p></div></div></div></div><div><ul class="post-copyright"><li class="post-copyright-author"> <strong>本文作者：</strong> 陈瑞文</li><li class="post-copyright-link"> <strong>本文链接：</strong> <a href="https://www.chenruiwen.cn/Netty/netty-pipeline-handler-context/" title="ChannelPipeline、ChannelHandler、ChannelHandlerContext 源码剖析">https://www.chenruiwen.cn/Netty/netty-pipeline-handler-context/</a></li><li class="post-copyright-license"> <strong>版权声明：</strong> 欢迎转载~~本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！</li></ul></div><footer class="post-footer"><div class="post-tags"><a href="/tags/Netty/" rel="tag"><i class="fa fa-tag"></i> Netty</a></div><div class="post-nav"><div class="post-nav-next post-nav-item"><a href="/Netty/netty-server-accept-request-analyse/" rel="next" title="Netty接受请求过程源码分析"><i class="fa fa-chevron-left"></i> Netty接受请求过程源码分析</a></div><span class="post-nav-divider"></span><div class="post-nav-prev post-nav-item"></div></div></footer></div></article><div class="post-body"><div class="recommended_posts"><div class="note primary"><h3 class="recommended"> 相关文章：</h3><ul class="recommended-ul"><li class="popular-posts-item"><div class="popular-posts-item"><a href="/Netty/reactor-thread-model/">Reactor模型的三种实现</a></div></li><li class="popular-posts-item"><div class="popular-posts-item"><a href="/Netty/netty-workflow/">一分钟看清Netty的工作流程</a></div></li><li class="popular-posts-item"><div class="popular-posts-item"><a href="/Netty/netty-server-accept-request-analyse/">Netty接受请求过程源码分析</a></div></li><li class="popular-posts-item"><div class="popular-posts-item"><a href="/Netty/netty-server-start-src-analyse/">Netty服务器启动过程源码分析</a></div></li></ul></div></div></div><div class="post-spread"></div></div></div><div class="comments" id="comments"><div id="gitment-container"></div></div></div><div class="sidebar-toggle"><div class="sidebar-toggle-line-wrap"><span class="sidebar-toggle-line sidebar-toggle-line-first"></span><span class="sidebar-toggle-line sidebar-toggle-line-middle"></span><span class="sidebar-toggle-line sidebar-toggle-line-last"></span></div></div><aside id="sidebar" class="sidebar"><div id="sidebar-dimmer"></div><div class="sidebar-inner"><ul class="sidebar-nav motion-element"><li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap"> 文章目录</li><li class="sidebar-nav-overview" data-target="site-overview-wrap"> 站点概览</li></ul><section class="site-overview-wrap sidebar-panel"><div class="site-overview"><div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person"> <img class="site-author-image" itemprop="image" src="/images/touxiang.jpeg" alt="陈瑞文"><p class="site-author-name" itemprop="name">陈瑞文</p><p class="site-description motion-element" itemprop="description">面向Google编程的java程序猿折腾指北</p></div><nav class="site-state motion-element"><div class="site-state-item site-state-posts"> <a href="/archives/"><span class="site-state-item-count">57</span> <span class="site-state-item-name">日志</span></a></div><div class="site-state-item site-state-categories"> <a href="/categories/index.html"><span class="site-state-item-count">17</span> <span class="site-state-item-name">分类</span></a></div><div class="site-state-item site-state-tags"> <a href="/tags/index.html"><span class="site-state-item-count">40</span> <span class="site-state-item-name">标签</span></a></div></nav><div class="feed-link motion-element"><a href="/atom.xml" rel="alternate"><i class="fa fa-rss"></i> RSS</a></div><div class="links-of-author motion-element"><span class="links-of-author-item"><a href="https://github.com/crrrrrw" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i> GitHub</a></span><span class="links-of-author-item"><a href="mailto:crw4085501@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i> E-Mail</a></span></div><div><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=18795423&auto=1&height=66"></iframe></div><div class="links-of-blogroll motion-element links-of-blogroll-block"><div class="links-of-blogroll-title"><i class="fa fa-fw fa-link"></i> 推荐链接</div><ul class="links-of-blogroll-list"><li class="links-of-blogroll-item"> <a href="http://ifeve.com/" title="并发编程网" target="_blank" rel="external nofollow">并发编程网</a></li><li class="links-of-blogroll-item"> <a href="http://www.importnew.com/" title="ImportNew" target="_blank" rel="external nofollow">ImportNew</a></li><li class="links-of-blogroll-item"> <a href="https://www.oschina.net/" title="开源中国" target="_blank" rel="external nofollow">开源中国</a></li><li class="links-of-blogroll-item"> <a href="http://www.spring4all.com/" title="spring4all" target="_blank" rel="external nofollow">spring4all</a></li><li class="links-of-blogroll-item"> <a href="http://www.infoq.com/cn/" title="InfoQ" target="_blank" rel="external nofollow">InfoQ</a></li><li class="links-of-blogroll-item"> <a href="http://stackoverflow.com/" title="stackoverflow" target="_blank" rel="external nofollow">stackoverflow</a></li><li class="links-of-blogroll-item"> <a href="https://linux.cn/" title="Linux中国" target="_blank" rel="external nofollow">Linux中国</a></li><li class="links-of-blogroll-item"> <a href="https://toutiao.io/" title="开发者头条" target="_blank" rel="external nofollow">开发者头条</a></li></ul></div></div></section><section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active"><div class="post-toc"><div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目的"><span class="nav-number">1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三者关系"><span class="nav-number">2.</span> <span class="nav-text">三者关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ChannelPipeline"><span class="nav-number">3.</span> <span class="nav-text">ChannelPipeline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ChannelHandler"><span class="nav-number">4.</span> <span class="nav-text">ChannelHandler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ChannelHandlerContext"><span class="nav-number">5.</span> <span class="nav-text">ChannelHandlerContext</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ChannelPipeline、ChannelHandler、ChannelHandlerContext-创建过程"><span class="nav-number">6.</span> <span class="nav-text">ChannelPipeline、ChannelHandler、ChannelHandlerContext 创建过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Channel-创建时创建-ChannelPipeline"><span class="nav-number">6.1.</span> <span class="nav-text">Channel 创建时创建 ChannelPipeline</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pipeline-的-add方法时创建-context-并形成双向链表"><span class="nav-number">6.2.</span> <span class="nav-text">pipeline 的 add方法时创建 context 并形成双向链表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div></div></section></div></aside></div></main><footer id="footer" class="footer"><div class="footer-inner"><script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span><span class="with-love"><i class="fa fa-user"></i></span> <span class="author" itemprop="copyrightHolder">陈瑞文</span></div><div class="theme-info"><span id="showDays"></span></div><br><div class="theme-info"><div class="powered-by"></div> <span class="post-count">本站累计共106.2k字</span></div> &nbsp;&nbsp;|&nbsp;&nbsp;本站总点击<span id="busuanzi_value_site_pv"></span> 次 &nbsp;&nbsp;|&nbsp;&nbsp;您是第<span id="busuanzi_value_site_uv"></span> 位访客<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><script>var seconds=1e3,minutes=60*seconds,hours=60*minutes,days=24*hours,years=365*days,birthDay=Date.UTC(2018,4,14,0,0,0);setInterval(function(){var e=new Date,s=e.getFullYear(),t=e.getMonth()+1,a=e.getDate(),o=e.getHours(),r=e.getMinutes(),n=e.getSeconds(),h=Date.UTC(s,t,a,o,r,n)-birthDay,u=Math.floor(h/years),d=Math.floor(h/days-365*u),y=Math.floor((h-(365*u+d)*days)/hours),i=Math.floor((h-(365*u+d)*days-y*hours)/minutes),l=Math.floor((h-(365*u+d)*days-y*hours-i*minutes)/seconds);document.getElementById("showDays").innerHTML="本站已运行 "+u+" 年 "+d+" 天 "+y+" 小时 "+i+" 分钟 "+l+" 秒"},1e3)</script><script>var _hmt=_hmt||[];!function(){var e=document.createElement("script");e.src="https://hm.baidu.com/hm.js?24046c6beb6cd2056bee02dc2a0168c9";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)}()</script></div></footer><div class="back-to-top"><i class="fa fa-arrow-up"></i> <span id="scrollpercent"><span>0</span>%</span></div></div><script type="text/javascript">"[object Function]"!==Object.prototype.toString.call(window.Promise)&&(window.Promise=null)</script><script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script><script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script><script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script><script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script><script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script><script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script><script src="/js/src/photoswipe.min.js?v=5.1.4"></script><script src="/js/src/photoswipe-ui-default.min.js?v=5.1.4"></script><script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script><link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css"><script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script><script type="text/javascript">function renderGitment(){new Gitmint({id:"1581327758000",owner:"crrrrrw",repo:"hexo_static_page",lang:navigator.language||navigator.systemLanguage||navigator.userLanguage,oauth:{client_secret:"bc55e698a64f91f9af7ad2e5d296f4cb244ad5cd",client_id:"80cec54113d1f1089a45"}}).render("gitment-container")}renderGitment()</script><script src="//unpkg.com/valine/dist/Valine.min.js"></script><script type="text/javascript">
+  new Valine({
+      av: AV,
+      el: '#comments' ,
+      app_id: '',
+      app_key: '',
+      placeholder: 'Just go go', // 默认 null
+      notify: false, // 默认 false
+      verify: false, // 默认 false
+      path: , // 默认 window.location.pathname
+      avatar: 'mm' // 默认 ''
+  });
+</script><script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script><script>!function(){var t=document.createElement("script"),e=window.location.protocol.split(":")[0];t.src="https"===e?"https://zz.bdstatic.com/linksubmit/push.js":"http://push.zhanzhang.baidu.com/push.js";var s=document.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}()</script></body></html><script type="text/javascript" src="/js/src/love.js"></script><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script><script type="text/javascript">$(function(){hljs.initHighlighting(),$("pre code").each(function(){$(this).text().split("\n").length;var n=$("<ul/>").addClass("pre-numbering");$(this).addClass("has-numbering").parent().append(n)})})</script>
